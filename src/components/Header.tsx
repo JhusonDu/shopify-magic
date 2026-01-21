@@ -8,11 +8,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import logoIcon from "@/assets/logo-icon.png";
 
 const navLinks = [
-  { label: "Termékek", href: "/shop" },
-  { label: "Doboz Összeállítása", href: "#bundle-builder" },
-  { label: "Kedvencek", href: "#bestsellers" },
-  { label: "Eredetiség", href: "#authenticity" },
-  { label: "Blog", href: "/blog" },
+  { label: "Termékek", href: "/termekek", isRoute: true },
+  { label: "Doboz Összeállítása", href: "#bundle-builder", isRoute: false },
+  { label: "Kedvencek", href: "#bestsellers", isRoute: false },
+  { label: "Eredetiség", href: "#authenticity", isRoute: false },
 ];
 
 export const Header = () => {
@@ -56,22 +55,39 @@ export const Header = () => {
                 </Link>
               </div>
               
-              {/* Mobile Nav Links */}
               <nav className="flex-1 p-6">
                 <div className="space-y-2">
                   {navLinks.map((link, index) => (
-                    <motion.a
-                      key={link.label}
-                      href={link.href}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-300 group"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
-                      {link.label}
-                    </motion.a>
+                    link.isRoute ? (
+                      <motion.div 
+                        key={link.label}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                      >
+                        <Link
+                          to={link.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-300 group"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
+                          {link.label}
+                        </Link>
+                      </motion.div>
+                    ) : (
+                      <motion.a
+                        key={link.label}
+                        href={link.href}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-300 group"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
+                        {link.label}
+                      </motion.a>
+                    )
                   ))}
                 </div>
               </nav>
@@ -119,17 +135,34 @@ export const Header = () => {
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-1">
           {navLinks.map((link, index) => (
-            <motion.a 
-              key={link.label}
-              href={link.href}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-              className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground group"
-            >
-              {link.label}
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4" />
-            </motion.a>
+            link.isRoute ? (
+              <motion.div
+                key={link.label}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
+              >
+                <Link 
+                  to={link.href}
+                  className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground group block"
+                >
+                  {link.label}
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4" />
+                </Link>
+              </motion.div>
+            ) : (
+              <motion.a 
+                key={link.label}
+                href={link.href}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
+                className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground group"
+              >
+                {link.label}
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4" />
+              </motion.a>
+            )
           ))}
         </nav>
 

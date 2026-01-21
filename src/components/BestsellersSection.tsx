@@ -4,6 +4,7 @@ import { ProductCard } from "./ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 export const BestsellersSection = () => {
   const { data: products, isLoading, error } = useProducts();
@@ -69,8 +70,9 @@ export const BestsellersSection = () => {
             <Button 
               variant="outline"
               className="border-primary text-foreground hover:bg-primary/10"
+              asChild
             >
-              Összes Megtekintése
+              <Link to="/termekek">Összes Megtekintése</Link>
             </Button>
           </div>
         </div>

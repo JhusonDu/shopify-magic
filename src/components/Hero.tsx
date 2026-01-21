@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-vault.jpg";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -68,10 +69,12 @@ export const Hero = () => {
             <Button 
               size="lg"
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-full transition-all duration-300 group"
-              onClick={() => document.getElementById('bestsellers')?.scrollIntoView({ behavior: 'smooth' })}
+              asChild
             >
-              Shop Collection
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Link to="/termekek">
+                Shop Collection
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
             <Button 
               variant="outline"

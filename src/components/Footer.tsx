@@ -3,21 +3,14 @@ import { ShieldCheck, Lock, RefreshCcw } from "lucide-react";
 
 const footerLinks = {
   shop: [
-    { label: "Összes Termék", href: "/shop" },
-    { label: "Kedvenceink", href: "#bestsellers" },
-    { label: "Új Illatok", href: "/new" },
-    { label: "Ajándékcsomagok", href: "/gifts" },
+    { label: "Összes Termék", href: "/termekek", isRoute: true },
+    { label: "Kedvenceink", href: "#bestsellers", isRoute: false },
   ],
   bundle: [
-    { label: "Doboz Összeállítása", href: "#bundle-builder" },
-    { label: "Felfedező Szett", href: "/discovery" },
-    { label: "Ajándékutalvány", href: "/gift-card" },
+    { label: "Doboz Összeállítása", href: "#bundle-builder", isRoute: false },
   ],
   company: [
-    { label: "Eredetiség", href: "#authenticity" },
-    { label: "GYIK", href: "/faq" },
-    { label: "Szállítás", href: "/shipping" },
-    { label: "Kapcsolat", href: "/contact" },
+    { label: "Eredetiség", href: "#authenticity", isRoute: false },
   ]
 };
 
@@ -69,12 +62,21 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
                 <li key={link.label}>
-                  <a 
-                    href={link.href} 
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
+                  {link.isRoute ? (
+                    <Link 
+                      to={link.href} 
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a 
+                      href={link.href} 
+                      className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
