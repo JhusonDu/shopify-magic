@@ -20,7 +20,7 @@ export default {
     extend: {
       fontFamily: {
         display: ['"Playfair Display"', 'Georgia', 'serif'],
-        body: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        body: ['Manrope', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'hero': 'clamp(2.4rem, 4vw, 4rem)',
