@@ -19,8 +19,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        body: ['Outfit', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'hero': 'clamp(2.4rem, 4vw, 4rem)',
