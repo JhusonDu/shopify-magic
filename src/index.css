@@ -9,31 +9,31 @@
 
 @layer base {
   :root {
-    /* Core backgrounds - Obsidian Black spectrum */
-    --background: 240 11% 6%; /* #0F0F14 */
+    /* Core backgrounds - True Black spectrum (PRD) */
+    --background: 0 0% 4%; /* #0a0a0a */
     --foreground: 0 0% 97%; /* Pearl White #F7F7F7 */
 
-    --card: 225 10% 11%; /* Midnight Gray #1A1C22 */
+    --card: 0 0% 8%; /* #141414 */
     --card-foreground: 0 0% 97%;
 
-    --popover: 225 10% 11%;
+    --popover: 0 0% 10%; /* #1a1a1a */
     --popover-foreground: 0 0% 97%;
 
     /* Primary - Champagne Gold */
     --primary: 43 65% 52%; /* #D4AF37 Royal Champagne Gold */
-    --primary-foreground: 240 11% 6%;
+    --primary-foreground: 0 0% 4%;
 
-    /* Secondary - Soft Graphite surfaces */
-    --secondary: 222 9% 19%; /* #2C2F36 */
+    /* Secondary - Dark surfaces */
+    --secondary: 0 0% 10%; /* #1a1a1a */
     --secondary-foreground: 0 0% 97%;
 
     /* Muted */
-    --muted: 222 9% 19%;
-    --muted-foreground: 0 0% 72%; /* Warm Gray #B8B8B8 */
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%; /* #A6A6A6 */
 
     /* Accent - Soft Amber (hover state) */
     --accent: 45 87% 62%; /* #F2C94C */
-    --accent-foreground: 240 11% 6%;
+    --accent-foreground: 0 0% 4%;
 
     /* Pale Gold for badges/highlights */
     --gold-pale: 50 71% 81%; /* #F5E6A8 */
@@ -44,42 +44,42 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 222 9% 22%;
-    --input: 222 9% 22%;
+    --border: 0 0% 14%; /* #242424 */
+    --input: 0 0% 14%;
     --ring: 43 65% 52%;
 
-    --radius: 1rem;
+    --radius: 0.5rem;
 
-    --sidebar-background: 240 11% 6%;
+    --sidebar-background: 0 0% 4%;
     --sidebar-foreground: 0 0% 97%;
     --sidebar-primary: 43 65% 52%;
-    --sidebar-primary-foreground: 240 11% 6%;
-    --sidebar-accent: 222 9% 19%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 10%;
     --sidebar-accent-foreground: 0 0% 97%;
-    --sidebar-border: 222 9% 22%;
+    --sidebar-border: 0 0% 14%;
     --sidebar-ring: 43 65% 52%;
   }
 
   /* Light mode fallback - same as dark for this luxury theme */
   .light {
-    --background: 240 11% 6%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 97%;
-    --card: 225 10% 11%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 97%;
-    --popover: 225 10% 11%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 97%;
     --primary: 43 65% 52%;
-    --primary-foreground: 240 11% 6%;
-    --secondary: 222 9% 19%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 97%;
-    --muted: 222 9% 19%;
-    --muted-foreground: 0 0% 72%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
     --accent: 45 87% 62%;
-    --accent-foreground: 240 11% 6%;
+    --accent-foreground: 0 0% 4%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 222 9% 22%;
-    --input: 222 9% 22%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
     --ring: 43 65% 52%;
   }
 }
@@ -126,7 +126,7 @@
 
   /* Premium card hover */
   .card-luxury {
-    @apply bg-card border border-border/50 rounded-2xl transition-all duration-300;
+    @apply bg-card border border-border/50 rounded-lg transition-all duration-300;
   }
 
   .card-luxury:hover {

@@ -53,7 +53,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Container - Edge-to-edge, large cards (Savor style) */}
-      <div className="relative overflow-hidden rounded-2xl bg-secondary aspect-[4/5] mb-5">
+      <div className="relative overflow-hidden rounded-lg bg-secondary aspect-[4/5] mb-5">
         {/* Loading shimmer */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gradient-to-r from-secondary via-muted to-secondary animate-image-shimmer bg-[length:200%_100%]" />
@@ -94,7 +94,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           <Button 
             onClick={handleAddToCart}
             disabled={isLoading || !firstVariant?.availableForSale}
-            className="w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-primary-foreground h-12 rounded-xl shadow-lg"
+            className="w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-primary-foreground h-12 rounded-md shadow-lg"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

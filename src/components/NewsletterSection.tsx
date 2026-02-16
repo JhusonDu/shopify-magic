@@ -47,11 +47,11 @@ export const NewsletterSection = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 h-14 bg-card border-border focus:border-primary rounded-xl text-foreground placeholder:text-muted-foreground"
+                className="flex-1 h-14 bg-card border-border focus:border-primary rounded-md text-foreground placeholder:text-muted-foreground"
               />
               <Button 
                 type="submit"
-                className="bg-primary text-primary-foreground hover:bg-accent h-14 px-8 rounded-xl font-semibold tracking-cta"
+                className="bg-primary text-primary-foreground hover:bg-accent h-14 px-8 rounded-md font-semibold tracking-cta"
               >
                 Feliratkozás
               </Button>

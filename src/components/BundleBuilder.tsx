@@ -94,7 +94,7 @@ export const BundleBuilder = () => {
                   <button
                     key={size.id}
                     onClick={() => setSelectedSize(size.id)}
-                    className={`p-6 rounded-2xl text-left transition-all duration-300 ${
+                    className={`p-6 rounded-lg text-left transition-all duration-300 ${
                       selectedSize === size.id
                         ? "bg-primary/10 border-2 border-primary"
                         : "bg-secondary border-2 border-transparent hover:border-primary/30"
@@ -122,7 +122,7 @@ export const BundleBuilder = () => {
                   <button
                     key={vibe.id}
                     onClick={() => toggleVibe(vibe.id)}
-                    className={`flex items-center gap-3 p-4 rounded-xl transition-all duration-300 ${
+                    className={`flex items-center gap-3 p-4 rounded-md transition-all duration-300 ${
                       selectedVibes.includes(vibe.id)
                         ? "bg-primary text-primary-foreground"
                         : "bg-secondary text-foreground hover:bg-secondary/80"
@@ -164,7 +164,7 @@ export const BundleBuilder = () => {
               <h3 className="text-xl font-display font-semibold mb-4">
                 Összefoglaló
               </h3>
-              <div className="bg-secondary rounded-2xl p-6 max-w-md mx-auto text-left">
+              <div className="bg-secondary rounded-lg p-6 max-w-md mx-auto text-left">
                 <div className="flex justify-between items-center mb-4 pb-4 border-b border-border">
                   <span className="text-muted-foreground">Méret:</span>
                   <span className="font-semibold">{selectedSize || "Nincs kiválasztva"}</span>

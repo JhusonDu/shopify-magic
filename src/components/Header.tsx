@@ -68,7 +68,7 @@ export const Header = () => {
                         <Link
                           to={link.href}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-300 group"
+                          className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 group"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
                           {link.label}
@@ -82,7 +82,7 @@ export const Header = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all duration-300 group"
+                        className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 group"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
                         {link.label}

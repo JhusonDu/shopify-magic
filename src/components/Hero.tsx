@@ -68,7 +68,7 @@ export const Hero = () => {
           >
             <Button 
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-full transition-all duration-300 group"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-md transition-all duration-300 group"
               asChild
             >
               <Link to="/termekek">
@@ -79,7 +79,7 @@ export const Hero = () => {
             <Button 
               variant="outline"
               size="lg"
-              className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-full transition-all duration-300"
+              className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-md transition-all duration-300"
               onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Our Process

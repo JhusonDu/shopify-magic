@@ -80,9 +80,9 @@ export default {
           pale: "hsl(50 71% 81%)",
           soft: "hsl(45 87% 62%)",
         },
-        obsidian: "hsl(240 11% 6%)",
-        midnight: "hsl(225 10% 11%)",
-        graphite: "hsl(222 9% 19%)",
+        obsidian: "hsl(0 0% 4%)",
+        midnight: "hsl(0 0% 10%)",
+        graphite: "hsl(0 0% 14%)",
         champagne: "hsl(36 38% 89%)",
       },
       borderRadius: {
