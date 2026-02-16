@@ -112,7 +112,7 @@ export const Hero = () => {
             className="text-sm md:text-base text-foreground/90 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-lg font-body"
             style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
           >
-            Fedezd fel a legkeresettebb designer illatokat — eredeti, bontatlan parfümök közvetlenül az európai disztribútoroktól.
+            Fedezd fel a legkeresettebb designer illatokat — eredeti, bontatlan parfümök közvetlenül a magyarországi hivatalos forgalmazóktól.
             <span className="block mt-1 text-primary/80 text-xs md:text-sm font-medium">
               100% Eredeti · Expressz Szállítás · Pénzvisszafizetési Garancia
             </span>
