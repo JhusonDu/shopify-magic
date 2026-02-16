@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { CartDrawer } from "./CartDrawer";
-import { Search, Menu, User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -15,10 +15,18 @@ const navLinks = [
   { label: "Kapcsolat", href: "#footer", isRoute: false, opensSearch: false },
 ];
 
-export const Header = () => {
+interface HeaderProps {
+  isSearchOpen?: boolean;
+  onSearchOpenChange?: (open: boolean) => void;
+}
+
+export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const isSearchOpen = externalOpen ?? internalOpen;
+  const setIsSearchOpen = onSearchOpenChange ?? setInternalOpen;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,12 +41,12 @@ export const Header = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        setIsSearchOpen((prev) => !prev);
+        setIsSearchOpen(!isSearchOpen);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [isSearchOpen, setIsSearchOpen]);
 
   return (
     <>
@@ -69,18 +77,13 @@ export const Header = () => {
               className="w-80 bg-card/95 backdrop-blur-xl border-border p-0"
             >
               <div className="flex flex-col h-full">
-                {/* Mobile Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
                   <Link
                     to="/"
                     className="flex items-center gap-3"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <img
-                      src={logoIcon}
-                      alt="ScentBox"
-                      className="h-10 w-10 object-contain"
-                    />
+                    <img src={logoIcon} alt="ScentBox" className="h-10 w-10 object-contain" />
                     <span className="text-xl font-semibold text-foreground font-display">
                       ScentBox Hungary
                     </span>
@@ -139,20 +142,8 @@ export const Header = () => {
                   </div>
                 </nav>
 
-                {/* Mobile Footer */}
                 <div className="p-6 border-t border-border">
                   <div className="flex items-center gap-3">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="rounded-full border-border hover:border-primary hover:bg-primary/10"
-                      onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        setIsSearchOpen(true);
-                      }}
-                    >
-                      <Search className="h-4 w-4" />
-                    </Button>
                     <Button
                       variant="outline"
                       size="icon"
@@ -232,32 +223,14 @@ export const Header = () => {
             )}
           </nav>
 
-          {/* Actions */}
+          {/* Actions — no search icon */}
           <div className="flex items-center gap-1 md:gap-2">
-            {/* Mobile search icon */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full"
-              onClick={() => setIsSearchOpen(true)}
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
               className="hidden md:flex items-center gap-1"
             >
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300"
-                onClick={() => setIsSearchOpen(true)}
-              >
-                <Search className="h-5 w-5" />
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"
@@ -277,7 +250,6 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Decorative bottom line when scrolled */}
         <AnimatePresence>
           {isScrolled && (
             <motion.div
@@ -291,7 +263,6 @@ export const Header = () => {
         </AnimatePresence>
       </motion.header>
 
-      {/* Search Command Palette */}
       <SearchCommand open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </>
   );

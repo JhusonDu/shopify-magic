@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronDown, Search, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-vault.jpg";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 
-export const Hero = () => {
+interface HeroProps {
+  onSearchOpen?: () => void;
+}
+
+export const Hero = ({ onSearchOpen }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -42,10 +46,10 @@ export const Hero = () => {
         />
       </motion.div>
 
-      {/* Gradient overlay — lighter to show more image */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/75 via-black/30 to-black/50" />
 
-      {/* Text backdrop glow — dark vignette behind content for readability */}
+      {/* Text backdrop glow */}
       <div
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
@@ -54,7 +58,7 @@ export const Hero = () => {
         }}
       />
 
-      {/* Gold glow — larger, warmer */}
+      {/* Gold glow */}
       <div className="absolute inset-0 z-[3] flex items-center justify-center pointer-events-none">
         <div
           className="w-[700px] h-[700px] rounded-full animate-gold-pulse"
@@ -113,19 +117,34 @@ export const Hero = () => {
             style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
           >
             Fedezd fel a legkeresettebb designer illatokat — eredeti, bontatlan parfümök közvetlenül a magyarországi hivatalos forgalmazóktól.
-            <span className="block mt-1 text-primary/80 text-xs md:text-sm font-medium">
-              100% Eredeti · Expressz Szállítás · Pénzvisszafizetési Garancia
-            </span>
           </motion.p>
 
-          {/* CTAs */}
+          {/* Search Bar */}
+          <motion.button
+            {...stagger(0.9)}
+            onClick={onSearchOpen}
+            className="w-full max-w-xs sm:max-w-md md:max-w-lg mb-5 md:mb-6 flex items-center gap-3 px-5 py-3.5 rounded-md border border-primary/30 bg-background/20 backdrop-blur-md text-foreground/60 hover:border-primary/60 hover:bg-background/30 transition-all duration-300 cursor-pointer group"
+            style={{
+              boxShadow: "0 0 30px hsl(43 65% 52% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.05)",
+            }}
+          >
+            <Search className="w-4 h-4 text-primary/70 group-hover:text-primary transition-colors shrink-0" />
+            <span className="text-sm font-body tracking-wide text-left">
+              Milyen illatot keresel?
+            </span>
+            <kbd className="hidden md:inline-flex ml-auto text-[10px] tracking-wider text-foreground/30 border border-foreground/10 rounded px-1.5 py-0.5 font-mono">
+              ⌘K
+            </kbd>
+          </motion.button>
+
+          {/* Primary CTA */}
           <motion.div
             {...stagger(1.0)}
-            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4"
+            className="w-full max-w-xs sm:max-w-md md:max-w-lg flex flex-col sm:flex-row items-center gap-3"
           >
             <Button
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground font-bold tracking-wider uppercase px-7 h-12 text-xs rounded-md transition-all duration-300 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
+              className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground font-bold tracking-wider uppercase px-7 h-12 text-xs rounded-md transition-all duration-300 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
               asChild
             >
               <Link to="/termekek">
@@ -133,6 +152,19 @@ export const Hero = () => {
                 <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
+          </motion.div>
+
+          {/* Trust signals */}
+          <motion.span
+            {...stagger(1.1)}
+            className="block mt-4 text-primary/80 text-xs md:text-sm font-medium font-body"
+            style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
+          >
+            100% Eredeti · Expressz Szállítás · Pénzvisszafizetési Garancia
+          </motion.span>
+
+          {/* Secondary CTA — below trust signals */}
+          <motion.div {...stagger(1.2)} className="mt-4">
             <Button
               variant="outline"
               size="lg"
