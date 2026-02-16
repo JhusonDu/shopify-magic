@@ -1,127 +1,89 @@
 
 
-# Hero Szekció Ujratervezes -- Reszletes Terv
+# Header Toolbar Redesign Plan
 
-## Jelenlegi Problemak
-- A hatterkep alig latszik (tulzottan sotet overlay)
-- A CTA gombok a hajtás alatt vannak, nem lathatoak azonnal
-- Nincs parallax effekt, scroll indikator vagy fade-out
-- A layout statikus, nem reagal gorgetesre
-- Mobilon a szovegmeretek tul nagyok
+## Overview
+A complete redesign of the header for both desktop and mobile, updating branding to "ScentBox Hungary", restructuring navigation links, and building a functional search overlay that queries your Shopify product catalog.
 
 ---
 
-## Uj Hero Design -- Felepites
+## 1. Branding Update
 
-### Retegek (alulrol felfelé)
+- Change the two-line logo text ("ScentBox" + small "Hungary") into a single clickable line: **"ScentBox Hungary"**
+- Keep the gold 3D logo icon and its hover/glow animations exactly as they are
+
+## 2. Navigation Links (Desktop + Mobile)
+
+Replace the current nav links with these:
+
+| Label | Type | Target |
+|---|---|---|
+| Kezdolap | Route | `/` |
+| Illatok | Route | `/termekek` |
+| Rolunk | Anchor | `#authenticity` |
+| Kapcsolat | Anchor | `#footer` (scroll to footer) |
+
+This removes the old "Doboz Osszeallitasa" and "Kedvencek" links from the header (they remain accessible on the homepage itself).
+
+## 3. Search Bar -- Command Palette Style
+
+Instead of a plain search bar in the header, implement a **search overlay/modal** (using the existing `cmdk` + `CommandDialog` component already installed):
+
+- **Desktop**: Clicking the Search icon opens a centered command palette overlay with a text input. As the user types, it queries Shopify products via the existing `fetchProducts(first, query)` function and shows results with product image, title, and price.
+- **Mobile**: Same overlay, full-width, triggered from the mobile menu or a search icon in the header.
+- Selecting a result navigates to `/product/{handle}`.
+- Keyboard shortcut: `Ctrl+K` / `Cmd+K` opens it on desktop.
+
+## 4. Desktop Header Layout
 
 ```text
-+-----------------------------------------------+
-|  1. Hatterkep (parallax 0.5x sebesseggel)     |
-|     - object-position: center 30%              |
-|     - Sotetebb gradient overlay (nem flat)      |
-+-----------------------------------------------+
-|  2. Opcionallis arany glow effekt (kozepre)    |
-|     - Finom radial gradient                    |
-+-----------------------------------------------+
-|  3. Fo tartalom (kozepre igazitva)             |
-|     - Badge: arany pont + "THE OBSIDIAN..."    |
-|     - Cim: "THE ART OF" + "Authenticity"       |
-|     - Alcim: 1-2 sor leiras                    |
-|     - 2 CTA gomb egymas mellett                |
-|     - Bizalmi jelzesek sor (opcio)             |
-+-----------------------------------------------+
-|  4. Scroll indikator (alul kozepen)            |
-|     - Animalt lefele nyil / eger ikon          |
-|     - Pulzalo arany animacio                   |
-+-----------------------------------------------+
+[Logo + "ScentBox Hungary"]  [Kezdolap] [Illatok] [Rolunk] [Kapcsolat]  [Search icon] [User icon] [Cart icon]
 ```
 
-### Desktop Layout (1920x1080)
-- Teljes kepernyo (100vh)
-- Tartalom vertikalisan kozepre
-- Max szelesseg: 800px
-- Cim: 7-8rem meret
-- Gombok egymas mellett (flex-row)
-- Scroll indikator az also 60px-ben
+- Left: Logo + brand name (single line)
+- Center: Navigation links with existing gold underline hover animation
+- Right: Search, Account, Cart icons in a row
 
-### Tablet Layout (768-1024px)
-- Teljes kepernyo (100vh)
-- Cim: 5-6rem
-- Alcim: max-w-lg
-- Gombok egymas mellett
+## 5. Mobile Header Layout
 
-### Mobil Layout (< 768px)
-- Min magassag: 100svh (safe viewport height)
-- Cim: 3rem / 3.5rem
-- Alcim: text-sm, max-w-xs
-- Gombok egymas alatt (flex-col), teljes szelesseg
-- Scroll indikator kisebb
+```text
+[Hamburger]  [Logo + "ScentBox Hungary"]  [Search icon] [Cart icon]
+```
+
+- The hamburger opens the existing slide-out Sheet with updated nav links
+- Search icon opens the same command palette overlay
+- User/Account icon moves inside the mobile menu's footer section
+- Cart icon stays visible in the header
+
+## 6. Account Icon (Placeholder)
+
+The User icon currently does nothing. It will remain as a visual placeholder button for now -- no auth flow will be added in this phase.
 
 ---
 
-## Technikai Megvalositás
+## Technical Details
 
-### 1. Parallax Hatter (useScroll + useTransform)
-- Framer Motion `useScroll()` es `useTransform()` hasznalata
-- A hatterkep 0.5x sebesseggel mozog gorgeteskor
-- `translateY` transzformacio a scroll pozicio alapjan
-- GPU-gyorsitott (will-change: transform)
+### Files to modify:
+1. **`src/components/Header.tsx`** -- Main changes:
+   - Update `navLinks` array with new labels/targets
+   - Change brand text to single-line "ScentBox Hungary"
+   - Add search state (`isSearchOpen`) and `Ctrl+K` keyboard listener
+   - Import and render the new `SearchCommand` component
+   - Reorganize mobile header to show search + cart icons (move User icon into mobile menu)
 
-### 2. Tartalom Fade-Out Gorgeteskor
-- A teljes tartalom (cim, alcim, gombok) opacity-je csokken
-- 0% scroll = opacity 1.0
-- 50% scroll = opacity 0.2
-- Szinten `useTransform` a smooth atmenetre
+2. **New file: `src/components/SearchCommand.tsx`** -- Search overlay component:
+   - Uses existing `CommandDialog`, `CommandInput`, `CommandList`, `CommandItem`, `CommandEmpty` from `src/components/ui/command.tsx`
+   - Uses `useProducts` hook with debounced search query
+   - Shows product results with thumbnail, title, price
+   - `useNavigate` to go to product detail on selection
+   - Accepts `open` and `onOpenChange` props
 
-### 3. Gradient Overlay (nem flat szin)
-- Jelenlegi: `bg-black/60` (flat)
-- Uj: Tobbretegu gradient
-  - Alulrol: erős fekete gradient (szoveg olvashatosag)
-  - Kozepen: enyhe sotetites
-  - Felulrol: enyhe sotetites (header olvashatosag)
-- Kod: `bg-gradient-to-t from-black/80 via-black/40 to-black/60`
+### No new dependencies needed
+- `cmdk` is already installed
+- `CommandDialog` component already exists
+- `useProducts` hook already supports a `query` parameter
+- `framer-motion` already in use for animations
 
-### 4. Arany Glow Effekt
-- Finom radial gradient a tartalom mogott
-- Szin: `hsl(43 65% 52% / 0.08)`
-- Lelegzo animacio (opacity 0.05-0.12 kozott, 6s ciklus)
-
-### 5. Scroll Indikator
-- Lucide `ChevronDown` vagy `Mouse` ikon
-- Arany szin, pulzalo animacio (translateY bounce)
-- Kattintasra smooth scroll a kovetkezo szekciohoz
-- Eltűnik gorgeteskor (opacity fade)
-
-### 6. Staggered Entrance Animaciok
-- Badge: 0.2s delay
-- Cim 1. sor: 0.4s delay
-- Cim 2. sor: 0.6s delay
-- Alcim: 0.8s delay
-- Gombok: 1.0s delay
-- Scroll indikator: 1.4s delay
-
----
-
-## Modositando Fajlok
-
-| Fajl | Valtozas |
-|------|----------|
-| `src/components/Hero.tsx` | Teljes ujrairás: parallax, fade-out, scroll indikator, gradient overlay, responsive meretek |
-
-Egyetlen fajl modosul, a Hero.tsx komponens teljes ujraepitese az osszes fenti fejlesztessel.
-
----
-
-## Responsiv Meretezés Osszefoglalo
-
-| Elem | Mobil (<768px) | Tablet (768-1024px) | Desktop (>1024px) |
-|------|----------------|---------------------|---------------------|
-| Cim 1. sor | text-3xl | text-5xl | text-7xl |
-| Cim 2. sor | text-4xl | text-6xl | text-8xl |
-| Alcim | text-sm, max-w-xs | text-base, max-w-md | text-base, max-w-md |
-| Gombok | flex-col, w-full | flex-row | flex-row |
-| Badge | text-[10px] | text-xs | text-xs |
-| Scroll ikon | 20px | 24px | 28px |
-| Container padding | px-6 | px-8 | default |
+### Search debouncing
+- Add a `useState` for the search term and a simple `useEffect` with a 300ms `setTimeout` debounce before passing the query to `useProducts`
 
