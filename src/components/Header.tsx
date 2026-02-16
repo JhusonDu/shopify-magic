@@ -18,9 +18,10 @@ const navLinks = [
 interface HeaderProps {
   isSearchOpen?: boolean;
   onSearchOpenChange?: (open: boolean) => void;
+  searchInitialTab?: "search" | "finder";
 }
 
-export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange }: HeaderProps) => {
+export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchInitialTab = "search" }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
@@ -263,7 +264,7 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange }: Heade
         </AnimatePresence>
       </motion.header>
 
-      <SearchCommand open={isSearchOpen} onOpenChange={setIsSearchOpen} />
+      <SearchCommand open={isSearchOpen} onOpenChange={setIsSearchOpen} initialTab={searchInitialTab} />
     </>
   );
 };

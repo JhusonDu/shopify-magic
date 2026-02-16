@@ -10,10 +10,12 @@ import {
 } from "@/components/ui/command";
 import { useProducts } from "@/hooks/useProducts";
 import { Search, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SearchCommandProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  initialTab?: "search" | "finder";
 }
 
 type Tab = "search" | "finder";
@@ -33,13 +35,26 @@ const FINDER_QUESTIONS = [
   },
 ];
 
-export const SearchCommand = ({ open, onOpenChange }: SearchCommandProps) => {
+const slideVariants = {
+  enter: { x: 80, opacity: 0 },
+  center: { x: 0, opacity: 1 },
+  exit: { x: -80, opacity: 0 },
+};
+
+export const SearchCommand = ({ open, onOpenChange, initialTab = "search" }: SearchCommandProps) => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<Tab>("search");
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [finderStep, setFinderStep] = useState(0);
   const [finderAnswers, setFinderAnswers] = useState<string[]>([]);
+
+  // Sync initialTab when dialog opens
+  useEffect(() => {
+    if (open) {
+      setActiveTab(initialTab);
+    }
+  }, [open, initialTab]);
 
   // Debounce search input
   useEffect(() => {
@@ -54,7 +69,6 @@ export const SearchCommand = ({ open, onOpenChange }: SearchCommandProps) => {
     if (!open) {
       setSearch("");
       setDebouncedSearch("");
-      setActiveTab("search");
       setFinderStep(0);
       setFinderAnswers([]);
     }
@@ -189,35 +203,51 @@ export const SearchCommand = ({ open, onOpenChange }: SearchCommandProps) => {
               {/* Progress */}
               <div className="flex gap-1.5">
                 {FINDER_QUESTIONS.map((_, i) => (
-                  <div
+                  <motion.div
                     key={i}
-                    className={`h-1 flex-1 rounded-full transition-colors ${
-                      i <= finderStep
-                        ? "bg-primary"
-                        : "bg-muted"
-                    }`}
+                    className="h-1 flex-1 rounded-full"
+                    animate={{
+                      backgroundColor: i <= finderStep
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--muted))",
+                    }}
+                    transition={{ duration: 0.3 }}
                   />
                 ))}
               </div>
 
-              <p className="text-sm text-muted-foreground">
-                {finderStep + 1}/{FINDER_QUESTIONS.length}. kérdés
-              </p>
-              <h3 className="text-lg font-semibold text-foreground">
-                {FINDER_QUESTIONS[finderStep].question}
-              </h3>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={finderStep}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="space-y-4"
+                >
+                  <p className="text-sm text-muted-foreground">
+                    {finderStep + 1}/{FINDER_QUESTIONS.length}. kérdés
+                  </p>
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {FINDER_QUESTIONS[finderStep].question}
+                  </h3>
 
-              <div className="grid grid-cols-2 gap-2">
-                {FINDER_QUESTIONS[finderStep].options.map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => handleFinderAnswer(option)}
-                    className="px-4 py-3 text-sm font-medium rounded-lg border border-border bg-card hover:bg-primary/10 hover:border-primary/50 transition-all text-foreground text-left"
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {FINDER_QUESTIONS[finderStep].options.map((option) => (
+                      <motion.button
+                        key={option}
+                        onClick={() => handleFinderAnswer(option)}
+                        whileHover={{ scale: 1.02, borderColor: "hsl(var(--primary))" }}
+                        whileTap={{ scale: 0.97 }}
+                        className="px-4 py-3 text-sm font-medium rounded-lg border border-border bg-card hover:bg-primary/10 transition-colors text-foreground text-left"
+                      >
+                        {option}
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
               {finderStep > 0 && (
                 <button
@@ -229,7 +259,12 @@ export const SearchCommand = ({ open, onOpenChange }: SearchCommandProps) => {
               )}
             </div>
           ) : (
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-4"
+            >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-foreground">
                   Neked ajánljuk
@@ -248,44 +283,60 @@ export const SearchCommand = ({ open, onOpenChange }: SearchCommandProps) => {
                 </CommandEmpty>
                 {products && products.length > 0 && (
                   <CommandGroup>
-                    {products.map((product) => {
+                    {products.map((product, idx) => {
                       const p = product.node;
                       const image = p.images.edges[0]?.node;
                       const price = p.priceRange.minVariantPrice;
+                      const desc = p.description
+                        ? p.description.length > 80
+                          ? p.description.slice(0, 80) + "…"
+                          : p.description
+                        : null;
                       return (
-                        <CommandItem
+                        <motion.div
                           key={p.id}
-                          value={p.title}
-                          onSelect={() => handleSelect(p.handle)}
-                          className="flex items-center gap-3 cursor-pointer py-3"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.08 }}
                         >
-                          {image && (
-                            <img
-                              src={image.url}
-                              alt={image.altText || p.title}
-                              className="h-10 w-10 rounded-md object-cover flex-shrink-0"
-                            />
-                          )}
-                          <div className="flex flex-col min-w-0 flex-1">
-                            <span className="text-sm font-medium truncate">
-                              {p.title}
-                            </span>
-                            {p.vendor && (
-                              <span className="text-xs text-muted-foreground">
-                                {p.vendor}
-                              </span>
+                          <CommandItem
+                            value={p.title}
+                            onSelect={() => handleSelect(p.handle)}
+                            className="flex items-center gap-3 cursor-pointer py-3"
+                          >
+                            {image && (
+                              <img
+                                src={image.url}
+                                alt={image.altText || p.title}
+                                className="h-12 w-12 rounded-md object-cover flex-shrink-0"
+                              />
                             )}
-                          </div>
-                          <span className="text-sm font-semibold text-primary ml-auto flex-shrink-0">
-                            {formatPrice(price.amount, price.currencyCode)}
-                          </span>
-                        </CommandItem>
+                            <div className="flex flex-col min-w-0 flex-1">
+                              <span className="text-sm font-medium truncate">
+                                {p.title}
+                              </span>
+                              {p.vendor && (
+                                <span className="text-xs text-muted-foreground">
+                                  {p.vendor}
+                                </span>
+                              )}
+                              {desc && (
+                                <span className="text-xs text-muted-foreground/70 mt-0.5 line-clamp-1">
+                                  {desc}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-sm font-semibold text-primary ml-auto flex-shrink-0">
+                              {formatPrice(price.amount, price.currencyCode)}
+                            </span>
+                          </CommandItem>
+                        </motion.div>
                       );
                     })}
                   </CommandGroup>
                 )}
               </CommandList>
-            </div>
+            </motion.div>
           )}
         </div>
       )}
