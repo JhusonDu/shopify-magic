@@ -1,48 +1,50 @@
 
 
-# Mobile Product Card Popup -- Size & Quantity Selector
+# Desktop Quick Buy Popup
 
 ## What Changes
 
-On **mobile only**, the product cards in "Legnepszerubb Termekek" will no longer show the "Kosar" and "Vasarlas" buttons overlaid on the image. Instead:
+Product cards on desktop will also open the **QuickBuy popup** when clicked or when the hover button is pressed -- reusing the exact same `ProductQuickBuy` dialog that mobile already uses.
 
-1. **Tapping a product card on mobile** opens a bottom-sheet style **Dialog popup**
-2. The popup shows the product image, name, price, and lets the user:
-   - **Choose a variant/size (ml)** from the product's available options
-   - **Select quantity** with +/- buttons
-   - **Add to cart** or **Buy now**
-3. **Desktop stays exactly the same** -- hover-reveal buttons on the image
+## Current vs New Behavior
+
+**Current desktop**: Clicking a card navigates to product detail page. Hover shows two buttons ("+ Kosar" and "Vasarlas") that add the first variant directly.
+
+**New desktop**: Clicking a card opens the QuickBuy popup (size selector, quantity, add to cart). Hover shows **one clean button**: "Gyors valasztas" (Quick Choose) that also opens the popup.
+
+## Recommendation: One Button on Hover
+
+Having a single **"Gyors valasztas"** button on the hover overlay is the cleanest approach because:
+- The popup already contains both "Kosarba" and "Vasarlas" actions
+- Two buttons on the card that both open the same popup would be confusing
+- One button keeps the card clean, premium, and uncluttered
+- The button acts as a visual hint that tapping/clicking does something
+
+The user can still reach the product detail page via links elsewhere (e.g., "Osszes Megtekintese", search, etc.).
 
 ## Technical Details
 
 ### File: `src/components/FeaturedProducts.tsx`
 
-**1. Hide overlay buttons on mobile**
-- Change the action buttons container from `opacity-100 md:opacity-0` to `hidden md:flex md:opacity-0` 
-- This completely hides buttons on mobile, keeps hover-reveal on desktop
+**1. Remove mobile-only click interception**
+- Currently the `Link` `onClick` only intercepts on mobile (`window.innerWidth < 768`)
+- Change this to **always** call `e.preventDefault()` and open the popup on both mobile and desktop
+- This means clicking anywhere on the card opens the QuickBuy dialog
 
-**2. Add tap handler for mobile**
-- On mobile, tapping the card opens a product popup dialog instead of navigating to the product page
-- On desktop, clicking still navigates via the `Link` as before
-- Implement this by intercepting the click on mobile (`window.innerWidth < 768`) and opening the dialog instead of following the link
+**2. Replace two hover buttons with one**
+- Remove the "Vasarlas" (buy now) button from the hover overlay
+- Rename the remaining button from "+ Kosar" to "Gyors valasztas" (Quick Choose)
+- Change the button's action from `handleAddToCart` to opening the popup (`onMobileTap(product)` -- we'll rename this prop to `onQuickBuy`)
+- Keep the hover-reveal animation (`md:opacity-0 md:group-hover:opacity-100`)
 
-**3. Create `ProductQuickBuy` dialog component** (inline in same file)
-- Uses the existing `Dialog` component
-- Shows:
-  - Product image (small thumbnail)
-  - Product title + vendor
-  - **Variant selector**: renders the product's `variants.edges` as selectable chips (showing the ml/size from `selectedOptions`), highlighted when selected
-  - **Quantity selector**: simple -/+ row with a number display, default 1
-  - **Price**: updates based on selected variant
-  - **Two buttons**: "Kosarba" (add to cart) and "Vasarlas most" (buy now)
-- All text in Hungarian
+**3. Rename prop for clarity**
+- Rename `onMobileTap` to `onQuickBuy` since it's now used on both mobile and desktop
 
-**4. State management**
-- `selectedProduct` state on the `FeaturedProducts` component (or `null` when closed)
-- `selectedVariant` and `quantity` state inside the dialog
-- Uses existing `useCartStore` for add-to-cart with the chosen variant and quantity
+**4. Remove unused handlers**
+- Remove `handleAddToCart` and `handleBuyNow` from the `FeaturedCard` component since the popup handles everything
+
+### File: `src/components/ProductQuickBuy.tsx`
+- No changes needed -- it already handles variant selection, quantity, add-to-cart, and buy-now perfectly
 
 ### No new dependencies needed
-- Uses existing `Dialog` from `@/components/ui/dialog`
-- Uses existing cart store and Shopify types
 
