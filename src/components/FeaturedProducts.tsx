@@ -86,7 +86,7 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
         className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
       >
         {/* Image */}
-        <div className="relative aspect-[3/4] bg-secondary overflow-hidden">
+        <div className="relative aspect-square md:aspect-[3/4] bg-secondary overflow-hidden">
           {image ? (
             <img
               src={image.url}
@@ -107,11 +107,11 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
           )}
 
           {/* Quick actions – always visible on mobile, hover on desktop */}
-          <div className="absolute inset-x-0 bottom-0 p-2 flex gap-1.5 opacity-100 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
+          <div className="absolute inset-x-0 bottom-0 p-2.5 flex gap-2 opacity-100 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/40 to-transparent pt-8">
             <button
               onClick={handleAddToCart}
               disabled={isLoading || !firstVariant?.availableForSale}
-              className="flex-1 bg-primary/95 backdrop-blur-sm text-primary-foreground text-xs font-semibold py-2 rounded-md hover:bg-primary transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+              className="flex-1 bg-primary/95 backdrop-blur-sm text-primary-foreground text-sm font-semibold py-2.5 rounded-lg hover:bg-primary transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 active:scale-95"
               aria-label={`${node.title} kosárba`}
             >
               {isLoading ? (
@@ -123,7 +123,7 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
             <button
               onClick={handleBuyNow}
               disabled={isLoading || !firstVariant?.availableForSale}
-              className="flex-1 bg-accent/95 backdrop-blur-sm text-accent-foreground text-xs font-semibold py-2 rounded-md hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+              className="flex-1 bg-accent/95 backdrop-blur-sm text-accent-foreground text-sm font-semibold py-2.5 rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 active:scale-95"
               aria-label={`${node.title} vásárlás`}
             >
               {isLoading ? (
@@ -139,16 +139,16 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
         </div>
 
         {/* Info */}
-        <div className="p-2 md:p-3 space-y-0.5">
+        <div className="p-3 md:p-4 space-y-1">
           {node.vendor && (
-            <span className="text-[10px] uppercase tracking-widest text-primary font-medium">
+            <span className="text-[11px] uppercase tracking-widest text-primary font-medium">
               {node.vendor}
             </span>
           )}
-          <h3 className="text-sm font-semibold text-foreground truncate">
+          <h3 className="text-sm md:text-base font-semibold text-foreground line-clamp-2 leading-snug">
             {node.title}
           </h3>
-          <p className="text-base font-bold text-primary">
+          <p className="text-lg font-bold text-primary">
             {formatPrice(price.amount, price.currencyCode)}
           </p>
         </div>
@@ -160,11 +160,11 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
 /* ── skeleton loader ── */
 const CardSkeleton = () => (
   <div className="rounded-xl overflow-hidden bg-card">
-    <Skeleton className="aspect-[3/4] w-full" />
-    <div className="p-2 md:p-3 space-y-1.5">
+    <Skeleton className="aspect-square md:aspect-[3/4] w-full" />
+    <div className="p-3 md:p-4 space-y-2">
       <Skeleton className="h-3 w-16" />
       <Skeleton className="h-4 w-3/4" />
-      <Skeleton className="h-5 w-20" />
+      <Skeleton className="h-5 w-24" />
     </div>
   </div>
 );
@@ -285,7 +285,7 @@ export const FeaturedProducts = () => {
 
         {/* Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
             {Array.from({ length: 8 }).map((_, i) => (
               <CardSkeleton key={i} />
             ))}
@@ -299,7 +299,7 @@ export const FeaturedProducts = () => {
           </div>
         ) : (
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
