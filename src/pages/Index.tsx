@@ -7,6 +7,7 @@ import { AuthenticitySection } from "@/components/AuthenticitySection";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { NewsletterSection } from "@/components/NewsletterSection";
 import { Footer } from "@/components/Footer";
+import { FeaturedProducts } from "@/components/FeaturedProducts";
 
 type SearchTab = "search" | "finder";
 
@@ -32,6 +33,7 @@ const Index = () => {
         searchInitialTab={searchInitialTab}
       />
       <Hero onSearchOpen={handleSearchOpen} onFinderOpen={handleFinderOpen} />
+      <FeaturedProducts />
       <BestsellersSection />
       <BundleBuilder />
       <AuthenticitySection />
