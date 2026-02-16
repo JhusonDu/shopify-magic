@@ -313,8 +313,7 @@ export const FeaturedProducts = () => {
             className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5"
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-40px" }}
+            animate="visible"
           >
             {products.map((product) => (
               <FeaturedCard key={product.node.id} product={product} onQuickBuy={setQuickBuyProduct} />
