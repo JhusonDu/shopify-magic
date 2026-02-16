@@ -138,39 +138,28 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
               </kbd>
             </button>
 
-            {/* Finder link */}
-            <motion.button
-              onClick={onFinderOpen}
-              className="mt-3 flex items-center justify-center gap-2 mx-auto px-5 py-2.5 rounded-full text-xs font-medium text-primary hover:text-primary-foreground bg-primary/15 hover:bg-primary/90 backdrop-blur-md border border-primary/30 hover:border-primary/60 cursor-pointer group transition-all duration-300"
-              animate={{ boxShadow: ["0 0 15px hsl(43 65% 52% / 0.15)", "0 0 25px hsl(43 65% 52% / 0.3)", "0 0 15px hsl(43 65% 52% / 0.15)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span className="font-body tracking-wide">
-                Nem tudod, mit keresel? Segítünk megtalálni!
-              </span>
-            </motion.button>
-          </motion.div>
-
-          {/* CTA Button — single centered */}
-          <motion.div
-            {...stagger(1.0)}
-            className="w-full max-w-xs sm:max-w-sm"
-          >
+            {/* Finder link + Browse link — compact row */}
             <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              {...stagger(1.0)}
+              className="mt-4 flex flex-wrap items-center justify-center gap-3"
             >
-              <Button
-                size="lg"
-                className="w-full bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground font-bold tracking-wider uppercase px-7 h-12 text-xs rounded-md transition-all duration-300 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
-                asChild
+              <motion.button
+                onClick={onFinderOpen}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium text-primary/80 hover:text-primary bg-primary/10 hover:bg-primary/15 backdrop-blur-sm border border-primary/20 hover:border-primary/40 cursor-pointer transition-all duration-300"
               >
-                <Link to="/termekek">
-                  Böngészd az Illatokat
-                  <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+                <Sparkles className="w-3 h-3" />
+                <span className="font-body tracking-wide">
+                  Segítünk megtalálni!
+                </span>
+              </motion.button>
+
+              <Link
+                to="/termekek"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium text-foreground/60 hover:text-foreground bg-foreground/5 hover:bg-foreground/10 backdrop-blur-sm border border-foreground/10 hover:border-foreground/20 transition-all duration-300"
+              >
+                <span className="font-body tracking-wide">Böngészd az Illatokat</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
             </motion.div>
           </motion.div>
 
