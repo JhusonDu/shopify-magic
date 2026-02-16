@@ -130,7 +130,7 @@ export const Hero = () => {
             >
               <Link to="/termekek">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Termékek Felfedezése
+                Nézd Meg az Illatokat 🔥
                 <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
