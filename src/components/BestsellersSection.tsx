@@ -82,7 +82,7 @@ export const BestsellersSection = () => {
           <div className="flex gap-6 overflow-hidden">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="flex-shrink-0 w-[300px]">
-                <Skeleton className="aspect-[4/5] rounded-2xl bg-card" />
+                <Skeleton className="aspect-[4/5] rounded-lg bg-card" />
                 <Skeleton className="h-6 mt-4 w-3/4 bg-card" />
                 <Skeleton className="h-4 mt-2 w-1/2 bg-card" />
               </div>

@@ -76,7 +76,7 @@ export const CartDrawer = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="flex gap-4 p-3 rounded-xl bg-secondary/50 border border-border/50"
+                      className="flex gap-4 p-3 rounded-lg bg-secondary/50 border border-border/50"
                     >
                       <div className="w-20 h-24 bg-background rounded-lg overflow-hidden flex-shrink-0">
                         {item.product.node.images?.edges?.[0]?.node && (
@@ -140,7 +140,7 @@ export const CartDrawer = () => {
                 <p className="text-xs text-muted-foreground">A szállítási díj a pénztárnál kerül kiszámításra</p>
                 <Button 
                   onClick={handleCheckout} 
-                  className="w-full bg-primary hover:bg-accent text-primary-foreground h-14 text-base rounded-xl font-semibold tracking-cta transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/20" 
+                  className="w-full bg-primary hover:bg-accent text-primary-foreground h-14 text-base rounded-md font-semibold tracking-cta transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/20" 
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
                   {isLoading || isSyncing ? (
