@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { BestsellersSection } from "@/components/BestsellersSection";
 import { BundleBuilder } from "@/components/BundleBuilder";
 import { AuthenticitySection } from "@/components/AuthenticitySection";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
@@ -34,7 +33,6 @@ const Index = () => {
       />
       <Hero onSearchOpen={handleSearchOpen} onFinderOpen={handleFinderOpen} />
       <FeaturedProducts />
-      <BestsellersSection />
       <BundleBuilder />
       <AuthenticitySection />
       <HowItWorksSection />
