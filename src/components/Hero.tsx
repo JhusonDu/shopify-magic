@@ -79,13 +79,14 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           {/* Badge */}
           <motion.div
             {...stagger(0.2)}
-            className="badge-gold flex items-center gap-2 mb-6 md:mb-8"
+            className="badge-gold flex items-center gap-2 mb-4 md:mb-8"
           >
             <Sparkles className="w-3 h-3 text-primary" />
             <span className="text-[10px] md:text-xs tracking-[0.2em] font-medium uppercase font-body">
               100% Eredeti · Prémium Illatok
             </span>
           </motion.div>
+
 
           {/* Headline */}
           <motion.h1 {...stagger(0.4)} className="mb-2 md:mb-3">
@@ -108,20 +109,20 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           {/* Divider accent */}
           <motion.div
             {...stagger(0.7)}
-            className="w-12 h-[2px] bg-primary/40 mb-5 md:mb-6"
+            className="w-12 h-[2px] bg-primary/40 mb-3 md:mb-6"
           />
 
           {/* Subheadline */}
           <motion.p
             {...stagger(0.8)}
-            className="text-sm md:text-base text-foreground/90 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-lg font-body"
+            className="hidden md:block text-sm md:text-base text-foreground/90 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-lg font-body"
             style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
           >
             Fedezd fel a legkeresettebb designer illatokat — eredeti, bontatlan parfümök közvetlenül a magyarországi hivatalos forgalmazóktól.
           </motion.p>
 
           {/* Search Bar */}
-          <motion.div {...stagger(0.9)} className="w-full max-w-xs sm:max-w-md md:max-w-lg mb-3">
+          <motion.div {...stagger(0.9)} className="w-full max-w-xs sm:max-w-md md:max-w-lg mb-2">
             <button
               onClick={onSearchOpen}
               className="w-full flex items-center gap-3 px-5 py-4 rounded-md border border-primary/30 bg-background/20 backdrop-blur-md text-foreground/60 hover:border-primary/60 hover:bg-background/30 transition-all duration-300 cursor-pointer group"
@@ -141,11 +142,11 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
             {/* Finder link + Browse link — compact row */}
             <motion.div
               {...stagger(1.0)}
-              className="mt-4 flex flex-wrap items-center justify-center gap-3"
+              className="mt-3 flex flex-nowrap items-center justify-center gap-2 md:gap-3"
             >
               <motion.button
                 onClick={onFinderOpen}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium text-primary/80 hover:text-primary bg-primary/10 hover:bg-primary/15 backdrop-blur-sm border border-primary/20 hover:border-primary/40 cursor-pointer transition-all duration-300"
+                className="flex items-center gap-1.5 px-4 py-2 md:px-3.5 md:py-1.5 rounded-full text-xs md:text-[11px] font-medium text-primary/80 hover:text-primary bg-primary/10 hover:bg-primary/15 backdrop-blur-sm border border-primary/20 hover:border-primary/40 cursor-pointer transition-all duration-300"
               >
                 <Sparkles className="w-3 h-3" />
                 <span className="font-body tracking-wide">
@@ -155,7 +156,7 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
 
               <Link
                 to="/termekek"
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium text-foreground/60 hover:text-foreground bg-foreground/5 hover:bg-foreground/10 backdrop-blur-sm border border-foreground/10 hover:border-foreground/20 transition-all duration-300"
+                className="flex items-center gap-1.5 px-4 py-2 md:px-3.5 md:py-1.5 rounded-full text-xs md:text-[11px] font-medium text-primary/70 hover:text-primary bg-primary/5 hover:bg-primary/10 backdrop-blur-sm border border-primary/30 hover:border-primary/50 transition-all duration-300"
               >
                 <span className="font-body tracking-wide">Böngészd az Illatokat</span>
                 <ArrowRight className="w-3 h-3" />
@@ -166,7 +167,7 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           {/* Trust signals */}
           <motion.span
             {...stagger(1.1)}
-            className="block mt-4 text-primary/80 text-xs md:text-sm font-medium font-body"
+            className="block mt-3 md:mt-4 text-primary/80 text-[10px] md:text-sm font-medium font-body"
             style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
           >
             100% Eredeti · Expressz Szállítás · Pénzvisszafizetési Garancia
