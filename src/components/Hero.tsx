@@ -136,7 +136,7 @@ export const Hero = () => {
             <Button
               variant="outline"
               size="lg"
-              className="border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300"
+              className="border-primary/50 text-primary hover:bg-primary/20 hover:border-primary font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300"
               asChild
             >
               <Link to="/termekek?bundle=true">
