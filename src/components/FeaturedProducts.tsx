@@ -1,13 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, Search, X, Loader2, CreditCard, SlidersHorizontal, Sparkles } from "lucide-react";
-import { toast } from "sonner";
-import { Link, useNavigate } from "react-router-dom";
+import { ShoppingBag, Search, X, SlidersHorizontal, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
-import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { ProductQuickBuy } from "@/components/ProductQuickBuy";
 import {
   Dialog,
@@ -37,57 +34,16 @@ const formatPrice = (amount: string, currency: string) => {
 };
 
 /* ── product card ── */
-const FeaturedCard = ({ product, onMobileTap }: { product: ShopifyProduct; onMobileTap: (p: ShopifyProduct) => void }) => {
-  const addItem = useCartStore((s) => s.addItem);
-  const getCheckoutUrl = useCartStore((s) => s.getCheckoutUrl);
-  const isLoading = useCartStore((s) => s.isLoading);
-
+const FeaturedCard = ({ product, onQuickBuy }: { product: ShopifyProduct; onQuickBuy: (p: ShopifyProduct) => void }) => {
   const { node } = product;
   const image = node.images?.edges?.[0]?.node;
   const price = node.priceRange.minVariantPrice;
   const firstVariant = node.variants?.edges?.[0]?.node;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!firstVariant) return;
-
-    await addItem({
-      product,
-      variantId: firstVariant.id,
-      variantTitle: firstVariant.title,
-      price: firstVariant.price,
-      quantity: 1,
-      selectedOptions: firstVariant.selectedOptions || [],
-    });
-
-    toast.success("Kosárba helyezve", { description: node.title });
-  };
-
-  const handleBuyNow = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!firstVariant) return;
-
-    await addItem({
-      product,
-      variantId: firstVariant.id,
-      variantTitle: firstVariant.title,
-      price: firstVariant.price,
-      quantity: 1,
-      selectedOptions: firstVariant.selectedOptions || [],
-    });
-
-    const url = getCheckoutUrl();
-    if (url) window.open(url, "_blank");
-  };
-
   return (
     <Link to={`/product/${node.handle}`} className="group block" onClick={(e) => {
-      if (window.innerWidth < 768) {
-        e.preventDefault();
-        onMobileTap(product);
-      }
+      e.preventDefault();
+      onQuickBuy(product);
     }}>
       <motion.div
         variants={cardVariants}
@@ -115,34 +71,15 @@ const FeaturedCard = ({ product, onMobileTap }: { product: ShopifyProduct; onMob
             </span>
           )}
 
-          {/* Quick actions – always visible on mobile, hover on desktop */}
-          <div className="absolute inset-x-0 bottom-0 p-2.5 hidden md:flex gap-2 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/50 to-transparent pt-8">
+          {/* Quick choose – hover on desktop */}
+          <div className="absolute inset-x-0 bottom-0 p-2.5 hidden md:flex md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/50 to-transparent pt-8">
             <button
-              onClick={handleAddToCart}
-              disabled={isLoading || !firstVariant?.availableForSale}
-              className="flex-1 bg-primary/95 backdrop-blur-sm text-primary-foreground text-sm font-semibold py-2.5 rounded-lg hover:bg-primary transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 active:scale-95"
-              aria-label={`${node.title} kosárba`}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickBuy(product); }}
+              className="flex-1 bg-primary/95 backdrop-blur-sm text-primary-foreground text-sm font-semibold py-2.5 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-1.5 active:scale-95"
+              aria-label={`${node.title} gyors választás`}
             >
-              {isLoading ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              ) : (
-                <>+ Kosár</>
-              )}
-            </button>
-            <button
-              onClick={handleBuyNow}
-              disabled={isLoading || !firstVariant?.availableForSale}
-              className="flex-1 bg-accent/95 backdrop-blur-sm text-accent-foreground text-sm font-semibold py-2.5 rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 active:scale-95"
-              aria-label={`${node.title} vásárlás`}
-            >
-              {isLoading ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              ) : (
-                <>
-                  <CreditCard className="w-3.5 h-3.5" />
-                  Vásárlás
-                </>
-              )}
+              <ShoppingBag className="w-3.5 h-3.5" />
+              Gyors választás
             </button>
           </div>
         </div>
@@ -380,7 +317,7 @@ export const FeaturedProducts = () => {
             viewport={{ once: true, margin: "-40px" }}
           >
             {products.map((product) => (
-              <FeaturedCard key={product.node.id} product={product} onMobileTap={setQuickBuyProduct} />
+              <FeaturedCard key={product.node.id} product={product} onQuickBuy={setQuickBuyProduct} />
             ))}
           </motion.div>
         )}
