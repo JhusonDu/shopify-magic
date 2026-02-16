@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
 import heroImage from "@/assets/hero-vault.jpg";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -12,11 +12,8 @@ export const Hero = () => {
     offset: ["start start", "end start"],
   });
 
-  // Parallax: background moves at 0.5x speed
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  // Content fades out as user scrolls
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.2]);
-  // Scroll indicator fades out quickly
   const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   const handleScrollDown = () => {
@@ -25,9 +22,9 @@ export const Hero = () => {
   };
 
   const stagger = (delay: number) => ({
-    initial: { opacity: 0, y: 24 },
+    initial: { opacity: 0, y: 28 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] as const },
+    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
   });
 
   return (
@@ -45,15 +42,16 @@ export const Hero = () => {
         />
       </motion.div>
 
-      {/* Multi-layer gradient overlay */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/80 via-black/40 to-black/60" />
+      {/* Gradient overlay — lighter to show more image */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/75 via-black/30 to-black/50" />
 
-      {/* Gold glow effect */}
+      {/* Gold glow — larger, warmer */}
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none">
         <div
-          className="w-[600px] h-[600px] rounded-full animate-gold-pulse"
+          className="w-[700px] h-[700px] rounded-full animate-gold-pulse"
           style={{
-            background: "radial-gradient(circle, hsl(43 65% 52% / 0.08) 0%, transparent 70%)",
+            background:
+              "radial-gradient(circle, hsl(43 65% 52% / 0.1) 0%, hsl(43 65% 52% / 0.04) 40%, transparent 70%)",
           }}
         />
       </div>
@@ -65,61 +63,72 @@ export const Hero = () => {
       >
         <div className="flex flex-col items-center text-center max-w-[800px] mx-auto">
           {/* Badge */}
-          <motion.div {...stagger(0.2)} className="flex items-center gap-2 mb-6 md:mb-8">
-            <span className="w-2 h-2 rounded-full bg-primary" />
-            <span className="text-[10px] md:text-xs tracking-[0.25em] text-primary font-medium uppercase font-body">
-              Prémium Parfüm Kollekció
+          <motion.div
+            {...stagger(0.2)}
+            className="badge-gold flex items-center gap-2 mb-6 md:mb-8"
+          >
+            <Sparkles className="w-3 h-3 text-primary" />
+            <span className="text-[10px] md:text-xs tracking-[0.2em] font-medium uppercase font-body">
+              100% Eredeti · Prémium Illatok
             </span>
           </motion.div>
 
-          {/* Headline line 1 */}
-          <motion.span
-            {...stagger(0.4)}
-            className="block text-3xl md:text-5xl lg:text-7xl font-body font-bold uppercase tracking-wide text-foreground leading-tight"
-          >
-            Az Illat
-          </motion.span>
+          {/* Headline */}
+          <motion.h1 {...stagger(0.4)} className="mb-2 md:mb-3">
+            <span className="block text-3xl md:text-5xl lg:text-7xl font-body font-bold uppercase tracking-wide text-foreground leading-tight">
+              Találd Meg
+            </span>
+          </motion.h1>
 
-          {/* Headline line 2 */}
           <motion.span
             {...stagger(0.6)}
-            className="block text-4xl md:text-6xl lg:text-8xl font-display italic text-primary leading-tight mb-4 md:mb-6"
+            className="block text-4xl md:text-6xl lg:text-8xl font-display italic text-primary leading-tight mb-3 md:mb-5"
           >
-            Művészete
+            A Te Illatod
           </motion.span>
+
+          {/* Divider accent */}
+          <motion.div
+            {...stagger(0.7)}
+            className="w-12 h-[2px] bg-primary/40 mb-5 md:mb-6"
+          />
 
           {/* Subheadline */}
           <motion.p
             {...stagger(0.8)}
-            className="text-sm md:text-base text-foreground/70 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-md font-body"
+            className="text-sm md:text-base text-foreground/80 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-lg font-body"
           >
-            Válogatott luxusillatok a világ legjobb parfümházaiból — szakértők által hitelesítve, prémium csomagolásban, házhoz szállítva.
+            Prémium parfümök, amelyeket a világ legjobb házaiból válogattunk össze neked.
+            <span className="block mt-1 text-primary/70 text-xs md:text-sm font-medium">
+              Hitelesített · Ingyenes szállítás · 30 napos garancia
+            </span>
           </motion.p>
 
           {/* CTAs */}
           <motion.div
             {...stagger(1.0)}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+            className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4"
           >
             <Button
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300 group"
+              className="bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground font-bold tracking-wider uppercase px-7 h-12 text-xs rounded-md transition-all duration-300 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
               asChild
             >
               <Link to="/termekek">
-                Vásárlás
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                Kollekció Felfedezése
+                <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="lg"
-              className="border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300"
+              className="text-foreground/80 hover:text-primary hover:bg-primary/5 font-semibold tracking-wider uppercase px-5 h-11 text-xs rounded-md transition-all duration-300"
               onClick={() =>
                 document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              Tudj Meg Többet
+              Hogyan Működik?
             </Button>
           </motion.div>
         </div>
@@ -135,11 +144,14 @@ export const Hero = () => {
         transition={{ delay: 1.4, duration: 0.6 }}
         aria-label="Görgess lejjebb"
       >
+        <span className="text-[9px] tracking-[0.2em] uppercase text-foreground/40 font-body mb-1">
+          Görgess
+        </span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7" />
+          <ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
         </motion.div>
       </motion.button>
     </section>
