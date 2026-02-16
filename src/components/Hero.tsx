@@ -68,7 +68,7 @@ export const Hero = () => {
           <motion.div {...stagger(0.2)} className="flex items-center gap-2 mb-6 md:mb-8">
             <span className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-[10px] md:text-xs tracking-[0.25em] text-primary font-medium uppercase font-body">
-              The Obsidian Collection
+              Prémium Parfüm Kollekció
             </span>
           </motion.div>
 
@@ -77,7 +77,7 @@ export const Hero = () => {
             {...stagger(0.4)}
             className="block text-3xl md:text-5xl lg:text-7xl font-body font-bold uppercase tracking-wide text-foreground leading-tight"
           >
-            The Art of
+            Az Illat
           </motion.span>
 
           {/* Headline line 2 */}
@@ -85,7 +85,7 @@ export const Hero = () => {
             {...stagger(0.6)}
             className="block text-4xl md:text-6xl lg:text-8xl font-display italic text-primary leading-tight mb-4 md:mb-6"
           >
-            Authenticity
+            Művészete
           </motion.span>
 
           {/* Subheadline */}
@@ -93,7 +93,7 @@ export const Hero = () => {
             {...stagger(0.8)}
             className="text-sm md:text-base text-muted-foreground mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-md font-body"
           >
-            Discover our curated edit of ultra-premium fragrances. Sourced globally, verified by experts, delivered with excellence.
+            Válogatott, világszerte beszerzett luxusillatok — szakértők által hitelesítve, kiválósággal szállítva.
           </motion.p>
 
           {/* CTAs */}
@@ -107,7 +107,7 @@ export const Hero = () => {
               asChild
             >
               <Link to="/termekek">
-                Shop Collection
+                Felfedezem
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
@@ -119,7 +119,7 @@ export const Hero = () => {
                 document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              Our Process
+              Hogyan Működik
             </Button>
           </motion.div>
         </div>
