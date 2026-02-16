@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ShoppingBag, Search, X, Loader2, CreditCard, SlidersHorizontal, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { ProductQuickBuy } from "@/components/ProductQuickBuy";
 import {
   Dialog,
   DialogContent,
@@ -35,7 +37,7 @@ const formatPrice = (amount: string, currency: string) => {
 };
 
 /* ── product card ── */
-const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
+const FeaturedCard = ({ product, onMobileTap }: { product: ShopifyProduct; onMobileTap: (p: ShopifyProduct) => void }) => {
   const addItem = useCartStore((s) => s.addItem);
   const getCheckoutUrl = useCartStore((s) => s.getCheckoutUrl);
   const isLoading = useCartStore((s) => s.isLoading);
@@ -81,7 +83,12 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
   };
 
   return (
-    <Link to={`/product/${node.handle}`} className="group block">
+    <Link to={`/product/${node.handle}`} className="group block" onClick={(e) => {
+      if (window.innerWidth < 768) {
+        e.preventDefault();
+        onMobileTap(product);
+      }
+    }}>
       <motion.div
         variants={cardVariants}
         whileHover={{ y: -4 }}
@@ -109,7 +116,7 @@ const FeaturedCard = ({ product }: { product: ShopifyProduct }) => {
           )}
 
           {/* Quick actions – always visible on mobile, hover on desktop */}
-          <div className="absolute inset-x-0 bottom-0 p-2.5 flex gap-2 opacity-100 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/50 to-transparent pt-8">
+          <div className="absolute inset-x-0 bottom-0 p-2.5 hidden md:flex gap-2 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/50 to-transparent pt-8">
             <button
               onClick={handleAddToCart}
               disabled={isLoading || !firstVariant?.availableForSale}
@@ -283,6 +290,7 @@ export const FeaturedProducts = () => {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeVendor, setActiveVendor] = useState<string | null>(null);
+  const [quickBuyProduct, setQuickBuyProduct] = useState<ShopifyProduct | null>(null);
 
   // debounce search
   useEffect(() => {
@@ -372,7 +380,7 @@ export const FeaturedProducts = () => {
             viewport={{ once: true, margin: "-40px" }}
           >
             {products.map((product) => (
-              <FeaturedCard key={product.node.id} product={product} />
+              <FeaturedCard key={product.node.id} product={product} onMobileTap={setQuickBuyProduct} />
             ))}
           </motion.div>
         )}
@@ -398,6 +406,8 @@ export const FeaturedProducts = () => {
         activeVendor={activeVendor}
         setActiveVendor={setActiveVendor}
       />
+      {/* Quick buy dialog (mobile) */}
+      <ProductQuickBuy product={quickBuyProduct} onClose={() => setQuickBuyProduct(null)} />
     </section>
   );
 };
