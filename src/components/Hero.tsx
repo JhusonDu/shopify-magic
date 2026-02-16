@@ -7,9 +7,10 @@ import { useRef } from "react";
 
 interface HeroProps {
   onSearchOpen?: () => void;
+  onFinderOpen?: () => void;
 }
 
-export const Hero = ({ onSearchOpen }: HeroProps) => {
+export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -120,38 +121,75 @@ export const Hero = ({ onSearchOpen }: HeroProps) => {
           </motion.p>
 
           {/* Search Bar */}
-          <motion.button
-            {...stagger(0.9)}
-            onClick={onSearchOpen}
-            className="w-full max-w-xs sm:max-w-md md:max-w-lg mb-5 md:mb-6 flex items-center gap-3 px-5 py-3.5 rounded-md border border-primary/30 bg-background/20 backdrop-blur-md text-foreground/60 hover:border-primary/60 hover:bg-background/30 transition-all duration-300 cursor-pointer group"
-            style={{
-              boxShadow: "0 0 30px hsl(43 65% 52% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.05)",
-            }}
-          >
-            <Search className="w-4 h-4 text-primary/70 group-hover:text-primary transition-colors shrink-0" />
-            <span className="text-sm font-body tracking-wide text-left">
-              Milyen illatot keresel?
-            </span>
-            <kbd className="hidden md:inline-flex ml-auto text-[10px] tracking-wider text-foreground/30 border border-foreground/10 rounded px-1.5 py-0.5 font-mono">
-              ⌘K
-            </kbd>
-          </motion.button>
+          <motion.div {...stagger(0.9)} className="w-full max-w-xs sm:max-w-md md:max-w-lg mb-3">
+            <button
+              onClick={onSearchOpen}
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-md border border-primary/30 bg-background/20 backdrop-blur-md text-foreground/60 hover:border-primary/60 hover:bg-background/30 transition-all duration-300 cursor-pointer group"
+              style={{
+                boxShadow: "0 0 30px hsl(43 65% 52% / 0.1), inset 0 1px 0 hsl(0 0% 100% / 0.05)",
+              }}
+            >
+              <Search className="w-4 h-4 text-primary/70 group-hover:text-primary transition-colors shrink-0" />
+              <span className="text-sm font-body tracking-wide text-left">
+                Milyen illatot keresel?
+              </span>
+              <kbd className="hidden md:inline-flex ml-auto text-[10px] tracking-wider text-foreground/30 border border-foreground/10 rounded px-1.5 py-0.5 font-mono">
+                ⌘K
+              </kbd>
+            </button>
 
-          {/* Primary CTA */}
+            {/* Finder link */}
+            <motion.button
+              onClick={onFinderOpen}
+              className="mt-2.5 flex items-center justify-center gap-1.5 mx-auto text-xs text-primary/70 hover:text-primary transition-colors cursor-pointer group"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Sparkles className="w-3 h-3" />
+              <span className="font-body underline underline-offset-2 decoration-primary/30 group-hover:decoration-primary/60 transition-colors">
+                Nem tudod, mit keresel? Segítünk megtalálni!
+              </span>
+            </motion.button>
+          </motion.div>
+
+          {/* CTA Buttons — side by side on desktop, stacked on mobile */}
           <motion.div
             {...stagger(1.0)}
-            className="w-full max-w-xs sm:max-w-md md:max-w-lg flex flex-col sm:flex-row items-center gap-3"
+            className="w-full max-w-xs sm:max-w-md md:max-w-lg flex flex-col sm:flex-row items-stretch gap-3"
           >
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground font-bold tracking-wider uppercase px-7 h-12 text-xs rounded-md transition-all duration-300 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
-              asChild
+            <motion.div
+              className="flex-1"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Link to="/termekek">
-                Böngészd az Illatokat
-                <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
+              <Button
+                size="lg"
+                className="w-full bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground font-bold tracking-wider uppercase px-7 h-12 text-xs rounded-md transition-all duration-300 group shadow-lg shadow-primary/20 hover:shadow-primary/30"
+                asChild
+              >
+                <Link to="/termekek">
+                  Böngészd az Illatokat
+                  <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </motion.div>
+
+            <motion.div
+              className="flex-1"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full border-primary/50 text-primary hover:bg-primary/20 hover:border-primary font-semibold tracking-wider uppercase px-6 h-12 text-xs rounded-md transition-all duration-300"
+                asChild
+              >
+                <Link to="/termekek?bundle=true">
+                  Állítsd Össze a Dobozod
+                </Link>
+              </Button>
+            </motion.div>
           </motion.div>
 
           {/* Trust signals */}
@@ -162,20 +200,6 @@ export const Hero = ({ onSearchOpen }: HeroProps) => {
           >
             100% Eredeti · Expressz Szállítás · Pénzvisszafizetési Garancia
           </motion.span>
-
-          {/* Secondary CTA — below trust signals */}
-          <motion.div {...stagger(1.2)} className="mt-4">
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-primary/50 text-primary hover:bg-primary/20 hover:border-primary font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300"
-              asChild
-            >
-              <Link to="/termekek?bundle=true">
-                Állítsd Össze a Dobozod
-              </Link>
-            </Button>
-          </motion.div>
         </div>
       </motion.div>
 

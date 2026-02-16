@@ -8,13 +8,30 @@ import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { NewsletterSection } from "@/components/NewsletterSection";
 import { Footer } from "@/components/Footer";
 
+type SearchTab = "search" | "finder";
+
 const Index = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchInitialTab, setSearchInitialTab] = useState<SearchTab>("search");
+
+  const handleSearchOpen = () => {
+    setSearchInitialTab("search");
+    setIsSearchOpen(true);
+  };
+
+  const handleFinderOpen = () => {
+    setSearchInitialTab("finder");
+    setIsSearchOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Header isSearchOpen={isSearchOpen} onSearchOpenChange={setIsSearchOpen} />
-      <Hero onSearchOpen={() => setIsSearchOpen(true)} />
+      <Header
+        isSearchOpen={isSearchOpen}
+        onSearchOpenChange={setIsSearchOpen}
+        searchInitialTab={searchInitialTab}
+      />
+      <Hero onSearchOpen={handleSearchOpen} onFinderOpen={handleFinderOpen} />
       <BestsellersSection />
       <BundleBuilder />
       <AuthenticitySection />
