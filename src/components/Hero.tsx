@@ -45,13 +45,22 @@ export const Hero = () => {
       {/* Gradient overlay — lighter to show more image */}
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/75 via-black/30 to-black/50" />
 
+      {/* Text backdrop glow — dark vignette behind content for readability */}
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 50% at 50% 50%, hsl(0 0% 0% / 0.55) 0%, transparent 70%)",
+        }}
+      />
+
       {/* Gold glow — larger, warmer */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 z-[3] flex items-center justify-center pointer-events-none">
         <div
           className="w-[700px] h-[700px] rounded-full animate-gold-pulse"
           style={{
             background:
-              "radial-gradient(circle, hsl(43 65% 52% / 0.1) 0%, hsl(43 65% 52% / 0.04) 40%, transparent 70%)",
+              "radial-gradient(circle, hsl(43 65% 52% / 0.12) 0%, hsl(43 65% 52% / 0.04) 40%, transparent 70%)",
           }}
         />
       </div>
@@ -75,7 +84,10 @@ export const Hero = () => {
 
           {/* Headline */}
           <motion.h1 {...stagger(0.4)} className="mb-2 md:mb-3">
-            <span className="block text-3xl md:text-5xl lg:text-7xl font-body font-bold uppercase tracking-wide text-foreground leading-tight">
+            <span
+              className="block text-3xl md:text-5xl lg:text-7xl font-body font-bold uppercase tracking-wide text-foreground leading-tight"
+              style={{ textShadow: "0 2px 20px hsl(0 0% 0% / 0.7), 0 0 40px hsl(0 0% 0% / 0.4)" }}
+            >
               Találd Meg
             </span>
           </motion.h1>
@@ -83,6 +95,7 @@ export const Hero = () => {
           <motion.span
             {...stagger(0.6)}
             className="block text-4xl md:text-6xl lg:text-8xl font-display italic text-primary leading-tight mb-3 md:mb-5"
+            style={{ textShadow: "0 2px 30px hsl(43 65% 52% / 0.3), 0 0 60px hsl(43 65% 52% / 0.15)" }}
           >
             A Te Illatod
           </motion.span>
@@ -96,10 +109,11 @@ export const Hero = () => {
           {/* Subheadline */}
           <motion.p
             {...stagger(0.8)}
-            className="text-sm md:text-base text-foreground/80 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-lg font-body"
+            className="text-sm md:text-base text-foreground/90 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-lg font-body"
+            style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
           >
             Prémium parfümök, amelyeket a világ legjobb házaiból válogattunk össze neked.
-            <span className="block mt-1 text-primary/70 text-xs md:text-sm font-medium">
+            <span className="block mt-1 text-primary/80 text-xs md:text-sm font-medium">
               Hitelesített · Ingyenes szállítás · 30 napos garancia
             </span>
           </motion.p>
@@ -116,7 +130,7 @@ export const Hero = () => {
             >
               <Link to="/termekek">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Kollekció Felfedezése
+                Termékek Felfedezése
                 <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
