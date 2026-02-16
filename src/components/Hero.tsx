@@ -91,35 +91,35 @@ export const Hero = () => {
           {/* Subheadline */}
           <motion.p
             {...stagger(0.8)}
-            className="text-sm md:text-base text-muted-foreground mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-md font-body"
+            className="text-sm md:text-base text-foreground/70 mb-8 md:mb-10 leading-relaxed max-w-xs md:max-w-md font-body"
           >
-            Válogatott, világszerte beszerzett luxusillatok — szakértők által hitelesítve, kiválósággal szállítva.
+            Válogatott luxusillatok a világ legjobb parfümházaiból — szakértők által hitelesítve, prémium csomagolásban, házhoz szállítva.
           </motion.p>
 
           {/* CTAs */}
           <motion.div
             {...stagger(1.0)}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4"
           >
             <Button
               size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-md transition-all duration-300 group w-full sm:w-auto"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300 group"
               asChild
             >
               <Link to="/termekek">
-                Felfedezem
+                Vásárlás
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className="border-border text-foreground hover:bg-secondary hover:border-primary/30 font-semibold tracking-wider uppercase px-8 h-12 text-xs rounded-md transition-all duration-300 w-full sm:w-auto"
+              className="border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-semibold tracking-wider uppercase px-6 h-11 text-xs rounded-md transition-all duration-300"
               onClick={() =>
                 document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
               }
             >
-              Hogyan Működik
+              Tudj Meg Többet
             </Button>
           </motion.div>
         </div>
