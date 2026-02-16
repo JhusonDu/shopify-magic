@@ -152,13 +152,12 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
             </motion.button>
           </motion.div>
 
-          {/* CTA Buttons — side by side on desktop, stacked on mobile */}
+          {/* CTA Button — single centered */}
           <motion.div
             {...stagger(1.0)}
-            className="w-full max-w-xs sm:max-w-md md:max-w-lg flex flex-col sm:flex-row items-stretch gap-3"
+            className="w-full max-w-xs sm:max-w-sm"
           >
             <motion.div
-              className="flex-1"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -170,23 +169,6 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
                 <Link to="/termekek">
                   Böngészd az Illatokat
                   <ArrowRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </motion.div>
-
-            <motion.div
-              className="flex-1"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full border-primary/50 text-primary hover:bg-primary/20 hover:border-primary font-semibold tracking-wider uppercase px-6 h-12 text-xs rounded-md transition-all duration-300"
-                asChild
-              >
-                <Link to="/termekek?bundle=true">
-                  Állítsd Össze a Dobozod
                 </Link>
               </Button>
             </motion.div>

@@ -28,6 +28,7 @@ export const CartDrawer = () => {
         <Button 
           variant="ghost" 
           size="icon" 
+          data-cart-trigger
           className="relative text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300"
         >
           <ShoppingBag className="h-5 w-5" />
