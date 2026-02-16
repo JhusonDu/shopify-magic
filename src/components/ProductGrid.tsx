@@ -1,10 +1,19 @@
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "./ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PackageOpen, Sparkles } from "lucide-react";
+import { PackageOpen, Sparkles, FilterX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ShopifyProduct } from "@/lib/shopify";
+import { ProductFiltersState, applyFilters } from "./ProductFilters";
+import { motion, AnimatePresence } from "framer-motion";
 
-export const ProductGrid = () => {
-  const { data: products, isLoading, error } = useProducts(20);
+interface ProductGridProps {
+  filters?: ProductFiltersState;
+  onClearFilters?: () => void;
+}
+
+export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
+  const { data: products, isLoading, error } = useProducts(50);
 
   if (isLoading) {
     return (
@@ -61,11 +70,45 @@ export const ProductGrid = () => {
     );
   }
 
+  // Apply client-side filters
+  const filtered = filters ? applyFilters(products, filters) : products;
+
+  if (filtered.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 text-center animate-fade-in">
+        <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-6">
+          <FilterX className="w-10 h-10 text-muted-foreground" />
+        </div>
+        <h3 className="text-2xl font-semibold mb-3">Nincs találat</h3>
+        <p className="text-muted-foreground max-w-md mb-6">
+          A kiválasztott szűrőkkel nem található termék. Próbálj más kombinációt!
+        </p>
+        {onClearFilters && (
+          <Button variant="outline" onClick={onClearFilters} className="gap-2">
+            <FilterX className="w-4 h-4" />
+            Szűrők törlése
+          </Button>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-      {products.map((product, index) => (
-        <ProductCard key={product.node.id} product={product} index={index} />
-      ))}
-    </div>
+    <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <AnimatePresence mode="popLayout">
+        {filtered.map((product, index) => (
+          <motion.div
+            key={product.node.id}
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.25, delay: index * 0.03 }}
+          >
+            <ProductCard product={product} index={index} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </motion.div>
   );
 };

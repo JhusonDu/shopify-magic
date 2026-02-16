@@ -1,9 +1,17 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
+import { ProductFilters, ProductFiltersState } from "@/components/ProductFilters";
+import { useProducts } from "@/hooks/useProducts";
 import { motion } from "framer-motion";
 
+const emptyFilters: ProductFiltersState = { genders: [], brands: [], types: [] };
+
 const Products = () => {
+  const [filters, setFilters] = useState<ProductFiltersState>(emptyFilters);
+  const { data: products } = useProducts(50);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -28,10 +36,20 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Products Grid */}
+      {/* Filter Bar + Products Grid */}
       <section className="py-16">
-        <div className="container">
-          <ProductGrid />
+        <div className="container space-y-8">
+          {products && products.length > 0 && (
+            <ProductFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              products={products}
+            />
+          )}
+          <ProductGrid
+            filters={filters}
+            onClearFilters={() => setFilters(emptyFilters)}
+          />
         </div>
       </section>
 
