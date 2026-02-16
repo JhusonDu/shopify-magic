@@ -5,7 +5,7 @@ const steps = [
   { id: 1, title: "Méret" },
   { id: 2, title: "Illatok" },
   { id: 3, title: "Áttekintés" },
-  { id: 4, title: "Kosárba" },
+  { id: 4, title: "Elküldés" },
 ];
 
 interface StepProgressProps {

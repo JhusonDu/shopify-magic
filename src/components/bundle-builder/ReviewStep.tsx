@@ -1,26 +1,34 @@
 import { motion } from "framer-motion";
-import { Pencil } from "lucide-react";
+import { Pencil, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ShopifyProduct } from "@/lib/shopify";
-import { getVariantForSize, formatPrice } from "./PerfumeStep";
 import { DecantingPopover } from "./DecantingPopover";
 
 interface ReviewStepProps {
   selectedSize: string;
   selectedProducts: ShopifyProduct[];
   onEditStep: (step: number) => void;
+  name: string;
+  email: string;
+  onNameChange: (v: string) => void;
+  onEmailChange: (v: string) => void;
 }
 
-export const ReviewStep = ({ selectedSize, selectedProducts, onEditStep }: ReviewStepProps) => {
-  const totalPrice = selectedProducts.reduce((sum, p) => {
-    const v = getVariantForSize(p, selectedSize);
-    return sum + (v ? parseFloat(v.node.price.amount) : 0);
-  }, 0);
+const SIZE_LABELS: Record<string, string> = {
+  "5ml": "5ml dekantok",
+  "10ml": "10ml dekantok",
+  "3x10ml": "3× 10ml csomag",
+  "3x50ml": "3× 50ml csomag",
+};
+
+export const ReviewStep = ({ selectedSize, selectedProducts, onEditStep, name, email, onNameChange, onEmailChange }: ReviewStepProps) => {
+  const isBundle = selectedSize.startsWith("3x");
 
   return (
     <div>
       <h3 className="text-xl font-display font-semibold text-center mb-8">
-        Áttekintés
+        Áttekintés & Érdeklődés
       </h3>
 
       <div className="bg-secondary rounded-lg p-6 max-w-lg mx-auto">
@@ -28,7 +36,7 @@ export const ReviewStep = ({ selectedSize, selectedProducts, onEditStep }: Revie
         <div className="flex justify-between items-center mb-4 pb-4 border-b border-border">
           <div>
             <span className="text-muted-foreground text-sm">Méret</span>
-            <p className="font-semibold text-foreground">{selectedSize} dekantok</p>
+            <p className="font-semibold text-foreground">{SIZE_LABELS[selectedSize] || selectedSize}</p>
           </div>
           <Button variant="ghost" size="icon" onClick={() => onEditStep(1)} className="text-muted-foreground hover:text-primary">
             <Pencil className="w-4 h-4" />
@@ -45,7 +53,6 @@ export const ReviewStep = ({ selectedSize, selectedProducts, onEditStep }: Revie
           </div>
           <div className="space-y-3">
             {selectedProducts.map((product) => {
-              const variant = getVariantForSize(product, selectedSize);
               const image = product.node.images.edges[0]?.node;
               return (
                 <motion.div
@@ -61,23 +68,52 @@ export const ReviewStep = ({ selectedSize, selectedProducts, onEditStep }: Revie
                     <p className="text-sm font-medium text-foreground truncate">{product.node.title}</p>
                     <p className="text-xs text-muted-foreground">{product.node.vendor}</p>
                   </div>
-                  {variant && (
-                    <span className="text-sm font-semibold text-foreground shrink-0">
-                      {formatPrice(variant.node.price.amount)}
-                    </span>
-                  )}
                 </motion.div>
               );
             })}
           </div>
         </div>
 
-        {/* Total */}
-        <div className="flex justify-between items-center">
-          <span className="font-semibold text-foreground">Összesen</span>
-          <span className="text-lg font-bold text-primary">
-            {formatPrice(totalPrice.toString())}
-          </span>
+        {/* Bundle discount note */}
+        {isBundle && (
+          <div className="mb-4 pb-4 border-b border-border">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">Csomag kedvezmény</span>
+              <span className="text-sm font-semibold text-primary">-2 000 Ft</span>
+            </div>
+          </div>
+        )}
+
+        {/* Pricing note */}
+        <div className="mb-4 pb-4 border-b border-border">
+          <p className="text-xs text-muted-foreground italic">
+            A végleges árak a szolgáltatás induláskor lesznek megerősítve. Az érdeklődéssel automatikusan 2 000 Ft kedvezményre jogosulsz.
+          </p>
+        </div>
+
+        {/* Contact fields */}
+        <div className="space-y-3">
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Neved"
+              value={name}
+              onChange={(e) => onNameChange(e.target.value)}
+              className="pl-10"
+              maxLength={100}
+            />
+          </div>
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="email"
+              placeholder="Email címed"
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
+              className="pl-10"
+              maxLength={255}
+            />
+          </div>
         </div>
       </div>
 

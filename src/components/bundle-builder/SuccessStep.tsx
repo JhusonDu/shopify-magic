@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
-import { Check, ShoppingBag, ArrowUp } from "lucide-react";
+import { Check, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface SuccessStepProps {
-  onOpenCart: () => void;
   onScrollUp: () => void;
 }
 
-export const SuccessStep = ({ onOpenCart, onScrollUp }: SuccessStepProps) => (
+export const SuccessStep = ({ onScrollUp }: SuccessStepProps) => (
   <div className="text-center">
     <motion.div
       initial={{ scale: 0 }}
@@ -25,21 +24,15 @@ export const SuccessStep = ({ onOpenCart, onScrollUp }: SuccessStepProps) => (
     </motion.div>
 
     <h3 className="text-xl font-display font-semibold mb-2">
-      Sikeresen hozzáadva!
+      Köszönjük az érdeklődésedet!
     </h3>
     <p className="text-muted-foreground mb-8 max-w-sm mx-auto">
-      A kiválasztott dekantok a kosaradba kerültek. Folytasd a fizetéshez, vagy böngéssz tovább.
+      Amint elérhető lesz ez a szolgáltatás, értesítünk és automatikusan megkapod a 2 000 Ft kedvezményt.
     </p>
 
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-      <Button onClick={onOpenCart} className="bg-primary text-primary-foreground hover:bg-accent gap-2">
-        <ShoppingBag className="w-4 h-4" />
-        Tovább a fizetéshez
-      </Button>
-      <Button variant="ghost" onClick={onScrollUp} className="text-muted-foreground gap-2">
-        <ArrowUp className="w-4 h-4" />
-        Folytasd a böngészést
-      </Button>
-    </div>
+    <Button variant="ghost" onClick={onScrollUp} className="text-muted-foreground gap-2">
+      <ArrowUp className="w-4 h-4" />
+      Folytasd a böngészést
+    </Button>
   </div>
 );

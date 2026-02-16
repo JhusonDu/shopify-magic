@@ -7,7 +7,8 @@ import { ShopifyProduct } from "@/lib/shopify";
 const MAX_SELECTIONS: Record<string, number> = {
   "5ml": 5,
   "10ml": 3,
-  "15ml": 3,
+  "3x10ml": 3,
+  "3x50ml": 3,
 };
 
 interface PerfumeStepProps {
@@ -19,9 +20,11 @@ interface PerfumeStepProps {
 }
 
 function getVariantForSize(product: ShopifyProduct, size: string) {
+  // Map bundle sizes to their base variant size
+  const lookupSize = size === "3x10ml" ? "10ml" : size === "3x50ml" ? "50ml" : size;
   return product.node.variants.edges.find(v => {
     const sizeOpt = v.node.selectedOptions.find(o => o.name === "Méret" || o.name === "Meret");
-    return sizeOpt?.value === size && v.node.availableForSale;
+    return sizeOpt?.value === lookupSize && v.node.availableForSale;
   });
 }
 
@@ -64,7 +67,9 @@ export const PerfumeStep = ({ selectedSize, selectedProducts, onToggle, products
         Válaszd ki az illatokat
       </h3>
       <p className="text-center text-muted-foreground text-sm mb-6">
-        Válassz {maxSelections === 5 ? "1-5" : "1-3"} illatot a {selectedSize}-es dekantokhoz
+        {selectedSize.startsWith("3x")
+          ? `Válassz pontosan 3 illatot a ${selectedSize} csomaghoz`
+          : `Válassz ${maxSelections === 5 ? "1-5" : "1-3"} illatot a ${selectedSize}-es dekantokhoz`}
       </p>
 
       {/* Search */}

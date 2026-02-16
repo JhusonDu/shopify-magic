@@ -2,14 +2,15 @@ import { useState, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
-import { useCartStore } from "@/stores/cartStore";
 import { ShopifyProduct } from "@/lib/shopify";
+import { supabase } from "@/integrations/supabase/client";
 import { DecantingPopover } from "./bundle-builder/DecantingPopover";
 import { StepProgress } from "./bundle-builder/StepProgress";
 import { SizeStep } from "./bundle-builder/SizeStep";
-import { PerfumeStep, getVariantForSize } from "./bundle-builder/PerfumeStep";
+import { PerfumeStep } from "./bundle-builder/PerfumeStep";
 import { ReviewStep } from "./bundle-builder/ReviewStep";
 import { SuccessStep } from "./bundle-builder/SuccessStep";
+import { toast } from "sonner";
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -29,10 +30,11 @@ export const BundleBuilder = () => {
   const [direction, setDirection] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<ShopifyProduct[]>([]);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [inquiryName, setInquiryName] = useState("");
+  const [inquiryEmail, setInquiryEmail] = useState("");
 
   const { data: products = [], isLoading } = useProducts(50);
-  const addItem = useCartStore((s) => s.addItem);
 
   const goTo = useCallback((step: number) => {
     setDirection(step > currentStep ? 1 : -1);
@@ -50,43 +52,44 @@ export const BundleBuilder = () => {
     });
   };
 
-  const handleAddToCart = async () => {
-    if (!selectedSize) return;
-    setIsAddingToCart(true);
+  const handleSubmitInquiry = async () => {
+    if (!selectedSize || !inquiryName.trim() || !inquiryEmail.trim()) return;
+    setIsSubmitting(true);
     try {
-      for (const product of selectedProducts) {
-        const variant = getVariantForSize(product, selectedSize);
-        if (!variant) continue;
-        await addItem({
-          product,
-          variantId: variant.node.id,
-          variantTitle: variant.node.title,
-          price: variant.node.price,
-          quantity: 1,
-          selectedOptions: variant.node.selectedOptions,
-        });
-      }
+      const { error } = await supabase.from("bundle_inquiries" as any).insert({
+        name: inquiryName.trim(),
+        email: inquiryEmail.trim(),
+        selected_size: selectedSize,
+        selected_products: selectedProducts.map(p => ({
+          id: p.node.id,
+          title: p.node.title,
+          vendor: p.node.vendor,
+        })),
+      } as any);
+      if (error) throw error;
       goTo(4);
     } catch (e) {
-      console.error("Failed to add bundle to cart:", e);
+      console.error("Failed to submit inquiry:", e);
+      toast.error("Hiba történt az elküldés során. Kérjük próbáld újra.");
     } finally {
-      setIsAddingToCart(false);
+      setIsSubmitting(false);
     }
   };
 
   const canProceed = () => {
     if (currentStep === 1) return !!selectedSize;
     if (currentStep === 2) return selectedProducts.length > 0;
-    if (currentStep === 3) return true;
+    if (currentStep === 3) return inquiryName.trim().length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inquiryEmail);
     return false;
   };
 
   const handleScrollUp = () => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth" });
-    // Reset for a new bundle
     setCurrentStep(1);
     setSelectedSize(null);
     setSelectedProducts([]);
+    setInquiryName("");
+    setInquiryEmail("");
     setDirection(1);
   };
 
@@ -94,8 +97,8 @@ export const BundleBuilder = () => {
     <section ref={sectionRef} id="bundle-builder" className="py-20 md:py-28 bg-card">
       <div className="container">
         {/* Header */}
-        <div className="text-center mb-14 animate-fade-in">
-          <span className="badge-gold mb-4 inline-block">Egyedi Összeállítás</span>
+        <div className="text-center mb-6 animate-fade-in">
+          <span className="badge-gold mb-4 inline-block">🚀 Hamarosan Érkezik</span>
           <div className="flex items-center justify-center gap-2 mb-4">
             <h2 className="text-h2 font-display font-bold text-foreground">
               Állítsd Össze a Saját Dobozkádat
@@ -103,8 +106,17 @@ export const BundleBuilder = () => {
             <DecantingPopover />
           </div>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Válaszd ki a neked tetsző illatokat, mi összeállítjuk és postázzuk a prémium dekant dobozkádat.
+            Válaszd ki a neked tetsző illatokat és jelezd az érdeklődésedet – amint elindul a szolgáltatás, elsőként értesítünk!
           </p>
+        </div>
+
+        {/* Discount info box */}
+        <div className="max-w-lg mx-auto mb-10">
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 text-center">
+            <p className="text-sm text-foreground">
+              Jelezd az érdeklődésedet és <strong className="text-primary">2 000 Ft kedvezményt kapsz</strong> az induláskor!
+            </p>
+          </div>
         </div>
 
         <StepProgress currentStep={currentStep} />
@@ -124,7 +136,10 @@ export const BundleBuilder = () => {
               {currentStep === 1 && (
                 <SizeStep
                   selectedSize={selectedSize}
-                  onSelect={(size) => setSelectedSize(size)}
+                  onSelect={(size) => {
+                    setSelectedSize(size);
+                    setSelectedProducts([]);
+                  }}
                   products={products}
                 />
               )}
@@ -144,18 +159,15 @@ export const BundleBuilder = () => {
                   selectedSize={selectedSize}
                   selectedProducts={selectedProducts}
                   onEditStep={goTo}
+                  name={inquiryName}
+                  email={inquiryEmail}
+                  onNameChange={setInquiryName}
+                  onEmailChange={setInquiryEmail}
                 />
               )}
 
               {currentStep === 4 && (
-                <SuccessStep
-                  onOpenCart={() => {
-                    // Trigger cart drawer open via clicking the cart button
-                    const cartButton = document.querySelector('[data-cart-trigger]') as HTMLButtonElement;
-                    cartButton?.click();
-                  }}
-                  onScrollUp={handleScrollUp}
-                />
+                <SuccessStep onScrollUp={handleScrollUp} />
               )}
             </motion.div>
           </AnimatePresence>
@@ -174,11 +186,11 @@ export const BundleBuilder = () => {
 
               {currentStep === 3 ? (
                 <Button
-                  onClick={handleAddToCart}
-                  disabled={isAddingToCart}
+                  onClick={handleSubmitInquiry}
+                  disabled={!canProceed() || isSubmitting}
                   className="bg-primary text-primary-foreground hover:bg-accent"
                 >
-                  {isAddingToCart ? "Hozzáadás..." : "Kosárba"}
+                  {isSubmitting ? "Küldés..." : "Érdeklődés Beküldése"}
                 </Button>
               ) : (
                 <Button
