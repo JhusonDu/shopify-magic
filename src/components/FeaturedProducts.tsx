@@ -313,7 +313,7 @@ export const FeaturedProducts = () => {
           <div className="flex items-center gap-3">
             <Sparkles className="w-5 h-5 text-primary drop-shadow-[0_0_6px_hsl(var(--primary)/0.5)]" />
             <h2 className="font-display text-2xl md:text-3xl text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.3)]">
-              Most Popular Products
+              Legnépszerűbb Termékek
             </h2>
           </div>
 
@@ -324,14 +324,14 @@ export const FeaturedProducts = () => {
               className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary bg-card border border-border hover:border-primary/50 px-4 py-2 rounded-full transition-all duration-200 hover:shadow-[0_0_10px_hsl(var(--primary)/0.15)]"
             >
               <SlidersHorizontal className="w-4 h-4" />
-              Filter
+              Szűrő
             </button>
 
             <Link
               to="/termekek"
               className="text-sm text-primary hover:underline font-medium hidden md:inline-flex items-center gap-1 hover:drop-shadow-[0_0_6px_hsl(var(--primary)/0.4)] transition-all"
             >
-              View All →
+              Összes Megtekintése →
             </Link>
           </div>
         </div>
@@ -339,7 +339,7 @@ export const FeaturedProducts = () => {
         {/* Active filter indicator */}
         {debouncedQuery && (
           <div className="mb-5 flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Active filter:</span>
+            <span className="text-xs text-muted-foreground">Aktív szűrő:</span>
             <span className="text-xs bg-primary/15 text-primary px-3 py-1 rounded-full flex items-center gap-1.5 border border-primary/20 shadow-[0_0_8px_hsl(var(--primary)/0.15)]">
               {debouncedQuery}
               <button onClick={() => { setSearchQuery(""); setActiveVendor(null); }}>
@@ -360,7 +360,7 @@ export const FeaturedProducts = () => {
           <div className="text-center py-16">
             <ShoppingBag className="w-12 h-12 text-muted-foreground/40 mx-auto mb-3" />
             <p className="text-muted-foreground">
-              No products found{debouncedQuery ? ` for "${debouncedQuery}"` : ""}.
+              Nincs termék{debouncedQuery ? ` "${debouncedQuery}" keresésre` : ""}.
             </p>
           </div>
         ) : (
@@ -383,7 +383,7 @@ export const FeaturedProducts = () => {
             to="/termekek"
             className="text-sm text-primary hover:underline font-medium hover:drop-shadow-[0_0_6px_hsl(var(--primary)/0.4)] transition-all"
           >
-            View All Products →
+            Összes Megtekintése →
           </Link>
         </div>
       </div>
