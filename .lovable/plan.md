@@ -1,89 +1,97 @@
 
 
-# Header Toolbar Redesign Plan
+# Hero Search Bar and Layout Redesign
 
 ## Overview
-A complete redesign of the header for both desktop and mobile, updating branding to "ScentBox Hungary", restructuring navigation links, and building a functional search overlay that queries your Shopify product catalog.
+Move the search experience from the header toolbar into the Hero section, creating a prominent search bar that acts as the main call-to-action. Reorganize Hero buttons and remove the search icon from the header.
 
 ---
 
-## 1. Branding Update
+## 1. Remove Search Icon from Header
 
-- Change the two-line logo text ("ScentBox" + small "Hungary") into a single clickable line: **"ScentBox Hungary"**
-- Keep the gold 3D logo icon and its hover/glow animations exactly as they are
+**File: `src/components/Header.tsx`**
 
-## 2. Navigation Links (Desktop + Mobile)
+- Remove the Search icon button from the desktop actions area (lines 253-260)
+- Remove the mobile search icon button (lines 238-245)
+- Remove the search icon from the mobile menu footer (lines 145-155)
+- Keep the `SearchCommand` component and `isSearchOpen` state -- the Hero search bar will trigger it
+- Keep `Ctrl+K` / `Cmd+K` keyboard shortcut working
+- Keep User icon and Cart icon in the header
 
-Replace the current nav links with these:
-
-| Label | Type | Target |
-|---|---|---|
-| Kezdolap | Route | `/` |
-| Illatok | Route | `/termekek` |
-| Rolunk | Anchor | `#authenticity` |
-| Kapcsolat | Anchor | `#footer` (scroll to footer) |
-
-This removes the old "Doboz Osszeallitasa" and "Kedvencek" links from the header (they remain accessible on the homepage itself).
-
-## 3. Search Bar -- Command Palette Style
-
-Instead of a plain search bar in the header, implement a **search overlay/modal** (using the existing `cmdk` + `CommandDialog` component already installed):
-
-- **Desktop**: Clicking the Search icon opens a centered command palette overlay with a text input. As the user types, it queries Shopify products via the existing `fetchProducts(first, query)` function and shows results with product image, title, and price.
-- **Mobile**: Same overlay, full-width, triggered from the mobile menu or a search icon in the header.
-- Selecting a result navigates to `/product/{handle}`.
-- Keyboard shortcut: `Ctrl+K` / `Cmd+K` opens it on desktop.
-
-## 4. Desktop Header Layout
-
+**New desktop actions layout:**
 ```text
-[Logo + "ScentBox Hungary"]  [Kezdolap] [Illatok] [Rolunk] [Kapcsolat]  [Search icon] [User icon] [Cart icon]
+[User icon] [Cart icon]
 ```
 
-- Left: Logo + brand name (single line)
-- Center: Navigation links with existing gold underline hover animation
-- Right: Search, Account, Cart icons in a row
-
-## 5. Mobile Header Layout
-
+**New mobile header layout:**
 ```text
-[Hamburger]  [Logo + "ScentBox Hungary"]  [Search icon] [Cart icon]
+[Hamburger] [Logo + "ScentBox Hungary"] [Cart icon]
 ```
-
-- The hamburger opens the existing slide-out Sheet with updated nav links
-- Search icon opens the same command palette overlay
-- User/Account icon moves inside the mobile menu's footer section
-- Cart icon stays visible in the header
-
-## 6. Account Icon (Placeholder)
-
-The User icon currently does nothing. It will remain as a visual placeholder button for now -- no auth flow will be added in this phase.
 
 ---
 
-## Technical Details
+## 2. Add Search Bar to Hero Section
 
-### Files to modify:
-1. **`src/components/Header.tsx`** -- Main changes:
-   - Update `navLinks` array with new labels/targets
-   - Change brand text to single-line "ScentBox Hungary"
-   - Add search state (`isSearchOpen`) and `Ctrl+K` keyboard listener
-   - Import and render the new `SearchCommand` component
-   - Reorganize mobile header to show search + cart icons (move User icon into mobile menu)
+**File: `src/components/Hero.tsx`**
 
-2. **New file: `src/components/SearchCommand.tsx`** -- Search overlay component:
-   - Uses existing `CommandDialog`, `CommandInput`, `CommandList`, `CommandItem`, `CommandEmpty` from `src/components/ui/command.tsx`
-   - Uses `useProducts` hook with debounced search query
-   - Shows product results with thumbnail, title, price
-   - `useNavigate` to go to product detail on selection
-   - Accepts `open` and `onOpenChange` props
+Restructure the Hero CTA area into three stacked elements:
 
-### No new dependencies needed
-- `cmdk` is already installed
-- `CommandDialog` component already exists
-- `useProducts` hook already supports a `query` parameter
-- `framer-motion` already in use for animations
+### New layout (top to bottom):
+1. **Search bar** -- a clickable fake input that opens the `SearchCommand` dialog
+2. **"Bongeszd az Illatokat"** button (primary CTA)
+3. **"Allitsd Ossze a Dobozod"** button (secondary CTA)
 
-### Search debouncing
-- Add a `useState` for the search term and a simple `useEffect` with a 300ms `setTimeout` debounce before passing the query to `useProducts`
+### Search bar design:
+- A wide, styled container that looks like a search input but is actually a button
+- Contains a Search icon on the left and placeholder text: **"Milyen illatot keresnel?"** ("What scent are you looking for?")
+- On click, it opens the existing `SearchCommand` dialog (which has both Search and Finder tabs)
+- **Mobile**: spans the full width of the content area (matching the width from the first button's left edge to the second button's right edge)
+- **Desktop**: same max-width as the content area (~500-600px)
+- Styled with a semi-transparent background, border, and subtle glow to match the luxury aesthetic
+
+### Button reordering:
+- **"Bongeszd az Illatokat"** stays as the primary gold button
+- **"Allitsd Ossze a Dobozod"** moves below it (after the "100% Eredeti" text line)
+
+The Hero component will need to accept a callback or state setter to open the search. Since `SearchCommand` lives in `Header.tsx`, we will lift the search state up:
+- Move `isSearchOpen` and `setIsSearchOpen` into Index.tsx and pass them as props to both `Header` and `Hero`
+- Alternatively, keep it simpler: pass `onSearchOpen` callback from `Header` to `Hero` -- but since they are siblings, **lift state to Index.tsx**
+
+---
+
+## 3. State Management
+
+**File: `src/pages/Index.tsx`**
+
+- Add `isSearchOpen` state here
+- Pass `isSearchOpen` and `setIsSearchOpen` (or `onSearchOpen`) to both `Header` and `Hero`
+- `Header` still renders the `SearchCommand` dialog and handles `Ctrl+K`
+- `Hero` calls `onSearchOpen()` when the fake search bar is clicked
+
+---
+
+## 4. Responsive Sizing
+
+### Mobile:
+- Search bar spans full width of the content container (`w-full`)
+- Both CTA buttons stack vertically below, also full width
+- All three elements align left-to-right edges
+
+### Desktop:
+- Search bar has a max-width matching the button group (~max-w-lg or similar)
+- Centered within the Hero content
+- Buttons remain side-by-side below the search bar
+
+---
+
+## Technical Summary
+
+| File | Changes |
+|---|---|
+| `src/pages/Index.tsx` | Add `isSearchOpen` state, pass props to Header and Hero |
+| `src/components/Header.tsx` | Accept `isSearchOpen`/`onSearchOpenChange` props, remove all Search icon buttons |
+| `src/components/Hero.tsx` | Accept `onSearchOpen` prop, add clickable search bar above CTAs, move "Allitsd Ossze a Dobozod" below authenticity text |
+| `src/components/SearchCommand.tsx` | No changes needed |
+
+No new dependencies required.
 
