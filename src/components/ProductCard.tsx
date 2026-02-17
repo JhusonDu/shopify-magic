@@ -5,6 +5,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductCardProps {
   product: ShopifyProduct;
@@ -21,6 +22,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const isLoading = useCartStore(state => state.isLoading);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const isMobile = useIsMobile();
   
   const { node } = product;
   const images = node.images?.edges || [];
@@ -59,7 +61,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     >
       {/* Image Container */}
       <div
-        className="relative overflow-hidden rounded-lg bg-secondary aspect-[4/5] mb-4 transition-all duration-500"
+        className="relative overflow-hidden rounded-lg bg-secondary aspect-[3/4] md:aspect-[4/5] mb-2 md:mb-4 transition-all duration-500"
         style={{
           transform: isHovered ? "translateY(-8px)" : "translateY(0)",
           boxShadow: isHovered
@@ -108,26 +110,37 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
         {/* Quick add overlay */}
         <div
-          className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-background/80 to-transparent transition-all duration-300"
+          className="absolute inset-x-0 bottom-0 p-2 md:p-4 bg-gradient-to-t from-background/80 to-transparent transition-all duration-300"
           style={{
-            opacity: isHovered ? 1 : 0,
-            transform: isHovered ? "translateY(0)" : "translateY(100%)",
+            opacity: isMobile || isHovered ? 1 : 0,
+            transform: isMobile || isHovered ? "translateY(0)" : "translateY(100%)",
           }}
         >
-          <Button 
-            onClick={handleAddToCart}
-            disabled={isLoading || !firstVariant?.availableForSale}
-            className="w-full bg-primary hover:bg-accent text-primary-foreground h-11 rounded-md font-semibold tracking-wide text-sm"
-          >
-            {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <>
-                <Plus className="w-4 h-4 mr-2" />
-                Kosárba
-              </>
-            )}
-          </Button>
+          {isMobile ? (
+            <Button 
+              onClick={handleAddToCart}
+              disabled={isLoading || !firstVariant?.availableForSale}
+              size="icon"
+              className="ml-auto block bg-primary hover:bg-accent text-primary-foreground h-9 w-9 rounded-full"
+            >
+              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+            </Button>
+          ) : (
+            <Button 
+              onClick={handleAddToCart}
+              disabled={isLoading || !firstVariant?.availableForSale}
+              className="w-full bg-primary hover:bg-accent text-primary-foreground h-11 rounded-md font-semibold tracking-wide text-sm"
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Kosárba
+                </>
+              )}
+            </Button>
+          )}
         </div>
 
         {/* Stock badge */}
@@ -147,11 +160,11 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </p>
         )}
         {/* Title */}
-        <h3 className="font-display text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
+        <h3 className="font-display text-sm md:text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
           {node.title}
         </h3>
         {/* Price */}
-        <p className="text-lg font-bold text-primary">
+        <p className="text-base md:text-lg font-bold text-primary">
           {formatHUF(price.amount)}
         </p>
       </div>

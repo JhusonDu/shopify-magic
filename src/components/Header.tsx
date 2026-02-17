@@ -53,12 +53,12 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
         className={`fixed top-0 z-50 w-full transition-all duration-500 ${
           isScrolled
             ? "bg-background/95 backdrop-blur-xl border-b border-primary/20 shadow-lg shadow-black/10"
-            : "bg-gradient-to-b from-background/80 to-transparent"
+            : "bg-gradient-to-b from-background/90 md:from-background/80 to-transparent"
         }`}
       >
-        <div className="container flex h-16 md:h-20 items-center justify-between">
+        <div className="container flex h-14 md:h-20 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-2 md:gap-3 group">
             <motion.div
               whileHover={{ scale: 1.05, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
@@ -73,7 +73,7 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
               />
             </motion.div>
             <span className="text-lg md:text-xl font-semibold tracking-tight text-foreground font-display leading-tight">
-              ScentBox Hungary
+              ScentBox<span className="hidden md:inline"> Hungary</span>
             </span>
           </Link>
 
