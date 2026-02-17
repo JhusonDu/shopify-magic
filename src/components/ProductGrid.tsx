@@ -93,6 +93,7 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, delay: index * 0.03 }}
+            className="sm:max-w-none max-w-sm mx-auto sm:mx-0 w-full"
           >
             <ProductCard product={product} index={index} />
           </motion.div>
