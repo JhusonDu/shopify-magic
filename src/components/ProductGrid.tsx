@@ -16,7 +16,7 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="space-y-4 animate-fade-in" style={{ animationDelay: `${i * 0.08}s` }}>
             <Skeleton className="aspect-[4/5] rounded-lg" />
@@ -83,7 +83,7 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
   }
 
   return (
-    <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+    <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
       <AnimatePresence mode="popLayout">
         {filtered.map((product, index) => (
           <motion.div
@@ -93,7 +93,7 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.25, delay: index * 0.03 }}
-            className="sm:max-w-none max-w-sm mx-auto sm:mx-0 w-full"
+            className="w-full"
           >
             <ProductCard product={product} index={index} />
           </motion.div>

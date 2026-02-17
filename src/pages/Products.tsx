@@ -24,7 +24,7 @@ const Products = () => {
       
       {/* Hero Section */}
       <section
-        className="relative pt-36 pb-16 border-b border-primary/20 overflow-hidden"
+        className="relative pt-24 pb-6 md:pt-36 md:pb-16 border-b border-primary/20 overflow-hidden"
         style={{
           background: `
             radial-gradient(ellipse 80% 60% at 30% 50%, hsl(43 65% 52% / 0.07) 0%, transparent 70%),
@@ -42,7 +42,7 @@ const Products = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm text-muted-foreground mb-8"
+            className="flex items-center gap-2 text-sm text-muted-foreground mb-3 md:mb-8"
           >
             <Link to="/" className="hover:text-primary transition-colors duration-200">
               Főoldal
@@ -57,18 +57,18 @@ const Products = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="badge-gold mb-5 inline-block"
+              className="badge-gold mb-5 hidden md:inline-block"
             >
               Kollekció
             </motion.span>
 
-            <div className="flex items-stretch gap-5">
+            <div className="flex items-stretch gap-3 md:gap-5">
               {/* Gold accent bar */}
               <motion.div
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
                 transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-                className="w-1 rounded-full origin-top"
+                className="w-0.5 md:w-1 rounded-full origin-top"
                 style={{ background: "linear-gradient(to bottom, hsl(43 65% 52%), hsl(43 65% 52% / 0.2))" }}
               />
 
@@ -77,23 +77,26 @@ const Products = () => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.25 }}
-                  className="text-4xl md:text-5xl lg:text-[56px] font-display font-bold text-foreground mb-4 leading-tight"
+                  className="text-2xl md:text-5xl lg:text-[56px] font-display font-bold text-foreground mb-1 md:mb-4 leading-tight"
                 >
                   Összes Termék
+                  {isMobile && productCount > 0 && (
+                    <span className="text-muted-foreground text-base font-medium ml-2">({productCount})</span>
+                  )}
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.35 }}
-                  className="text-muted-foreground text-lg leading-relaxed"
+                  className="text-muted-foreground text-lg leading-relaxed hidden md:block"
                 >
                   Fedezd fel prémium parfüm dekant kínálatunkat — mindig 100% eredeti, luxus minőségben.
                 </motion.p>
               </div>
             </div>
 
-            {productCount > 0 && (
+            {!isMobile && productCount > 0 && (
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -108,7 +111,7 @@ const Products = () => {
       </section>
 
       {/* Filter Sidebar + Products Grid */}
-      <section className="py-12">
+      <section className="py-6 md:py-12">
         <div className="container">
           <div className={`flex gap-8 ${isMobile ? "flex-col" : ""}`}>
             {!isMobile && products && products.length > 0 && (

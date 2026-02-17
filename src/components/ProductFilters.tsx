@@ -342,9 +342,9 @@ export const ProductFilters = ({
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none"
+            className="fixed bottom-5 left-0 right-0 z-40 flex justify-center pointer-events-none"
           >
-            <Button className="rounded-full px-8 h-12 shadow-2xl gap-2 pointer-events-auto" size="lg">
+            <Button className="rounded-full px-5 h-10 shadow-2xl gap-2 pointer-events-auto backdrop-blur-md bg-primary/90" size="lg">
               <SlidersHorizontal className="w-4 h-4" />
               Szűrő
               {activeCount > 0 && (
