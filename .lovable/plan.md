@@ -1,68 +1,74 @@
 
 
-# ScentBox Products Page Redesign - Phase 1: Layout and Product Cards
+# Add Price Range Filter + "Ajánlott" (Recommended) Sort Option
 
 ## Overview
 
-The uploaded spec describes a complete luxury e-commerce products page with ~15 major features. Implementing everything at once would be risky, so I recommend breaking it into 5 phases. Here is **Phase 1** — the foundation that everything else builds on.
+Enhance the filter sidebar with two new features:
+1. A **"Recommended" sort option** as the default in the sort dropdown
+2. A **price range slider** with budget preset buttons beneath the sort section -- a dual-thumb slider with min/max inputs, plus quick-select budget buttons for common spending ranges
 
-## Current State vs. Target
+## What Changes
 
-| Feature | Current | Target (Phase 1) |
-|---------|---------|-------------------|
-| Page layout | Full-width filter bar + 3-col grid | Sidebar (280px) + 4-col grid |
-| Product cards | Basic (image, title, price, quick add) | Luxury (brand label, hover lift, image zoom, quick add overlay, size pills) |
-| Hero section | Simple centered text | Badge + large title + subtitle + result count |
-| Mobile grid | 1 column | 1 column (unchanged) |
-| Mobile filters | Bottom sheet | Bottom sheet (unchanged, will enhance later) |
+### 1. Update `ProductFiltersState` interface
+- Add `priceRange: [number, number]` to the filter state (min, max in HUF)
+- Update the `emptyFilters` default in `Products.tsx` to include the full price range
 
-## What Phase 1 Covers
+### 2. Sort Dropdown -- Add "Ajanlott" (Recommended)
+- Rename the current "Alapertelmezett" (Default) option to **"Ajanlott"** (Recommended) with value `"recommended"`
+- Keep the existing price and name sort options
 
-### 1. Products Page Layout Restructure (`Products.tsx`)
-- Desktop: flex row with sticky 280px sidebar + fluid grid area
-- Mobile: stays single column, no sidebar (filter button opens sheet as now)
-- Grid changes from 3 columns to 4 columns on desktop (3 on laptop, 2 on tablet, 1 on mobile)
+### 3. Price Range Component (inside `ProductFilters.tsx`)
+- **Dual-thumb Radix Slider** showing min-max range
+- **Two small input fields** (min / max) showing formatted HUF values, editable
+- **Budget preset buttons** beneath the slider as pill chips:
+  - "< 5 000 Ft" (budget)
+  - "5 000 - 10 000 Ft" (mid-range)
+  - "10 000 - 20 000 Ft" (premium)
+  - "20 000+ Ft" (luxury)
+- Clicking a preset auto-sets the slider range with a smooth animation
+- An "Osszes ar" (All prices) chip to reset the range
+- The slider track fills with gold (primary color) between the two thumbs
+- Animated transitions when presets are selected
 
-### 2. Enhanced Hero Section (`Products.tsx`)
-- "KOLLEKCIO" pill badge at top
-- "Osszes Termek" heading at 56px desktop / 40px mobile
-- Subtitle text below
-- Product count display (e.g., "42 termek")
-- Bottom border with subtle gold line
+### 4. Filter Logic Update (`applyFilters`)
+- Add price range filtering: check if product's `minVariantPrice.amount` falls within `[min, max]`
+- Include price range in `activeCount` (count +1 if range differs from full range)
 
-### 3. Product Card Redesign (`ProductCard.tsx`)
-- Brand label (uppercase, small, muted) above title
-- Title with Playfair Display font, max 2 lines
-- Price in gold, larger (24px)
-- Hover effects: card lifts -8px with gold shadow, image scales 1.08x
-- Quick add button slides up from bottom on hover
-- HUF price formatting (e.g., "4 990 Ft" instead of "HUF 4990.00")
+### 5. Clear Behavior
+- "Torles" (Clear all) resets price range back to full range
+- Price range derives its min/max bounds dynamically from the loaded products
 
-### 4. Filter Sidebar (Desktop) (`ProductFilters.tsx`)
-- Move from horizontal bar to vertical sidebar layout on desktop
-- Same filter groups (Gender, Brand, Type) but stacked vertically
-- Add sort dropdown (Popularity, Price asc/desc, Name A-Z)
-- Mobile stays as bottom sheet (no change)
+## Files to Modify
 
-## What is NOT in Phase 1 (later phases)
+1. **`src/components/ProductFilters.tsx`**
+   - Add `priceRange` to `ProductFiltersState`
+   - Create `PriceRangeFilter` sub-component with dual Slider, inputs, and budget presets
+   - Add price filtering logic in `applyFilters`
+   - Rename default sort to "Ajanlott"
+   - Insert price range section between sort and gender filters
 
-- Phase 2: Wishlist, badges (New/Popular/Limited), active filter chips
-- Phase 3: Quick View modal
-- Phase 4: Pagination, URL params for filters, price range slider
-- Phase 5: Extra features (recently viewed, compare, social sharing)
+2. **`src/pages/Products.tsx`**
+   - Update `emptyFilters` to include `priceRange: [0, 100000]`
+   - Pass price bounds derived from products to filters
 
-## Technical Details
+3. **`src/components/ui/slider.tsx`**
+   - Already supports Radix dual-thumb (just pass `value={[min, max]}`) -- no changes needed
 
-### Files to modify:
-1. **`src/pages/Products.tsx`** - Restructure layout to sidebar + grid, update hero
-2. **`src/components/ProductCard.tsx`** - Redesign card with brand label, better pricing, hover effects
-3. **`src/components/ProductGrid.tsx`** - Update grid columns (4 on desktop), pass sort state
-4. **`src/components/ProductFilters.tsx`** - Desktop: vertical sidebar layout; add sort dropdown
+## UI/UX Details
 
-### Files to create:
-- None in Phase 1 (reusing existing components)
+- The price range section appears between the Sort dropdown and the Gender filter, separated by dividers
+- Budget preset pills use the same `FilterChip` style for visual consistency
+- Slider thumbs have the existing gold/primary styling
+- Min/max input fields are compact (w-20), right-aligned numbers, with "Ft" suffix label
+- On mobile bottom sheet: same layout, stacked vertically
+- Smooth `framer-motion` transitions on preset selection (slider animates to new range)
+- Active budget preset gets the gold highlight like other filter chips
 
-### No dependency changes needed
-- All animations use existing `framer-motion`
-- All UI components use existing shadcn/ui
+## Technical Notes
+
+- Price values are stored as numbers in HUF (parsed from Shopify's `amount` string)
+- The slider step is 500 Ft for practical granularity
+- `extractFilterOptions` will also return `priceBounds: [min, max]` computed from products
+- The dual-thumb Radix Slider component natively supports two thumbs when passed an array value
 
