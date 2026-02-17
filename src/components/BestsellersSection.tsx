@@ -38,7 +38,7 @@ export const BestsellersSection = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="animate-fade-in">
             <span className="badge-gold mb-4 inline-block">Legnépszerűbb</span>
-            <h2 className="text-h2 font-display font-bold text-foreground">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground" style={{ fontFamily: "'Manrope', sans-serif", fontStyle: "normal" }}>
               Kedvenceink
             </h2>
             <p className="text-muted-foreground mt-3 max-w-md">
