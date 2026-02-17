@@ -101,8 +101,8 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-weight: 500;
+    font-style: normal;
+    font-weight: 600;
   }
 }
 
