@@ -11,6 +11,11 @@ interface ProductCardProps {
   index?: number;
 }
 
+function formatHUF(amount: string): string {
+  const num = Math.round(parseFloat(amount));
+  return num.toLocaleString("hu-HU").replace(/,/g, " ") + " Ft";
+}
+
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const addItem = useCartStore(state => state.addItem);
   const isLoading = useCartStore(state => state.isLoading);
@@ -39,7 +44,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       selectedOptions: firstVariant.selectedOptions || []
     });
     
-    toast.success("Added to cart", {
+    toast.success("Kosárba rakva", {
       description: node.title,
     });
   };
@@ -48,12 +53,20 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
     <Link 
       to={`/product/${node.handle}`} 
       className="group block animate-fade-in"
-      style={{ animationDelay: `${index * 0.1}s` }}
+      style={{ animationDelay: `${index * 0.08}s` }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Image Container - Edge-to-edge, large cards (Savor style) */}
-      <div className="relative overflow-hidden rounded-lg bg-secondary aspect-[4/5] mb-5">
+      {/* Image Container */}
+      <div
+        className="relative overflow-hidden rounded-lg bg-secondary aspect-[4/5] mb-4 transition-all duration-500"
+        style={{
+          transform: isHovered ? "translateY(-8px)" : "translateY(0)",
+          boxShadow: isHovered
+            ? "0 20px 40px -10px hsl(43 65% 52% / 0.2)"
+            : "0 4px 12px -4px hsl(0 0% 0% / 0.3)",
+        }}
+      >
         {/* Loading shimmer */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gradient-to-r from-secondary via-muted to-secondary animate-image-shimmer bg-[length:200%_100%]" />
@@ -61,23 +74,29 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         
         {primaryImage ? (
           <>
-            {/* Primary image */}
             <img 
               src={primaryImage.url} 
               alt={primaryImage.altText || node.title}
               onLoad={() => setImageLoaded(true)}
               className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
-                isHovered && hoverImage !== primaryImage ? "opacity-0 scale-105" : "opacity-100 scale-100"
+                isHovered && hoverImage !== primaryImage ? "opacity-0" : "opacity-100"
               } ${imageLoaded ? "" : "opacity-0"}`}
+              style={{
+                transform: isHovered ? "scale(1.08)" : "scale(1)",
+                transition: "transform 0.7s ease, opacity 0.7s ease",
+              }}
             />
-            {/* Hover image (image rollover effect) */}
             {hoverImage && hoverImage !== primaryImage && (
               <img 
                 src={hoverImage.url} 
                 alt={hoverImage.altText || node.title}
                 className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
-                  isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  isHovered ? "opacity-100" : "opacity-0"
                 }`}
+                style={{
+                  transform: isHovered ? "scale(1.08)" : "scale(1)",
+                  transition: "transform 0.7s ease, opacity 0.7s ease",
+                }}
               />
             )}
           </>
@@ -87,21 +106,25 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
         )}
 
-        {/* Quick add button - appears on hover */}
-        <div className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-300 ${
-          isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        }`}>
+        {/* Quick add overlay */}
+        <div
+          className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-background/80 to-transparent transition-all duration-300"
+          style={{
+            opacity: isHovered ? 1 : 0,
+            transform: isHovered ? "translateY(0)" : "translateY(100%)",
+          }}
+        >
           <Button 
             onClick={handleAddToCart}
             disabled={isLoading || !firstVariant?.availableForSale}
-            className="w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-primary-foreground h-12 rounded-md shadow-lg"
+            className="w-full bg-primary hover:bg-accent text-primary-foreground h-11 rounded-md font-semibold tracking-wide text-sm"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
-                <Plus className="w-5 h-5 mr-2" />
-                Quick Add
+                <Plus className="w-4 h-4 mr-2" />
+                Kosárba
               </>
             )}
           </Button>
@@ -109,24 +132,27 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
         {/* Stock badge */}
         {!firstVariant?.availableForSale && (
-          <div className="absolute top-4 left-4 px-3 py-1.5 bg-foreground/90 text-background text-xs font-medium rounded-full">
-            Sold Out
+          <div className="absolute top-3 left-3 px-3 py-1 bg-foreground/90 text-background text-xs font-medium rounded-full">
+            Elfogyott
           </div>
         )}
       </div>
 
       {/* Product Info */}
-      <div className="space-y-2 px-1">
-        <h3 className="font-medium text-lg leading-tight group-hover:text-accent transition-colors duration-300">
-          {node.title}
-        </h3>
-        {node.description && (
-          <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
-            {node.description}
+      <div className="space-y-1.5 px-0.5">
+        {/* Brand */}
+        {node.vendor && (
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            {node.vendor}
           </p>
         )}
-        <p className="text-lg font-semibold text-foreground">
-          {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+        {/* Title */}
+        <h3 className="font-display text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
+          {node.title}
+        </h3>
+        {/* Price */}
+        <p className="text-lg font-bold text-primary">
+          {formatHUF(price.amount)}
         </p>
       </div>
     </Link>
