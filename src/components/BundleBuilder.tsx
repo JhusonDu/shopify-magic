@@ -101,7 +101,7 @@ export const BundleBuilder = () => {
           <span className="badge-gold mb-4 inline-block">🚀 Hamarosan Érkezik</span>
           <div className="flex items-center justify-center gap-2 mb-4">
             <h2 className="text-h2 font-display font-bold text-foreground">
-              Készítsd El a Saját Illatkollekciód
+              Ismerd Meg az Illatokat Mini Kiszerelésben
             </h2>
             <DecantingPopover />
           </div>
