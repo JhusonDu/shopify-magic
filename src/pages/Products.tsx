@@ -3,11 +3,18 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
-import { ProductFilters, ProductFiltersState } from "@/components/ProductFilters";
+import { ProductFilters, ProductFiltersState, extractFilterOptions } from "@/components/ProductFilters";
 import { useProducts } from "@/hooks/useProducts";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Shield, Truck, RotateCcw } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const emptyFilters: ProductFiltersState = { genders: [], brands: [], types: [], sort: "default", priceRange: [0, 100000] };
 
@@ -24,7 +31,7 @@ const Products = () => {
       
       {/* Hero Section */}
       <section
-        className="relative pt-24 pb-6 md:pt-36 md:pb-16 border-b border-primary/20 overflow-hidden"
+        className="relative pt-24 pb-6 md:pt-32 md:pb-10 border-b border-primary/20 overflow-hidden"
         style={{
           background: `
             radial-gradient(ellipse 80% 60% at 30% 50%, hsl(43 65% 52% / 0.07) 0%, transparent 70%),
@@ -42,7 +49,7 @@ const Products = () => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm text-muted-foreground mb-3 md:mb-8"
+            className="flex items-center gap-2 text-sm text-muted-foreground mb-3 md:mb-6"
           >
             <Link to="/" className="hover:text-primary transition-colors duration-200">
               Főoldal
@@ -96,22 +103,33 @@ const Products = () => {
               </div>
             </div>
 
-            {!isMobile && productCount > 0 && (
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="inline-block mt-5 text-sm text-muted-foreground font-medium tracking-wide"
-              >
-                {productCount} termék
-              </motion.span>
-            )}
+            {/* Trust badges - desktop only */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.45 }}
+              className="hidden md:flex items-center gap-6 mt-6"
+            >
+              {[
+                { icon: Shield, label: "100% Eredeti" },
+                { icon: Truck, label: "Gyors Szállítás" },
+                { icon: RotateCcw, label: "14 Nap Visszaküldés" },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} className="flex items-center gap-2 text-muted-foreground">
+                  <Icon className="w-4 h-4 text-primary/70" />
+                  <span className="text-xs font-medium tracking-wide uppercase">{label}</span>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
+      {/* Gold gradient separator */}
+      <div className="h-px w-full hidden md:block" style={{ background: "linear-gradient(to right, transparent, hsl(43 65% 52% / 0.3), transparent)" }} />
+
       {/* Filter Sidebar + Products Grid */}
-      <section className="py-6 md:py-12">
+      <section className="py-6 md:py-10 noise-texture">
         <div className="container">
           <div className={`flex gap-8 ${isMobile ? "flex-col" : ""}`}>
             {!isMobile && products && products.length > 0 && (
@@ -121,6 +139,7 @@ const Products = () => {
                     filters={filters}
                     onFiltersChange={setFilters}
                     products={products}
+                    hideSort
                   />
                 </div>
               </div>
@@ -135,6 +154,32 @@ const Products = () => {
             )}
 
             <div className="flex-1 min-w-0">
+              {/* Desktop sort bar */}
+              {!isMobile && productCount > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center justify-between mb-6 pb-4 border-b border-border"
+                >
+                  <span className="text-sm text-muted-foreground font-medium tracking-wide">
+                    {productCount} termék
+                  </span>
+                  <Select value={filters.sort} onValueChange={(v) => setFilters({ ...filters, sort: v })}>
+                    <SelectTrigger className="w-[200px] bg-secondary border-border text-foreground h-9 text-sm">
+                      <SelectValue placeholder="Ajánlott" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border z-50">
+                      <SelectItem value="recommended">Ajánlott</SelectItem>
+                      <SelectItem value="price-asc">Ár: alacsony → magas</SelectItem>
+                      <SelectItem value="price-desc">Ár: magas → alacsony</SelectItem>
+                      <SelectItem value="name-asc">Név: A → Z</SelectItem>
+                      <SelectItem value="name-desc">Név: Z → A</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </motion.div>
+              )}
+
               <ProductGrid
                 filters={filters}
                 onClearFilters={() => setFilters(emptyFilters)}

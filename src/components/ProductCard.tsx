@@ -65,7 +65,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         style={{
           transform: isHovered ? "translateY(-8px)" : "translateY(0)",
           boxShadow: isHovered
-            ? "0 20px 40px -10px hsl(43 65% 52% / 0.2)"
+            ? "0 20px 40px -10px hsl(43 65% 52% / 0.2), 0 0 0 1px hsl(43 65% 52% / 0.15)"
             : "0 4px 12px -4px hsl(0 0% 0% / 0.3)",
         }}
       >
@@ -136,7 +136,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               ) : (
                 <>
                   <Plus className="w-4 h-4 mr-2" />
-                  Kosárba
+                  Gyors Választás
                 </>
               )}
             </Button>
@@ -152,7 +152,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
       </div>
 
       {/* Product Info */}
-      <div className="space-y-1.5 px-0.5">
+      <div className="space-y-1.5 md:space-y-2 px-0.5">
         {/* Brand */}
         {node.vendor && (
           <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
@@ -165,6 +165,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         </h3>
         {/* Price */}
         <p className="text-base md:text-lg font-bold text-primary">
+          {(node.variants?.edges?.length ?? 0) > 1 && <span className="text-xs font-normal text-muted-foreground mr-1">tól</span>}
           {formatHUF(price.amount)}
         </p>
       </div>

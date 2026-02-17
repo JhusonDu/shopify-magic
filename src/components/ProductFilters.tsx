@@ -288,12 +288,14 @@ interface ProductFiltersProps {
   filters: ProductFiltersState;
   onFiltersChange: (filters: ProductFiltersState) => void;
   products: ShopifyProduct[];
+  hideSort?: boolean;
 }
 
 export const ProductFilters = ({
   filters,
   onFiltersChange,
   products,
+  hideSort = false,
 }: ProductFiltersProps) => {
   const isMobile = useIsMobile();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -315,8 +317,12 @@ export const ProductFilters = ({
 
   const filterContent = (
     <div className="space-y-6">
-      <SortSelect value={filters.sort} onChange={(v) => onFiltersChange({ ...filters, sort: v })} />
-      <div className="border-t border-border" />
+      {!hideSort && (
+        <>
+          <SortSelect value={filters.sort} onChange={(v) => onFiltersChange({ ...filters, sort: v })} />
+          <div className="border-t border-border" />
+        </>
+      )}
       <PriceRangeFilter
         priceRange={filters.priceRange}
         priceBounds={options.priceBounds}
@@ -381,7 +387,7 @@ export const ProductFilters = ({
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: 0.1 }}
-      className="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-5 space-y-5"
+      className="rounded-2xl border border-border bg-card/60 backdrop-blur-sm p-5 space-y-5 border-t-2 border-t-primary/30 shadow-[inset_0_1px_0_0_hsl(43_65%_52%/0.1)]"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold uppercase tracking-widest text-foreground flex items-center gap-2">
