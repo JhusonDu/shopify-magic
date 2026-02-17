@@ -172,7 +172,7 @@ export const ToolboxPanel = ({ open, onOpenChange }: ToolboxPanelProps) => {
                   Hogyan Működik
                 </span>
               </ToolboxLink>
-              <ToolboxLink onClick={() => { close(); }} index={2}>
+              <ToolboxLink onClick={() => goTo("/tamogatas")} index={2}>
                 <span className="flex items-center gap-1.5">
                   <Truck className="h-3.5 w-3.5 text-primary/60" />
                   Szállítás és Visszaküldés
@@ -190,10 +190,16 @@ export const ToolboxPanel = ({ open, onOpenChange }: ToolboxPanelProps) => {
               >
                 A ScentBox Hungary prémium parfüm dekantokat kínál, hogy megtaláld a tökéletes illatod anélkül, hogy teljes árat fizetnél.
               </motion.div>
-              <ToolboxLink onClick={() => scrollTo("#footer")} index={1}>
+              <ToolboxLink onClick={() => goTo("/rolunk")} index={1}>
+                <span className="flex items-center gap-1.5">
+                  <Users className="h-3.5 w-3.5 text-primary/60" />
+                  Rólunk Oldal
+                </span>
+              </ToolboxLink>
+              <ToolboxLink onClick={() => goTo("/tamogatas")} index={2}>
                 <span className="flex items-center gap-1.5">
                   <MessageCircle className="h-3.5 w-3.5 text-primary/60" />
-                  Kapcsolat
+                  Kapcsolat & Támogatás
                 </span>
               </ToolboxLink>
             </TabsContent>
