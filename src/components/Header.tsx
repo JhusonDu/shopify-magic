@@ -3,17 +3,11 @@ import { CartDrawer } from "./CartDrawer";
 import { Menu, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
 import logoIcon from "@/assets/logo-icon.png";
 import { SearchCommand } from "./SearchCommand";
-
-const navLinks = [
-  { label: "Kezdőlap", href: "/", isRoute: true, opensSearch: false },
-  { label: "Illatok", href: "#", isRoute: false, opensSearch: true },
-  { label: "Rólunk", href: "#authenticity", isRoute: false, opensSearch: false },
-  { label: "Kapcsolat", href: "#footer", isRoute: false, opensSearch: false },
-];
+import { ToolboxPanel } from "./ToolboxPanel";
+import { LoginDialog } from "./LoginDialog";
 
 interface HeaderProps {
   isSearchOpen?: boolean;
@@ -23,7 +17,8 @@ interface HeaderProps {
 
 export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchInitialTab = "search" }: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isToolboxOpen, setIsToolboxOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
 
   const isSearchOpen = externalOpen ?? internalOpen;
@@ -62,102 +57,6 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
         }`}
       >
         <div className="container flex h-16 md:h-20 items-center justify-between">
-          {/* Mobile Menu */}
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-foreground hover:text-primary hover:bg-primary/10"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="left"
-              className="w-80 bg-card/95 backdrop-blur-xl border-border p-0"
-            >
-              <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between p-6 border-b border-border">
-                  <Link
-                    to="/"
-                    className="flex items-center gap-3"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <img src={logoIcon} alt="ScentBox" className="h-10 w-10 object-contain" />
-                    <span className="text-xl font-semibold text-foreground font-display">
-                      ScentBox Hungary
-                    </span>
-                  </Link>
-                </div>
-
-                <nav className="flex-1 p-6">
-                  <div className="space-y-2">
-                    {navLinks.map((link, index) =>
-                      link.opensSearch ? (
-                        <motion.button
-                          key={link.label}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsSearchOpen(true);
-                          }}
-                          className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 group w-full text-left"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
-                          {link.label}
-                        </motion.button>
-                      ) : link.isRoute ? (
-                        <motion.div
-                          key={link.label}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <Link
-                            to={link.href}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 group"
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
-                            {link.label}
-                          </Link>
-                        </motion.div>
-                      ) : (
-                        <motion.a
-                          key={link.label}
-                          href={link.href}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex items-center px-4 py-3 text-lg font-medium text-foreground hover:text-primary hover:bg-primary/5 rounded-md transition-all duration-300 group"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary mr-3 transition-all duration-300" />
-                          {link.label}
-                        </motion.a>
-                      )
-                    )}
-                  </div>
-                </nav>
-
-                <div className="p-6 border-t border-border">
-                  <div className="flex items-center gap-3">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="rounded-full border-border hover:border-primary hover:bg-primary/10"
-                    >
-                      <User className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <motion.div
@@ -178,63 +77,17 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link, index) =>
-              link.opensSearch ? (
-                <motion.button
-                  key={link.label}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                  onClick={() => setIsSearchOpen(true)}
-                  className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground group"
-                >
-                  {link.label}
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4" />
-                </motion.button>
-              ) : link.isRoute ? (
-                <motion.div
-                  key={link.label}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                >
-                  <Link
-                    to={link.href}
-                    className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground group block"
-                  >
-                    {link.label}
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4" />
-                  </Link>
-                </motion.div>
-              ) : (
-                <motion.a
-                  key={link.label}
-                  href={link.href}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                  className="relative px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground group"
-                >
-                  {link.label}
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-300 group-hover:w-3/4" />
-                </motion.a>
-              )
-            )}
-          </nav>
-
-          {/* Actions — no search icon */}
+          {/* Actions: Login + Cart + Settings */}
           <div className="flex items-center gap-1 md:gap-2">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.4 }}
-              className="hidden md:flex items-center gap-1"
+              transition={{ delay: 0.3 }}
             >
               <Button
                 variant="ghost"
                 size="icon"
+                onClick={() => setIsLoginOpen(true)}
                 className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300"
               >
                 <User className="h-5 w-5" />
@@ -244,9 +97,24 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.4 }}
             >
               <CartDrawer />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsToolboxOpen(true)}
+                className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -265,6 +133,8 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
       </motion.header>
 
       <SearchCommand open={isSearchOpen} onOpenChange={setIsSearchOpen} initialTab={searchInitialTab} />
+      <ToolboxPanel open={isToolboxOpen} onOpenChange={setIsToolboxOpen} />
+      <LoginDialog open={isLoginOpen} onOpenChange={setIsLoginOpen} />
     </>
   );
 };
