@@ -1,74 +1,62 @@
 
-
-# Add Price Range Filter + "Ajánlott" (Recommended) Sort Option
+# Footer Redesign + About Us & Support Pages
 
 ## Overview
 
-Enhance the filter sidebar with two new features:
-1. A **"Recommended" sort option** as the default in the sort dropdown
-2. A **price range slider** with budget preset buttons beneath the sort section -- a dual-thumb slider with min/max inputs, plus quick-select budget buttons for common spending ranges
+Completely redesign the footer inspired by the reference images, adapted to ScentBox's luxury perfume brand identity (dark obsidian background, gold accents). Also create dedicated "Rolunk" (About Us) and "Tamogatas" (Support) pages with proper routing and working links throughout.
 
-## What Changes
+## Footer Redesign
 
-### 1. Update `ProductFiltersState` interface
-- Add `priceRange: [number, number]` to the filter state (min, max in HUF)
-- Update the `emptyFilters` default in `Products.tsx` to include the full price range
+### Structure (top to bottom)
 
-### 2. Sort Dropdown -- Add "Ajanlott" (Recommended)
-- Rename the current "Alapertelmezett" (Default) option to **"Ajanlott"** (Recommended) with value `"recommended"`
-- Keep the existing price and name sort options
+1. **CTA Banner** -- A full-width strip above the main footer: "Kerdesed van? Segitunk valasztani!" with a gold "Kapcsolatfelvetel" button linking to the Support page.
 
-### 3. Price Range Component (inside `ProductFilters.tsx`)
-- **Dual-thumb Radix Slider** showing min-max range
-- **Two small input fields** (min / max) showing formatted HUF values, editable
-- **Budget preset buttons** beneath the slider as pill chips:
-  - "< 5 000 Ft" (budget)
-  - "5 000 - 10 000 Ft" (mid-range)
-  - "10 000 - 20 000 Ft" (premium)
-  - "20 000+ Ft" (luxury)
-- Clicking a preset auto-sets the slider range with a smooth animation
-- An "Osszes ar" (All prices) chip to reset the range
-- The slider track fills with gold (primary color) between the two thumbs
-- Animated transitions when presets are selected
+2. **Main Footer Grid** (5 columns desktop, stacked mobile):
+   - **Column 1 (brand, span 2)**: ScentBox logo + short description + contact info (email icon + email, location icon + "Budapest, Magyarorszag"), social media icons (Instagram, TikTok, Facebook)
+   - **Column 2 "Termekek"**: Osszes Termek (/termekek), Ferfi illatok (/termekek?gender=Ferfi), Noi illatok (/termekek?gender=Noi), Kedvenceink (#bestsellers)
+   - **Column 3 "Segitseg"**: Hogyan Rendeljek? (/tamogatas), Szallitasi Informaciok (/tamogatas), Fizetesi modok (/tamogatas), Visszakuldes (/tamogatas)
+   - **Column 4 "Ceg"**: Rolunk (/rolunk), Eredetiseg (#authenticity), Kapcsolat (/tamogatas)
 
-### 4. Filter Logic Update (`applyFilters`)
-- Add price range filtering: check if product's `minVariantPrice.amount` falls within `[min, max]`
-- Include price range in `activeCount` (count +1 if range differs from full range)
+3. **Bottom Bar**: Copyright left, "Adatvedelem" + "ASZF" links right
 
-### 5. Clear Behavior
-- "Torles" (Clear all) resets price range back to full range
-- Price range derives its min/max bounds dynamically from the loaded products
+### Design Details
+- Dark background using `bg-obsidian` or `bg-[#0a0a0a]` for contrast from the rest of the site
+- Gold accent on hover states and CTA button
+- Trust row removed from footer (it already appears elsewhere on the page)
+- Smooth hover transitions on all links
+- Mobile: single column, sections collapsed with clear spacing
 
-## Files to Modify
+## New Pages
 
-1. **`src/components/ProductFilters.tsx`**
-   - Add `priceRange` to `ProductFiltersState`
-   - Create `PriceRangeFilter` sub-component with dual Slider, inputs, and budget presets
-   - Add price filtering logic in `applyFilters`
-   - Rename default sort to "Ajanlott"
-   - Insert price range section between sort and gender filters
+### About Us Page (`/rolunk`)
+- Hero section with brand story heading
+- "Kik Vagyunk" section -- short brand mission paragraph
+- "Miert ScentBox?" section -- 3-4 value cards (Eredetiseg, Preciz Dekantalas, Gyors Szallitas, Elegedettsegi Garancia)
+- Trust badges row
+- CTA to browse products
+- Uses Header + Footer layout
 
-2. **`src/pages/Products.tsx`**
-   - Update `emptyFilters` to include `priceRange: [0, 100000]`
-   - Pass price bounds derived from products to filters
+### Support Page (`/tamogatas`)
+- Hero with "Segitseg" heading
+- Tabbed or accordion FAQ sections:
+  - "Hogyan Rendeljek?" -- ordering steps
+  - "Szallitas" -- delivery info (GLS, 1-3 nap)
+  - "Fizetesi modok" -- payment methods (card, transfer)
+  - "Visszakuldes" -- 14-day return policy
+  - "Kapcsolat" -- email, response time
+- Uses Header + Footer layout
 
-3. **`src/components/ui/slider.tsx`**
-   - Already supports Radix dual-thumb (just pass `value={[min, max]}`) -- no changes needed
+## Technical Details
 
-## UI/UX Details
+### Files to modify:
+1. **`src/components/Footer.tsx`** -- Complete rewrite with new structure, CTA banner, 5-col grid, contact info, social icons
+2. **`src/App.tsx`** -- Add routes for `/rolunk` and `/tamogatas`
+3. **`src/components/ToolboxPanel.tsx`** -- Update "Rolunk" tab links to point to `/rolunk`, "Szallitas es Visszakuldes" to `/tamogatas`, "Kapcsolat" to `/tamogatas`
 
-- The price range section appears between the Sort dropdown and the Gender filter, separated by dividers
-- Budget preset pills use the same `FilterChip` style for visual consistency
-- Slider thumbs have the existing gold/primary styling
-- Min/max input fields are compact (w-20), right-aligned numbers, with "Ft" suffix label
-- On mobile bottom sheet: same layout, stacked vertically
-- Smooth `framer-motion` transitions on preset selection (slider animates to new range)
-- Active budget preset gets the gold highlight like other filter chips
+### Files to create:
+1. **`src/pages/AboutUs.tsx`** -- About Us page with brand story, value cards
+2. **`src/pages/Support.tsx`** -- Support/FAQ page with accordion sections
 
-## Technical Notes
-
-- Price values are stored as numbers in HUF (parsed from Shopify's `amount` string)
-- The slider step is 500 Ft for practical granularity
-- `extractFilterOptions` will also return `priceBounds: [min, max]` computed from products
-- The dual-thumb Radix Slider component natively supports two thumbs when passed an array value
-
+### Dependencies:
+- No new packages needed
+- Uses existing: `framer-motion`, `lucide-react`, `react-router-dom`, shadcn `Accordion`
