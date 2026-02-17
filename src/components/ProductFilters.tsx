@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sheet,
@@ -26,6 +28,7 @@ export interface ProductFiltersState {
   brands: string[];
   types: string[];
   sort: string;
+  priceRange: [number, number];
 }
 
 // Gender mapping based on product handle/title keywords
@@ -49,14 +52,23 @@ export function getProductGender(product: ShopifyProduct): string {
 export function extractFilterOptions(products: ShopifyProduct[]) {
   const brands = new Set<string>();
   const types = new Set<string>();
+  let minPrice = Infinity;
+  let maxPrice = 0;
   for (const p of products) {
     if (p.node.vendor) brands.add(p.node.vendor);
     if (p.node.productType) types.add(p.node.productType);
+    const price = parseFloat(p.node.priceRange.minVariantPrice.amount);
+    if (price < minPrice) minPrice = price;
+    if (price > maxPrice) maxPrice = price;
   }
   return {
     genders: ["Férfi", "Női", "Uniszex"],
     brands: Array.from(brands).sort(),
     types: Array.from(types).sort(),
+    priceBounds: [
+      minPrice === Infinity ? 0 : Math.floor(minPrice),
+      maxPrice === 0 ? 100000 : Math.ceil(maxPrice),
+    ] as [number, number],
   };
 }
 
@@ -91,9 +103,14 @@ export function applyFilters(
     if (filters.types.length > 0) {
       if (!p.node.productType || !filters.types.includes(p.node.productType)) return false;
     }
+    // Price range filter
+    if (filters.priceRange) {
+      const price = parseFloat(p.node.priceRange.minVariantPrice.amount);
+      if (price < filters.priceRange[0] || price > filters.priceRange[1]) return false;
+    }
     return true;
   });
-  if (filters.sort && filters.sort !== "default") {
+  if (filters.sort && filters.sort !== "default" && filters.sort !== "recommended") {
     result = sortProducts(result, filters.sort);
   }
   return result;
@@ -140,10 +157,10 @@ const SortSelect = ({ value, onChange }: { value: string; onChange: (v: string) 
     <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Rendezés</span>
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-full bg-secondary border-border text-foreground">
-        <SelectValue placeholder="Alapértelmezett" />
+        <SelectValue placeholder="Ajánlott" />
       </SelectTrigger>
       <SelectContent className="bg-popover border-border z-50">
-        <SelectItem value="default">Alapértelmezett</SelectItem>
+        <SelectItem value="recommended">Ajánlott</SelectItem>
         <SelectItem value="price-asc">Ár: alacsony → magas</SelectItem>
         <SelectItem value="price-desc">Ár: magas → alacsony</SelectItem>
         <SelectItem value="name-asc">Név: A → Z</SelectItem>
@@ -152,6 +169,118 @@ const SortSelect = ({ value, onChange }: { value: string; onChange: (v: string) 
     </Select>
   </div>
 );
+
+/* ── Budget presets ── */
+const BUDGET_PRESETS: { label: string; range: [number, number] | null }[] = [
+  { label: "Összes ár", range: null },
+  { label: "< 5 000 Ft", range: [0, 5000] },
+  { label: "5 000 - 10 000 Ft", range: [5000, 10000] },
+  { label: "10 000 - 20 000 Ft", range: [10000, 20000] },
+  { label: "20 000+ Ft", range: [20000, 100000] },
+];
+
+function formatHuf(n: number): string {
+  return n.toLocaleString("hu-HU");
+}
+
+function parseHuf(s: string): number {
+  return parseInt(s.replace(/\s/g, "").replace(/[^0-9]/g, ""), 10) || 0;
+}
+
+const PriceRangeFilter = ({
+  priceRange,
+  priceBounds,
+  onChange,
+}: {
+  priceRange: [number, number];
+  priceBounds: [number, number];
+  onChange: (range: [number, number]) => void;
+}) => {
+  const isPresetActive = (preset: { range: [number, number] | null }) => {
+    if (!preset.range) {
+      return priceRange[0] === priceBounds[0] && priceRange[1] === priceBounds[1];
+    }
+    return priceRange[0] === preset.range[0] &&
+      priceRange[1] === Math.min(preset.range[1], priceBounds[1]);
+  };
+
+  const handlePreset = (preset: { range: [number, number] | null }) => {
+    if (!preset.range) {
+      onChange([priceBounds[0], priceBounds[1]]);
+    } else {
+      onChange([
+        Math.max(preset.range[0], priceBounds[0]),
+        Math.min(preset.range[1], priceBounds[1]),
+      ]);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          Ár tartomány
+        </span>
+        {(priceRange[0] !== priceBounds[0] || priceRange[1] !== priceBounds[1]) && (
+          <Badge variant="default" className="h-5 min-w-5 px-1.5 text-[10px]">1</Badge>
+        )}
+      </div>
+
+      {/* Slider */}
+      <div className="px-1">
+        <Slider
+          value={priceRange}
+          onValueChange={(v) => onChange(v as [number, number])}
+          min={priceBounds[0]}
+          max={priceBounds[1]}
+          step={500}
+          className="w-full"
+        />
+      </div>
+
+      {/* Min / Max inputs */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 relative">
+          <Input
+            type="text"
+            value={formatHuf(priceRange[0])}
+            onChange={(e) => {
+              const v = parseHuf(e.target.value);
+              if (v <= priceRange[1]) onChange([v, priceRange[1]]);
+            }}
+            className="h-8 text-xs text-right pr-8 bg-secondary border-border"
+          />
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">Ft</span>
+        </div>
+        <span className="text-muted-foreground text-xs">–</span>
+        <div className="flex-1 relative">
+          <Input
+            type="text"
+            value={formatHuf(priceRange[1])}
+            onChange={(e) => {
+              const v = parseHuf(e.target.value);
+              if (v >= priceRange[0]) onChange([priceRange[0], v]);
+            }}
+            className="h-8 text-xs text-right pr-8 bg-secondary border-border"
+          />
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">Ft</span>
+        </div>
+      </div>
+
+      {/* Budget presets */}
+      <div className="flex flex-wrap gap-1.5">
+        {BUDGET_PRESETS.map((preset) => (
+          <FilterChip
+            key={preset.label}
+            label={preset.label}
+            selected={isPresetActive(preset)}
+            onClick={() => handlePreset(preset)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
 /* ── Main Component ── */
 
@@ -168,21 +297,31 @@ export const ProductFilters = ({
 }: ProductFiltersProps) => {
   const isMobile = useIsMobile();
   const [sheetOpen, setSheetOpen] = useState(false);
-  const options = extractFilterOptions(products);
+  const options = useMemo(() => extractFilterOptions(products), [products]);
 
-  const activeCount = filters.genders.length + filters.brands.length + filters.types.length;
+  const isPriceActive = filters.priceRange[0] !== options.priceBounds[0] || filters.priceRange[1] !== options.priceBounds[1];
+  const activeCount = filters.genders.length + filters.brands.length + filters.types.length + (isPriceActive ? 1 : 0);
 
-  const toggle = (key: keyof Omit<ProductFiltersState, "sort">, value: string) => {
+  const toggle = (key: keyof Omit<ProductFiltersState, "sort" | "priceRange">, value: string) => {
     const current = filters[key] as string[];
     const next = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
     onFiltersChange({ ...filters, [key]: next });
   };
 
-  const clearAll = () => onFiltersChange({ genders: [], brands: [], types: [], sort: filters.sort });
+  const clearAll = () => onFiltersChange({
+    genders: [], brands: [], types: [], sort: filters.sort,
+    priceRange: [options.priceBounds[0], options.priceBounds[1]],
+  });
 
   const filterContent = (
     <div className="space-y-6">
       <SortSelect value={filters.sort} onChange={(v) => onFiltersChange({ ...filters, sort: v })} />
+      <div className="border-t border-border" />
+      <PriceRangeFilter
+        priceRange={filters.priceRange}
+        priceBounds={options.priceBounds}
+        onChange={(range) => onFiltersChange({ ...filters, priceRange: range })}
+      />
       <div className="border-t border-border" />
       <FilterGroup title="Nem" options={options.genders} selected={filters.genders} onToggle={(v) => toggle("genders", v)} />
       {options.brands.length > 0 && (

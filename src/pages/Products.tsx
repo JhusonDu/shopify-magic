@@ -7,7 +7,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const emptyFilters: ProductFiltersState = { genders: [], brands: [], types: [], sort: "default" };
+const emptyFilters: ProductFiltersState = { genders: [], brands: [], types: [], sort: "default", priceRange: [0, 100000] };
 
 const Products = () => {
   const [filters, setFilters] = useState<ProductFiltersState>(emptyFilters);
