@@ -159,17 +159,17 @@ const AboutUs = () => {
       </section>
 
       {/* 3. Küldetés és Értékek */}
-      <section className="py-16 md:py-24 noise-texture">
+      <section className="py-10 md:py-[60px] noise-texture">
         <div className="container max-w-6xl mx-auto relative z-10">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            className="text-center mb-14"
+            className="text-center mb-8"
           >
             <span className="badge-gold inline-block mb-4">Értékeink</span>
-            <h2 className="text-3xl md:text-4xl font-display text-foreground">
+            <h2 className="text-[28px] md:text-[32px] font-display text-foreground">
               Amiben Hiszünk
             </h2>
           </motion.div>
@@ -179,19 +179,19 @@ const AboutUs = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
             {values.map((item) => (
               <motion.div
                 key={item.title}
                 variants={fadeUp}
-                className="bg-white/[0.03] border border-primary/[0.15] rounded-lg p-8 text-center transition-all duration-300 hover:border-primary hover:-translate-y-2"
+                className="bg-white/[0.03] border border-primary/[0.15] rounded-lg p-[30px] text-center transition-all duration-300 hover:border-primary hover:-translate-y-2"
               >
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                  <item.icon className="h-7 w-7 text-primary" />
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                  <item.icon className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="font-display text-xl text-foreground mb-3">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <h3 className="font-display text-[20px] text-foreground mb-2">{item.title}</h3>
+                <p className="text-[14px] text-muted-foreground leading-relaxed">
                   {item.description}
                 </p>
               </motion.div>
