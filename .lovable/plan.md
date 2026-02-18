@@ -1,49 +1,46 @@
 
 
-# Rólunk Oldal -- Tartalom Frissítés a Valós Történethez
+# Rólunk Oldal -- Piaci Pozícionálás és Versenyelőny Tartalom Bővítés
 
-## Mit Változtatunk
+## Mi Változik
 
-A design marad -- az tetszik. Kizárólag a **szöveges tartalom** frissül, hogy a valós történetet, értékeket és küldetést tükrözze.
+A design marad, csak a **szöveges tartalom** bővül a versenyelőny-történettel: miért olcsóbbak a termékeitek, hogyan dolgoztok, és mit kap a vásárló.
 
 ## Tartalmi Változások
 
-### 1. Hero Alcím
-- Régi: "Prémium parfümök, autentikus élmények -- 100% eredetiség garantálva."
-- Új: "Prémium parfümök, tisztességes áron -- mert nálunk a vásárló számít."
+### 1. Történet Szekció -- Kibővített Szöveg (2. szekció)
+A jelenlegi két bekezdés helyett három, gazdagabb bekezdés:
 
-### 2. Történet Szekció
-- A 2020-as indulás helyett **2024** szerepel
-- Új szöveg arról, hogy az ötlet 2024-ben született, a háttérben építkeztetek, és most álltatok ki a világ elé
-- Hangsúly: tudjátok mennyibe kerülnek a parfümök, ezért döntöttetek úgy, hogy a lehető legjobb árakat adjátok -- nem magas árrésekkel dolgoztok
-- A dekantálás mint **hamarosan érkező** szolgáltatás szerepel (nem úgy, mintha már elérhető lenne)
+- **1. bekezdés** (marad hasonló): 2024-ben indultatok, mert láttátok, hogy a piac túlárazott
+- **2. bekezdés** (uj): A piaci megzavarás ("disruption") üzenet -- a nagy szereplők azért kérnek többet, mert megtehetik. Ti ugyanazt a minőséget adjátok, minősített magyar forgalmazótól, 20-30-40%-kal olcsóbban
+- **3. bekezdés** (uj): A cél nem csak az ár -- hanem a teljes vásárlói élmény: versenyképes árak + kiváló ügyfélszolgálat + megbízható szállítás + hamarosan saját márkás dekantok
 
-### 3. Értékek (3 Kártya) -- Új Tartalom
-1. **A Vásárló az Első** (Heart ikon) -- "Nálunk a vásárlónak mindig igaza van. Ez nem szlogen -- ez a szabályunk."
-2. **Tisztességes Árak** (ShieldCheck ikon) -- "Nem dolgozunk magas árrésekkel. A legjobb piaci árakat adjuk, mert mi is tudjuk, mennyibe kerülhet egy parfüm."
-3. **Eredetiség Garantálva** (Star ikon) -- "Kizárólag eredeti, ellenőrzött termékeket árulunk. Soha nem kötünk kompromisszumot."
+### 2. Értékek Kártyák -- Finomított Leírások (3. szekció)
+- **Tisztességes Árak**: Bővül a "20-30-40%-kal olcsóbb" üzenettel és a minősített magyar forgalmazó említésével
+- **A Vásárló az Első**: Hangsúlyozza, hogy a legjobb összélményt adjátok, nem csak a legjobb árat
 
-### 4. Idővonal -- 2 Mérföldkő (Valós)
-- **2024**: "Az Ötlet" -- Az ötlet megszületése, piackutatás, a háttérben csendben építkeztünk
-- **2025**: "Az Indulás" -- A webáruház elindítása, első vásárlók, a ScentBox Hungary végre a világ elé állt
-- **Hamarosan**: "Dekant Szolgáltatás" -- Kísérletezünk a dekantálással, hamarosan érkezik
+### 3. Minőségi Elkötelezettség -- Frissített Pontok (5. szekció)
+A `qualityPoints` lista bővül/módosul:
+- "Ugyanaz a minőség, mint a nagy játékosoknál"
+- "Minősített magyarországi hivatalos forgalmazótól"
+- "20-40%-kal kedvezőbb árak"
+- "Kiváló ügyfélszolgálat és szállítás"
+- "Hamarosan saját márkás dekantok"
 
-### 5. Minőségi Elkötelezettség -- Frissített Pontok
-- Kizárólag eredeti parfümök
-- A piac legjobb árai, magas árrés nélkül
-- Gyors és megbízható szállítás
-- A vásárló elégedettsége az első
+A szekció leíró bekezdése is frissül, hogy tartalmazza a "nem azért olcsóbb, mert rosszabb -- azért olcsóbb, mert nem dolgozunk hatalmas árrésekkel" üzenetet.
 
-### 6. CTA
-- Leírás frissítés: "Prémium parfümök, tisztességes áron." (az 500 parfüm túlzás lehetne egy friss vállalkozásnál)
+### 4. CTA Szekció -- Finomhangolás (7. szekció)
+- Leírás: "Ugyanaz a minőség, jobb árak, jobb kiszolgálás."
 
 ## Technikai Részletek
 
 ### Módosított fájl:
-- **`src/pages/AboutUs.tsx`** -- Csak a szöveges konstansok (`values`, `milestones`, `qualityPoints`) és inline szövegek frissítése
+- **`src/pages/AboutUs.tsx`** -- Szöveges konstansok (`values`, `qualityPoints`) és inline szövegek frissítése
 
 ### Ami NEM változik:
-- Semmi a designból (animációk, elrendezés, színek, tipográfia)
-- Komponens struktúra, importok, JSX struktúra marad
-- Csak string értékek cserélődnek
+- Design, animációk, elrendezés, komponens struktúra, importok
+- Csak string értékek bővülnek/módosulnak
+
+### Megjegyzés a Landing Page-hez:
+A felhasználó említette, hogy ez a versenyelőny-üzenet a főoldalon is meg fog jelenni (hero után). Ez egy külön feladat lesz később -- most csak a Rólunk oldal frissül.
 
