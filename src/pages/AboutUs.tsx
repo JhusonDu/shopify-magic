@@ -11,13 +11,13 @@ const values = [
     icon: Heart,
     title: "A Vásárló az Első",
     description:
-      "Nálunk a vásárlónak mindig igaza van. Ez nem szlogen — ez a szabályunk. Minden döntésünket a vásárlóink elégedettsége vezérli.",
+      "Nálunk a vásárlónak mindig igaza van — ez nem szlogen, ez a szabályunk. A célunk nem csak a legjobb ár, hanem a legjobb összélmény: versenyképes árak, kiváló ügyfélszolgálat és megbízható szállítás.",
   },
   {
     icon: ShieldCheck,
     title: "Tisztességes Árak",
     description:
-      "Nem dolgozunk magas árrésekkel. A legjobb piaci árakat adjuk, mert mi is tudjuk, mennyibe kerülhet egy parfüm.",
+      "Minősített magyarországi forgalmazótól dolgozunk, ugyanazt a minőséget adjuk, mint a nagy szereplők — csak 20-30-40%-kal olcsóbban. Nem dolgozunk magas árrésekkel, mert mi is tudjuk, mennyibe kerülhet egy parfüm.",
   },
   {
     icon: Star,
@@ -49,10 +49,11 @@ const milestones = [
 ];
 
 const qualityPoints = [
-  "Kizárólag eredeti parfümök",
-  "A piac legjobb árai, magas árrés nélkül",
-  "Gyors és megbízható szállítás",
-  "A vásárló elégedettsége az első",
+  "Ugyanaz a minőség, mint a nagy játékosoknál",
+  "Minősített magyarországi hivatalos forgalmazótól",
+  "20-40%-kal kedvezőbb árak",
+  "Kiváló ügyfélszolgálat és szállítás",
+  "Hamarosan saját márkás dekantok",
 ];
 
 const fadeUp = {
@@ -140,9 +141,16 @@ const AboutUs = () => {
                   legjobb árakat adjuk a piacon.
                 </p>
                 <p>
-                  A háttérben csendben építkeztünk, és most itt vagyunk. Hamarosan dekant
-                  szolgáltatásunkkal a legdrágább parfümöket is mindenki számára elérhetővé
-                  tesszük. Nálunk a vásárló számít — ez nem szlogen, ez a szabályunk.
+                  A nagy szereplők azért kérnek többet, mert megtehetik. Mi ugyanazt a
+                  minőséget adjuk — minősített magyarországi hivatalos forgalmazótól —, csak
+                  20-30-40%-kal olcsóbban. Nem azért vagyunk kedvezőbbek, mert rosszabb a
+                  termék, hanem mert nem dolgozunk hatalmas árrésekkel.
+                </p>
+                <p>
+                  A célunk nem csak a legjobb ár, hanem a legjobb összélmény: versenyképes
+                  árak, kiváló ügyfélszolgálat, megbízható szállítás — és hamarosan saját
+                  márkás dekantjainkkal a legdrágább parfümöket is mindenki számára
+                  elérhetővé tesszük.
                 </p>
               </div>
             </motion.div>
@@ -275,8 +283,9 @@ const AboutUs = () => {
                 100% Eredeti Garantált
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-              A ScentBox Hungary garantálja, hogy minden termékünk eredeti, és az
-                áraink a piac legjobbjai. Nincs lehúzás, nincs túlárazás — soha.
+                Nem azért olcsóbb, mert rosszabb — azért olcsóbb, mert nem dolgozunk
+                hatalmas árrésekkel. Ugyanazt a minőséget kapod, mint a nagy
+                játékosoknál, minősített magyarországi forgalmazótól.
               </p>
               <ul className="space-y-3">
                 {qualityPoints.map((point) => (
@@ -307,7 +316,7 @@ const AboutUs = () => {
               Fedezd Fel Kínálatunkat
             </motion.h2>
             <motion.p variants={fadeUp} className="text-muted-foreground mb-8">
-              Prémium parfümök, tisztességes áron.
+              Ugyanaz a minőség, jobb árak, jobb kiszolgálás.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="rounded-full px-10">
