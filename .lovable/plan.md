@@ -1,34 +1,29 @@
 
-# Bemutatkozó Szekció a Főoldalra -- Hero és Termékek Között
+# Rólunk Oldal Hero Szekció Kompaktálása
 
-## Cél
+## Mi Változik
 
-Egy kompakt, professzionális "Ki vagyunk?" blokk közvetlenül a Hero szekció alatt és a FeaturedProducts felett, amely azonnal bemutatkozik az új látogatóknak: 100% eredeti termékek, minősített magyar forgalmazó, kedvező árak, vásárlóközpontúság.
+Kizárólag a Rólunk oldal hero szekciója lesz kisebb és tömörebb, hogy az oldal betöltésekor a következő szekció teteje is látható legyen görgetés nélkül.
 
-## Design
+## Változások Részletesen
 
-- **Háttér**: `noise-texture` osztály (sötét, finom textúra -- ugyanaz, mint a Rólunk oldalon)
-- **Elrendezés**: Középre igazított szöveges blokk + alatta 3 kompakt kiemelő kártya (ikon + cím + 1 mondat)
-- **Badge**: `badge-gold` -- "MIÉRT MINKET?"
-- **Cím**: Playfair Display (`font-display`), pl. "Prémium Parfümök, Tisztességes Áron"
-- **Alcím**: 2-3 mondat a márka lényegéről (eredeti termékek, legjobb árak, vásárló az első)
-- **3 kiemelő kártya** (ikonnal):
-  1. **100% Eredeti** (`ShieldCheck`) -- Minősített magyarországi hivatalos forgalmazótól
-  2. **Legjobb Árak** (`Tag`) -- 20-40%-kal kedvezőbb, mert nem dolgozunk magas árrésekkel
-  3. **Vásárló az Első** (`Heart`) -- Kiváló ügyfélszolgálat, megbízható szállítás
-- **"Rólunk" link gomb**: Outline stílusú gomb, ami a `/rolunk` oldalra visz
-- **Animáció**: `framer-motion` `whileInView` fade-up, staggered kártyák
+### Fájl: `src/pages/AboutUs.tsx` (75-107. sorok)
 
-## Technikai Részletek
+**1. Szekció magasság csökkentése**
+- `min-h-[50vh] md:min-h-[60vh]` --> `min-h-[35vh] md:min-h-[40vh]`
 
-### Új fájl:
-- **`src/components/BrandIntroSection.tsx`** -- Önálló komponens a bemutatkozó szekcióhoz
+**2. Belső padding csökkentése**
+- `py-20` --> `py-[30px] md:py-10`
 
-### Módosított fájl:
-- **`src/pages/Index.tsx`** -- Import + a komponens beillesztése a `<Hero />` és `<FeaturedProducts />` közé
+**3. Badge margin**
+- `mb-6` --> `mb-4`
 
-### Felhasznált minták:
-- `badge-gold`, `noise-texture` -- meglévő CSS utility-k
-- `framer-motion` -- `whileInView` animáció
-- `lucide-react` -- `ShieldCheck`, `Tag`, `Heart` ikonok
-- `Link` (`react-router-dom`) -- "/rolunk" oldalra navigáció
+**4. Cím font-size**
+- `text-5xl md:text-6xl` --> `text-[32px] md:text-[44px]`
+
+**5. Alcím**
+- `mt-6 text-lg md:text-xl ... max-w-[700px]` --> `mt-4 text-base md:text-lg ... max-w-[600px] leading-relaxed`
+
+### Ami NEM változik:
+- Animációk, arany glow, gradient, badge stílus, szövegek tartalma
+- Az oldal többi szekciója érintetlen marad
