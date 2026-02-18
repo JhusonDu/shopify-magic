@@ -1,86 +1,49 @@
 
 
-# Rólunk Oldal -- Teljes Professzionális Újratervezés
+# Rólunk Oldal -- Tartalom Frissítés a Valós Történethez
 
-## Áttekintés
+## Mit Változtatunk
 
-A jelenlegi Rólunk oldal egyszerű és minimális -- mindössze egy hero, egy rövid szöveges blokk, 4 érték-kártya és egy CTA. Az új verzió egy teljes értékű, 7 szekciós, történetmesélő luxus oldal lesz, amely bizalmat épít és a márka prémium pozícióját erősíti.
+A design marad -- az tetszik. Kizárólag a **szöveges tartalom** frissül, hogy a valós történetet, értékeket és küldetést tükrözze.
 
-## Szekciók
+## Tartalmi Változások
 
-### 1. Hero Szekció
-- **60vh** magasság asztalon, **50vh** mobilon
-- Arany radiális háttérfény (ugyanaz a minta, mint a Termékek oldalon)
-- "RÓLUNK" badge-gold jelvény felül
-- Cím: "A ScentBox Hungary Története" -- Playfair Display, `text-5xl md:text-6xl`
-- Alcím: "Prémium parfümök, autentikus élmények -- 100% eredetiség garantálva."
-- Staggered framer-motion animációk (badge, cím, alcím sorban)
+### 1. Hero Alcím
+- Régi: "Prémium parfümök, autentikus élmények -- 100% eredetiség garantálva."
+- Új: "Prémium parfümök, tisztességes áron -- mert nálunk a vásárló számít."
 
-### 2. Történet Szekció ("Hogyan Kezdődött Minden")
-- Kétoszlopos elrendezés: **60/40** arány (`md:grid-cols-5`, 3+2)
-- Bal oldal: Cím + hosszabb történetmesélő szöveg a márka eredetéről (2020-as indulás, dekantálás koncepciója)
-- Jobb oldal: `hero-vault.jpg` kép arany kerettel (`border border-primary/20`), `rounded-lg`
-- Mobilon egymás alá kerül (kép felül, szöveg alul)
-- Scroll-triggered fade-in animáció
+### 2. Történet Szekció
+- A 2020-as indulás helyett **2024** szerepel
+- Új szöveg arról, hogy az ötlet 2024-ben született, a háttérben építkeztetek, és most álltatok ki a világ elé
+- Hangsúly: tudjátok mennyibe kerülnek a parfümök, ezért döntöttetek úgy, hogy a lehető legjobb árakat adjátok -- nem magas árrésekkel dolgoztok
+- A dekantálás mint **hamarosan érkező** szolgáltatás szerepel (nem úgy, mintha már elérhető lenne)
 
-### 3. Küldetés és Értékek (3 Kártya)
-- Három oszlopos rács (`md:grid-cols-3`)
-- Kártyák:
-  1. **Eredetiség Mindenekelőtt** -- `ShieldCheck` ikon
-  2. **Szenvedély az Illatokért** -- `Heart` ikon
-  3. **Kiváló Minőség** -- `Star` ikon
-- Kártya design: `bg-white/[0.03]` háttér, `border border-primary/15`, hover-on `border-primary`, `translateY(-8px)` emelkedés
-- Framer-motion `whileInView` animáció kártyánként eltolva
+### 3. Értékek (3 Kártya) -- Új Tartalom
+1. **A Vásárló az Első** (Heart ikon) -- "Nálunk a vásárlónak mindig igaza van. Ez nem szlogen -- ez a szabályunk."
+2. **Tisztességes Árak** (ShieldCheck ikon) -- "Nem dolgozunk magas árrésekkel. A legjobb piaci árakat adjuk, mert mi is tudjuk, mennyibe kerülhet egy parfüm."
+3. **Eredetiség Garantálva** (Star ikon) -- "Kizárólag eredeti, ellenőrzött termékeket árulunk. Soha nem kötünk kompromisszumot."
 
-### 4. Utazásunk -- Idővonal
-- Függőleges arany vonal középen (asztalon), bal oldalon (mobilon)
-- 5 mérföldkő: 2020, 2021, 2022, 2023, 2024
-- Minden mérföldkő: arany kör az idővonalon, évszám, cím, rövid leírás
-- Asztali: váltakozó bal-jobb elrendezés
-- Mobil: mind bal oldalra igazítva
-- Minden elem scroll-triggered animációval jelenik meg
+### 4. Idővonal -- 2 Mérföldkő (Valós)
+- **2024**: "Az Ötlet" -- Az ötlet megszületése, piackutatás, a háttérben csendben építkeztünk
+- **2025**: "Az Indulás" -- A webáruház elindítása, első vásárlók, a ScentBox Hungary végre a világ elé állt
+- **Hamarosan**: "Dekant Szolgáltatás" -- Kísérletezünk a dekantálással, hamarosan érkezik
 
-### 5. Minőségi Elkötelezettség
-- Kétoszlopos elrendezés (fordított: bal oldal kép, jobb oldal szöveg)
-- Cím: "100% Eredeti Garantált"
-- 4 ellenőrzőpont `Check` ikonnal, arany színben:
-  - Kizárólag hivatalos forgalmazóktól
-  - Minden termék eredetiség-ellenőrzött
-  - Precíz dekantálás steril környezetben
-  - Luxus üvegek és címkézés
-- Kép: `hero-vault.jpg` újrahasználva (vagy az egyik termékfotó)
+### 5. Minőségi Elkötelezettség -- Frissített Pontok
+- Kizárólag eredeti parfümök
+- A piac legjobb árai, magas árrés nélkül
+- Gyors és megbízható szállítás
+- A vásárló elégedettsége az első
 
-### 6. Számok Szekcio (Bonus -- a specifikációban nem volt, de illeszkedik)
-- Kihagyva, a specifikáció nem kérte
-
-### 7. CTA Szekció
-- Háttér: `bg-gradient-to-br from-secondary to-background`
-- Cím: "Fedezd Fel Kínálatunkat"
-- Leírás: "Több mint 500 prémium parfüm várja felfedezésedet."
-- Két gomb egymás mellett:
-  1. **"Böngészd a Kollekciót"** -- elsődleges arany gomb (`/termekek`)
-  2. **"Lépj Velünk Kapcsolatba"** -- outline gomb (`/tamogatas`)
+### 6. CTA
+- Leírás frissítés: "Prémium parfümök, tisztességes áron." (az 500 parfüm túlzás lehetne egy friss vállalkozásnál)
 
 ## Technikai Részletek
 
 ### Módosított fájl:
-- **`src/pages/AboutUs.tsx`** -- Teljes újraírás a 7 szekciós struktúrával
+- **`src/pages/AboutUs.tsx`** -- Csak a szöveges konstansok (`values`, `milestones`, `qualityPoints`) és inline szövegek frissítése
 
-### Felhasznált technológiák:
-- `framer-motion` -- `whileInView` scroll animációk, staggered entrances
-- `lucide-react` -- `ShieldCheck`, `Heart`, `Star`, `Check`, `ChevronRight` ikonok
-- Meglévő Tailwind utilities: `badge-gold`, `card-luxury`, `noise-texture`, `text-gradient-gold`
-- Meglévő assets: `hero-vault.jpg`
-
-### Reszponzivitás:
-- Minden szekció mobilra optimalizálva (`grid-cols-1` mobilon, `md:grid-cols-X` asztalon)
-- Idővonal mobilon balra igazított egyoszlopos verzió
-- Hero magasság csökken mobilon
-- Szöveges méretek responsívan skálázódnak
-
-### Animációk:
-- Hero: `initial/animate` azonnali belépés (badge -> cím -> alcím sorrendben)
-- Minden más szekció: `whileInView` + `viewport={{ once: true }}` scroll-triggered
-- Kártyák: staggered delay (`i * 0.1s`)
-- Idővonal elemek: fade-up + bal/jobb slide-in asztali nézetben
+### Ami NEM változik:
+- Semmi a designból (animációk, elrendezés, színek, tipográfia)
+- Komponens struktúra, importok, JSX struktúra marad
+- Csak string értékek cserélődnek
 
