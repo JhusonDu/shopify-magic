@@ -1,61 +1,86 @@
 
-# Desktop Products Page -- Premium Shopping Experience Upgrade
 
-## What Changes
+# Rólunk Oldal -- Teljes Professzionális Újratervezés
 
-### 1. Hero Section -- Tighter, Trust-Forward
-- Reduce the hero height on desktop (less padding) so products are visible sooner
-- Add a subtle **trust strip** below the hero title: three inline badges -- "100% Eredeti", "Gyors Szallitas", "14 Nap Visszakuldes" -- with small icons (Shield, Truck, RotateCcw) in a horizontal row
-- This immediately communicates trustworthiness and professionalism before the user even scrolls
+## Áttekintés
 
-### 2. Product Grid -- Desktop Sort Bar Above Grid
-- Add a **top bar** above the product grid on desktop showing: product count on the left, sort dropdown on the right
-- This is the standard luxury e-commerce pattern (like Net-a-Porter, Sephora) -- gives users immediate control
-- The sort dropdown moves from the sidebar filter to this top bar on desktop, keeping filters focused on filtering
+A jelenlegi Rólunk oldal egyszerű és minimális -- mindössze egy hero, egy rövid szöveges blokk, 4 érték-kártya és egy CTA. Az új verzió egy teljes értékű, 7 szekciós, történetmesélő luxus oldal lesz, amely bizalmat épít és a márka prémium pozícióját erősíti.
 
-### 3. Product Card -- Enhanced Luxury Desktop Experience
-- Add a subtle **border glow** on hover using `box-shadow` with gold tint
-- Show the **"Kosarba"** button text as "Gyors Valasztas" (Quick Buy) to be more inviting and less transactional
-- Add a subtle **price "tol" (from) prefix** when there are multiple variants: "tol 3 490 Ft"
-- Increase card info spacing for a more breathable, editorial layout on desktop
+## Szekciók
 
-### 4. Filter Sidebar -- Polished Desktop Card
-- Add a subtle **gold top border** accent to the filter card for visual hierarchy
-- Slightly increase the card's border radius and add a subtle inner shadow for depth
-- Add a small **active filter count** badge next to the "Szurok" heading
+### 1. Hero Szekció
+- **60vh** magasság asztalon, **50vh** mobilon
+- Arany radiális háttérfény (ugyanaz a minta, mint a Termékek oldalon)
+- "RÓLUNK" badge-gold jelvény felül
+- Cím: "A ScentBox Hungary Története" -- Playfair Display, `text-5xl md:text-6xl`
+- Alcím: "Prémium parfümök, autentikus élmények -- 100% eredetiség garantálva."
+- Staggered framer-motion animációk (badge, cím, alcím sorban)
 
-### 5. Background Enhancement -- Subtle Luxury Texture
-- Add a very faint **noise texture** overlay to the products section background using CSS for a premium tactile feel
-- Add a subtle **gradient separator** between the hero and grid sections -- a thin gold-to-transparent line
+### 2. Történet Szekció ("Hogyan Kezdődött Minden")
+- Kétoszlopos elrendezés: **60/40** arány (`md:grid-cols-5`, 3+2)
+- Bal oldal: Cím + hosszabb történetmesélő szöveg a márka eredetéről (2020-as indulás, dekantálás koncepciója)
+- Jobb oldal: `hero-vault.jpg` kép arany kerettel (`border border-primary/20`), `rounded-lg`
+- Mobilon egymás alá kerül (kép felül, szöveg alul)
+- Scroll-triggered fade-in animáció
 
-## Technical Details
+### 3. Küldetés és Értékek (3 Kártya)
+- Három oszlopos rács (`md:grid-cols-3`)
+- Kártyák:
+  1. **Eredetiség Mindenekelőtt** -- `ShieldCheck` ikon
+  2. **Szenvedély az Illatokért** -- `Heart` ikon
+  3. **Kiváló Minőség** -- `Star` ikon
+- Kártya design: `bg-white/[0.03]` háttér, `border border-primary/15`, hover-on `border-primary`, `translateY(-8px)` emelkedés
+- Framer-motion `whileInView` animáció kártyánként eltolva
 
-### Files to modify:
+### 4. Utazásunk -- Idővonal
+- Függőleges arany vonal középen (asztalon), bal oldalon (mobilon)
+- 5 mérföldkő: 2020, 2021, 2022, 2023, 2024
+- Minden mérföldkő: arany kör az idővonalon, évszám, cím, rövid leírás
+- Asztali: váltakozó bal-jobb elrendezés
+- Mobil: mind bal oldalra igazítva
+- Minden elem scroll-triggered animációval jelenik meg
 
-1. **`src/pages/Products.tsx`**
-   - Reduce desktop hero padding from `md:pb-16` to `md:pb-10`
-   - Add trust badges row after the description (Shield, Truck, RotateCcw icons with text)
-   - Add a sort/count top bar above the ProductGrid on desktop
-   - Add subtle noise texture CSS to the grid section background
-   - Add gold gradient separator between hero and grid
+### 5. Minőségi Elkötelezettség
+- Kétoszlopos elrendezés (fordított: bal oldal kép, jobb oldal szöveg)
+- Cím: "100% Eredeti Garantált"
+- 4 ellenőrzőpont `Check` ikonnal, arany színben:
+  - Kizárólag hivatalos forgalmazóktól
+  - Minden termék eredetiség-ellenőrzött
+  - Precíz dekantálás steril környezetben
+  - Luxus üvegek és címkézés
+- Kép: `hero-vault.jpg` újrahasználva (vagy az egyik termékfotó)
 
-2. **`src/components/ProductCard.tsx`**
-   - Change "Kosarba" button text to "Gyors Valasztas" on desktop
-   - Add gold border glow on hover (`box-shadow: 0 0 0 1px hsl(43 65% 52% / 0.15)`)
-   - Add "tol" prefix for price when multiple variants exist
-   - Increase desktop spacing in the info section (`space-y-2` instead of `space-y-1.5`)
+### 6. Számok Szekcio (Bonus -- a specifikációban nem volt, de illeszkedik)
+- Kihagyva, a specifikáció nem kérte
 
-3. **`src/components/ProductGrid.tsx`**
-   - Accept and display a sort bar prop area (count + sort) above the grid on desktop
+### 7. CTA Szekció
+- Háttér: `bg-gradient-to-br from-secondary to-background`
+- Cím: "Fedezd Fel Kínálatunkat"
+- Leírás: "Több mint 500 prémium parfüm várja felfedezésedet."
+- Két gomb egymás mellett:
+  1. **"Böngészd a Kollekciót"** -- elsődleges arany gomb (`/termekek`)
+  2. **"Lépj Velünk Kapcsolatba"** -- outline gomb (`/tamogatas`)
 
-4. **`src/components/ProductFilters.tsx`**
-   - Add gold top border accent to the desktop filter card
-   - Show active filter count badge next to heading
-   - Remove sort from sidebar (moved to top bar)
+## Technikai Részletek
 
-5. **`src/index.css`**
-   - Add a `noise-texture` utility class with a CSS pseudo-element for subtle grain overlay
+### Módosított fájl:
+- **`src/pages/AboutUs.tsx`** -- Teljes újraírás a 7 szekciós struktúrával
 
-### No new dependencies needed
-- Uses existing `lucide-react` icons, `framer-motion`, Tailwind utilities
-- All changes are CSS/layout refinements for desktop breakpoints only
+### Felhasznált technológiák:
+- `framer-motion` -- `whileInView` scroll animációk, staggered entrances
+- `lucide-react` -- `ShieldCheck`, `Heart`, `Star`, `Check`, `ChevronRight` ikonok
+- Meglévő Tailwind utilities: `badge-gold`, `card-luxury`, `noise-texture`, `text-gradient-gold`
+- Meglévő assets: `hero-vault.jpg`
+
+### Reszponzivitás:
+- Minden szekció mobilra optimalizálva (`grid-cols-1` mobilon, `md:grid-cols-X` asztalon)
+- Idővonal mobilon balra igazított egyoszlopos verzió
+- Hero magasság csökken mobilon
+- Szöveges méretek responsívan skálázódnak
+
+### Animációk:
+- Hero: `initial/animate` azonnali belépés (badge -> cím -> alcím sorrendben)
+- Minden más szekció: `whileInView` + `viewport={{ once: true }}` scroll-triggered
+- Kártyák: staggered delay (`i * 0.1s`)
+- Idővonal elemek: fade-up + bal/jobb slide-in asztali nézetben
+
