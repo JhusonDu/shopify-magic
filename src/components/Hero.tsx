@@ -92,7 +92,7 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           <motion.h1 {...stagger(0.4)} className="mb-2 md:mb-3">
             <span
               className="block text-3xl md:text-5xl lg:text-7xl font-body font-bold uppercase tracking-wide text-foreground leading-tight"
-              style={{ textShadow: "0 2px 24px hsl(0 0% 0% / 0.8), 0 0 60px hsl(0 0% 0% / 0.5)" }}
+              style={{ textShadow: "0 2px 20px hsl(0 0% 0% / 0.7), 0 0 40px hsl(0 0% 0% / 0.4)" }}
             >
               Találd Meg
             </span>
@@ -101,7 +101,7 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           <motion.span
             {...stagger(0.6)}
             className="block text-4xl md:text-6xl lg:text-8xl font-display italic text-primary leading-tight mb-3 md:mb-5"
-            style={{ textShadow: "0 2px 30px hsl(43 65% 52% / 0.45), 0 0 80px hsl(43 65% 52% / 0.2)" }}
+            style={{ textShadow: "0 2px 30px hsl(43 65% 52% / 0.3), 0 0 60px hsl(43 65% 52% / 0.15)" }}
           >
             A Te Illatod
           </motion.span>
@@ -125,7 +125,7 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           <motion.div {...stagger(0.9)} className="w-full max-w-xs sm:max-w-md md:max-w-lg mb-2">
             <button
               onClick={onSearchOpen}
-              className="w-full flex items-center gap-3 px-5 py-4 rounded-md border border-primary/50 bg-background/25 backdrop-blur-md text-foreground/70 hover:border-primary/70 hover:bg-background/35 transition-all duration-300 cursor-pointer group"
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-md border border-primary/30 bg-background/20 backdrop-blur-md text-foreground/60 hover:border-primary/60 hover:bg-background/30 transition-all duration-300 cursor-pointer group"
               style={{
                 boxShadow: "0 0 30px hsl(43 65% 52% / 0.1), inset 0 1px 0 hsl(0 0% 100% / 0.05)",
               }}
@@ -167,7 +167,7 @@ export const Hero = ({ onSearchOpen, onFinderOpen }: HeroProps) => {
           {/* Trust signals */}
           <motion.span
             {...stagger(1.1)}
-            className="block mt-3 md:mt-4 text-primary text-[10px] md:text-sm font-medium font-body"
+            className="block mt-3 md:mt-4 text-primary/80 text-[10px] md:text-sm font-medium font-body"
             style={{ textShadow: "0 1px 12px hsl(0 0% 0% / 0.6)" }}
           >
             100% Eredeti · Expressz Szállítás · Pénzvisszafizetési Garancia

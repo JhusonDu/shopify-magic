@@ -19,7 +19,7 @@ export const NewsletterSection = () => {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-primary/10 border-y border-primary/15">
+    <section className="py-20 md:py-28 bg-primary/5 border-y border-primary/10">
       <div className="container">
         <div className="max-w-2xl mx-auto text-center">
           {/* Header */}
@@ -47,7 +47,7 @@ export const NewsletterSection = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="flex-1 h-14 bg-background border-border focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-md text-foreground placeholder:text-muted-foreground"
+                className="flex-1 h-14 bg-card border-border focus:border-primary rounded-md text-foreground placeholder:text-muted-foreground"
               />
               <Button 
                 type="submit"

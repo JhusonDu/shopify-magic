@@ -87,11 +87,11 @@ const FeaturedCard = ({ product, onQuickBuy }: { product: ShopifyProduct; onQuic
         {/* Info */}
         <div className="p-3 md:p-4 space-y-1">
           {node.vendor && (
-            <span className="text-[11px] uppercase tracking-widest text-primary/80 font-medium">
+            <span className="text-[11px] uppercase tracking-widest text-primary font-medium">
               {node.vendor}
             </span>
           )}
-          <h3 className="text-sm md:text-base font-semibold text-foreground line-clamp-2 leading-relaxed">
+          <h3 className="text-sm md:text-base font-semibold text-foreground line-clamp-2 leading-snug">
             {node.title}
           </h3>
           <p className="text-lg font-bold text-primary drop-shadow-[0_0_6px_hsl(var(--primary)/0.4)]">
@@ -251,18 +251,15 @@ export const FeaturedProducts = () => {
   }, [products])();
 
   return (
-    <section className="py-10 md:py-16 bg-gradient-to-b from-background via-card/50 to-background relative">
+    <section className="py-10 md:py-16 bg-gradient-to-b from-background to-secondary/30 relative">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-primary drop-shadow-[0_0_6px_hsl(var(--primary)/0.5)]" />
-              <h2 className="font-display text-2xl md:text-3xl text-foreground text-luxury">
-                Legnépszerűbb Termékek
-              </h2>
-            </div>
-            <div className="w-16 h-[2px] bg-gradient-to-r from-primary to-primary/20 ml-8" />
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-5 h-5 text-primary drop-shadow-[0_0_6px_hsl(var(--primary)/0.5)]" />
+            <h2 className="font-display text-2xl md:text-3xl text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.3)]">
+              Legnépszerűbb Termékek
+            </h2>
           </div>
 
           <div className="flex items-center gap-2">
@@ -277,8 +274,9 @@ export const FeaturedProducts = () => {
 
             <Link
               to="/termekek"
-              className="text-sm text-primary font-medium hidden md:inline-flex items-center gap-1.5 px-5 py-2 rounded-full border border-primary/30 hover:border-primary/60 hover:bg-primary/10 transition-all duration-300 hover:shadow-[0_0_12px_hsl(var(--primary)/0.2)]"
+              className="text-sm text-primary hover:underline font-medium hidden md:inline-flex items-center gap-1 hover:drop-shadow-[0_0_6px_hsl(var(--primary)/0.4)] transition-all"
             >
+              Összes Megtekintése →
             </Link>
           </div>
         </div>

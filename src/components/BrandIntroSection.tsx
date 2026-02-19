@@ -33,7 +33,6 @@ const cardVariants = {
 export const BrandIntroSection = () => {
   return (
     <section className="noise-texture relative py-16 md:py-24 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 60% 40% at 50% 50%, hsl(43 65% 52% / 0.06) 0%, transparent 70%)" }} />
       <div className="container px-6 md:px-8 relative z-10">
         {/* Text block */}
         <motion.div
@@ -63,13 +62,13 @@ export const BrandIntroSection = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
-              className="card-luxury flex flex-col items-center text-center p-6 md:p-7 hover:shadow-[0_8px_30px_-8px_hsl(43_65%_52%/0.2)]"
+              className="card-luxury flex flex-col items-center text-center p-6 md:p-7"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/25 flex items-center justify-center mb-4">
-                <item.icon className="w-6 h-6 text-primary" />
+              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mb-4">
+                <item.icon className="w-5 h-5 text-primary" />
               </div>
               <h3 className="font-display text-base md:text-lg text-foreground mb-2">{item.title}</h3>
-              <p className="text-xs md:text-sm text-muted-foreground/90 leading-relaxed">{item.description}</p>
+              <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{item.description}</p>
             </motion.div>
           ))}
         </div>

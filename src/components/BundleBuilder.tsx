@@ -94,12 +94,11 @@ export const BundleBuilder = () => {
   };
 
   return (
-    <section ref={sectionRef} id="bundle-builder" className="py-20 md:py-28 section-elevated relative">
-      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 50% 30% at 50% 20%, hsl(43 65% 52% / 0.04) 0%, transparent 70%)" }} />
-      <div className="container relative z-10">
+    <section ref={sectionRef} id="bundle-builder" className="py-20 md:py-28 bg-card">
+      <div className="container">
         {/* Header */}
         <div className="text-center mb-6 animate-fade-in">
-          <span className="badge-gold mb-4 inline-block">Hamarosan Érkezik</span>
+          <span className="badge-gold mb-4 inline-block">🚀 Hamarosan Érkezik</span>
           <div className="flex items-center justify-center gap-2 mb-4">
             <h2 className="text-h2 font-display font-bold text-foreground">
               Ismerd Meg az Illatokat Mini Kiszerelésben

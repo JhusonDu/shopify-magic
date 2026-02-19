@@ -29,7 +29,7 @@ const steps = [
 
 export const HowItWorksSection = () => {
   return (
-    <section className="py-20 md:py-28 section-dark">
+    <section className="py-20 md:py-28 bg-card">
       <div className="container">
         {/* Header */}
         <div className="text-center mb-14 animate-fade-in">
@@ -52,19 +52,19 @@ export const HowItWorksSection = () => {
             >
               {/* Connector Line */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-gradient-to-r from-primary/30 via-primary/15 to-transparent">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/40 w-0 group-hover:w-full transition-all duration-700" />
+                <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-border">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary to-transparent w-0 group-hover:w-full transition-all duration-500" />
                 </div>
               )}
               
               {/* Icon */}
-              <div className="relative z-10 w-20 h-20 rounded-full bg-card border-2 border-border flex items-center justify-center mx-auto mb-6 group-hover:border-primary group-hover:bg-primary/10 group-hover:shadow-[0_0_20px_hsl(43_65%_52%/0.15)] transition-all duration-300">
+              <div className="relative z-10 w-20 h-20 rounded-full bg-secondary border-2 border-border flex items-center justify-center mx-auto mb-6 group-hover:border-primary group-hover:bg-primary/10 transition-all duration-300">
                 <item.icon className="w-8 h-8 text-primary" />
               </div>
               
               {/* Step Number */}
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 text-xs font-bold text-primary tracking-badge mb-2">
-                {item.step}
+              <span className="text-xs font-semibold text-primary tracking-badge mb-2 block">
+                {item.step}. LÉPÉS
               </span>
               
               {/* Title */}
