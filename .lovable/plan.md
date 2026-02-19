@@ -1,34 +1,45 @@
 
-# Bemutatkozó Szekció a Főoldalra -- Hero és Termékek Között
 
-## Cél
+# Professzionális Mobil Navigációs Menü
 
-Egy kompakt, professzionális "Ki vagyunk?" blokk közvetlenül a Hero szekció alatt és a FeaturedProducts felett, amely azonnal bemutatkozik az új látogatóknak: 100% eredeti termékek, minősített magyar forgalmazó, kedvező árak, vásárlóközpontúság.
+## Mi Változik
 
-## Design
+Egy teljesen új, luxus megjelenésű mobil navigációs menü jön létre, amely jobbról csúszik be, fehér háttérrel, arany akcentusokkal, bővíthető almenükkel, elérhetőségi információkkal és promóciós bannerrel.
 
-- **Háttér**: `noise-texture` osztály (sötét, finom textúra -- ugyanaz, mint a Rólunk oldalon)
-- **Elrendezés**: Középre igazított szöveges blokk + alatta 3 kompakt kiemelő kártya (ikon + cím + 1 mondat)
-- **Badge**: `badge-gold` -- "MIÉRT MINKET?"
-- **Cím**: Playfair Display (`font-display`), pl. "Prémium Parfümök, Tisztességes Áron"
-- **Alcím**: 2-3 mondat a márka lényegéről (eredeti termékek, legjobb árak, vásárló az első)
-- **3 kiemelő kártya** (ikonnal):
-  1. **100% Eredeti** (`ShieldCheck`) -- Minősített magyarországi hivatalos forgalmazótól
-  2. **Legjobb Árak** (`Tag`) -- 20-40%-kal kedvezőbb, mert nem dolgozunk magas árrésekkel
-  3. **Vásárló az Első** (`Heart`) -- Kiváló ügyfélszolgálat, megbízható szállítás
-- **"Rólunk" link gomb**: Outline stílusú gomb, ami a `/rolunk` oldalra visz
-- **Animáció**: `framer-motion` `whileInView` fade-up, staggered kártyák
+A jelenlegi Header komponensben a Menu (hamburger) ikon mobilon ezt az új menüt fogja megnyitni a meglévő ToolboxPanel helyett.
+
+## Fő Elemek
+
+1. **Hamburger ikon animáció**: Mobilon a Menu ikon X-re változik nyitott állapotban
+2. **Jobbról becsúszó panel**: 85vw széles (max 400px), fehér háttér, sötét backdrop
+3. **Fejléc**: Logo + "Böngészd az Illatokat" arany CTA gomb + bezáró X
+4. **4 menüpont**: Termékek (bővíthető almenüvel), Rólunk, Kapcsolat, Segítség -- arany chevron, hover/tap effektekkel
+5. **Elérhetőségek**: Telefon + email ikonos linkek
+6. **Promóciós banner**: Sötét luxus háttér, arany szegélyű CTA gomb
 
 ## Technikai Részletek
 
 ### Új fájl:
-- **`src/components/BrandIntroSection.tsx`** -- Önálló komponens a bemutatkozó szekcióhoz
+- **`src/components/MobileNav.tsx`** -- A teljes mobil navigációs menü komponens
+  - `framer-motion` `AnimatePresence` + `motion.div` a panel csúsztatásához és backdrop fade-hez
+  - Bővíthető "Termékek" almenü (Férfi, Női, Unisex, Kedvenceink) saját állapottal
+  - Body scroll lock nyitott állapotban (`overflow: hidden`)
+  - Escape billentyű és backdrop kattintás bezárja
+  - Swipe-right gesztus bezáráshoz (touch event kezelés)
+  - Staggered fade-in animáció a menüpontokra
+  - Elérhetőségek: `tel:` és `mailto:` linkek arany ikonokkal
+  - Promóciós banner sötét gradienssel és outlined arany CTA gombbal
+  - ARIA attribútumok: `role="dialog"`, `aria-modal="true"`, `aria-label`
 
 ### Módosított fájl:
-- **`src/pages/Index.tsx`** -- Import + a komponens beillesztése a `<Hero />` és `<FeaturedProducts />` közé
+- **`src/components/Header.tsx`**
+  - Új `isMobileMenuOpen` állapot
+  - Mobilon a Menu gomb az új `MobileNav`-ot nyitja meg a `ToolboxPanel` helyett
+  - A Menu ikon animáltan X-re vált nyitott állapotban
+  - A `MobileNav` komponens importálása és renderelése
+  - A meglévő ToolboxPanel csak desktopon marad elérhető
 
-### Felhasznált minták:
-- `badge-gold`, `noise-texture` -- meglévő CSS utility-k
-- `framer-motion` -- `whileInView` animáció
-- `lucide-react` -- `ShieldCheck`, `Tag`, `Heart` ikonok
-- `Link` (`react-router-dom`) -- "/rolunk" oldalra navigáció
+### Stílus megközelítés:
+- Inline Tailwind osztályok + néhány egyedi szín fehér háttérhez (a globális téma sötét, ezért a fehér panel explicit `bg-white text-gray-900` stílusokat kap)
+- Reszponzív méretezés: 90vw kis telefonokon, 85vw alapértelmezetten, max 400px
+
