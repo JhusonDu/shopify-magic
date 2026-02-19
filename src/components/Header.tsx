@@ -82,7 +82,7 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
             {[
               { to: "/termekek", label: "Termékek" },
               { to: "/rolunk", label: "Rólunk" },
-              { to: "/tamogatas", label: "Segítség" },
+              { to: "/tamogatas", label: "Kapcsolat" },
             ].map((link) => (
               <Link
                 key={link.to}
