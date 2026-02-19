@@ -1,79 +1,87 @@
 
+# Koncentracio Tabos Rendszer a QuickBuy Pop-up-ban es Termekkartyakon
 
-# Gyors Választás Gomb + Quick Buy Pop-up Rendszer
+## Attekintes
 
-## Mi Valtozik
+A rendszer kibovitese koncentracio-alapu (EDT / EDP / Parfum / Intense) csoportositassal. A termekek cimet elemezzuk, kivonjuk a koncentracio tipust es az alap parfum nevet, majd a QuickBuy pop-up-ban tabokkal jelennek meg a kapcsolodo termekek. A termekkartyakon pedig kis badge mutatja a koncentracio tipust.
 
-1. **ProductCard "Gyors Valasztas" gomb ujratervezese** -- professzionalis design, jobb animaciok, reszponziv megjelenes
-2. **A gomb mostantol pop-up-ot nyit** a kozvetlen kosarazas helyett, igy a felhasznalo kivalaszthatja a meretet (ml), mennyiseget, es lathatja a reszleteket
-3. **ProductQuickBuy pop-up luxus ujratervezese** -- framer-motion animaciok, szebb layout, tobb informacio megjelenites
+## Hogyan Mukodik
 
----
+**Cim feldolgozas pelda:**
+- "Dior Sauvage EDP - Dekant" -> alap nev: "Dior Sauvage", koncentracio: "EDP", tipus: "Dekant"
+- "Chanel Bleu de Chanel Parfum - Dekant" -> alap nev: "Chanel Bleu de Chanel", koncentracio: "Parfum", tipus: "Dekant"
+- "Dior Homme Intense - Dekant" -> alap nev: "Dior Homme", koncentracio: "Intense", tipus: "Dekant"
+- "YSL Libre Intense - Dekant" -> alap nev: "YSL Libre", koncentracio: "Intense", tipus: "Dekant"
 
-## 1. ProductCard Gomb Ujratervezes (`src/components/ProductCard.tsx`)
+**QuickBuy pop-up viselkedese:**
+1. Megnyitaskor megkeresi az osszes terméket, amelynek ugyanaz az alap neve (pl. ha lenne "Dior Sauvage EDT" es "Dior Sauvage EDP", mindketto megjelenne tabkent)
+2. Ha tobb koncentracio letezik: tabok jelennek meg (pl. EDT | EDP | Parfum), es a kivalasztott tab alatt latszodnak az adott koncentracio ml variantjai
+3. Ha csak egy koncentracio van: a koncentracio badge-kent jelenik meg tab helyett, es a meretvalaszto marad a jelenlegi modon
+4. A pop-up cime az alap nev (pl. "Dior Sauvage"), nem a teljes cim
 
-### Desktop gomb:
-- A "Gyors Valasztas" szoveg helyett **"Gyors Valasztas"** marad, de szebb tipografia es gold glow
-- `backdrop-blur-xl` erosebb hatter, sima felcsuszo animacio
-- Hover-re enyhe scale (1.02) es intenzivebb glow
-- A gomb kattintasra **megallitja a Link navigaciot** (`e.preventDefault()`) es **megnyitja a QuickBuy pop-up-ot**
+**Termekkartyakon:**
+- Kis badge a kepen (felso jobb sarok): "EDP", "EDT", "Parfum", "Intense"
+- Arany szin, atlatszosag, premium megjelenes
 
-### Mobil gomb:
-- Marad a kerek ikon gomb, de szebb gold shadow-val
-- Szinten pop-up-ot nyit kozvetlen kosarazas helyett
+## Technikai Reszletek
 
-### Uj state es callback:
-- `onQuickBuy` callback prop hozzaadasa a ProductCard-hoz
-- A ProductGrid-ben es Products oldalon kezeljuk a `quickBuyProduct` state-et
+### Uj fajl: `src/lib/perfumeUtils.ts`
 
-## 2. ProductGrid + Products Oldal Integralas
+Utility fuggvenyek a cim feldolgozashoz:
 
-### `src/components/ProductGrid.tsx`:
-- Uj `quickBuyProduct` allapot a grid-ben
-- `ProductQuickBuy` rendereles a grid aljara
-- `ProductCard`-nak `onQuickBuy` prop atadasa
+```text
+extractConcentration(title: string) -> { baseName: string, concentration: string | null, isDecant: boolean }
+```
 
-### `src/components/ProductCard.tsx`:
-- Uj prop: `onQuickBuy?: (product: ShopifyProduct) => void`
-- A gomb kattintaskor meghivja `onQuickBuy(product)` a direkt `addItem` helyett
+- Regex-szel keresi az EDP, EDT, Parfum, Extrait, Intense kulcsszavakat a cimben
+- Eltavolitja a "- Dekant" toldalekot
+- Visszaadja a tiszta alap nevet es a koncentracio tipust
 
-## 3. ProductQuickBuy Pop-up Luxus Ujratervezes (`src/components/ProductQuickBuy.tsx`)
+```text
+groupProductsByBaseName(products: ShopifyProduct[]) -> Map<string, ShopifyProduct[]>
+```
 
-### Vizualis valtozasok:
-- **Nagyobb kep**: 24x24 (96px) meretu, kerekitett, enyhe arany szegely
-- **Vendor + cim** professzionalisabb tipografiaval
-- **Ar kiemelese** arany glow-val
-- **Variant (meret) selector**: Pill-stilusu gombok, az aktiv kivalasztas arany hatterrel es finom glow-val, minden variant mellett az adott meret ara is megjelenik
-- **Mennyiseg valaszto**: Szebb rounded gombok arany hover efektussal
-- **Osszeg kijelzes**: A variant ar x mennyiseg = vegosszeg kijelzese a CTA gombok felett
-- **"Reszletek megtekintese" link**: Kicsi link a termek reszletes oldalara (`/product/[handle]`)
-- **Elerheto badge**: Ha a kivalasztott variant elerheto, zold "Keszleten" jelzo; ha nem, piros "Elfogyott"
+- Csoportositja a termekeket alap nev szerint
+- Ha tobb termek osztozik egy alap neven (kulonbozo koncentracio), azok egy csoportba kerulnek
 
-### Animaciok (framer-motion):
-- Dialog tartalom: `scale` 0.95-rol 1-re + `opacity` fade-in, spring animacio
-- Variant gombok: staggered megjelenes (egyenkent)
-- CTA gombok: enyhe slide-up a variant kivalasztas utan
-- Ar frissulese: `AnimatePresence` szam-csere animacio meret valtas eseten
+### Modositott fajl: `src/components/ProductCard.tsx`
 
-### Megjelenendo informaciok osszefoglalva:
-- Termek kep (nagyobb)
-- Marka (vendor)
-- Termek nev
-- Kivalasztott meret ara (dinamikus)
-- Meret valaszto (5ml, 10ml, 15ml stb.)
-- Mennyiseg valaszto (+/-)
-- Vegosszeg (ar x mennyiseg)
-- Elerheto allapot jelzo
-- "Kosarazas" es "Vasarlas" CTA gombok
-- "Reszletek" link a termek oldalra
+- Import `extractConcentration` a perfumeUtils-bol
+- Koncentracio badge hozzaadasa a kep jobb felso sarkaba
+- A badge stilus: `bg-background/80 backdrop-blur-sm text-[10px] font-semibold text-primary border border-primary/20 px-2 py-0.5 rounded-full`
+- Csak akkor jelenik meg, ha van kinyerheto koncentracio
 
----
+### Modositott fajl: `src/components/ProductQuickBuy.tsx`
 
-## Technikai Osszefoglalo
+- Uj prop: `allProducts: ShopifyProduct[]` -- az osszes termek listaja a csoportositas erdekeben
+- `useMemo`-ban csoportositas: megkeresi az osszes terméket, amelynek azonos az alap neve mint a kivalasztott termeknek
+- Ha tobb koncentracio van:
+  - Radix Tabs komponens jelenik meg a meret valaszto felett
+  - Minden tab egy koncentracio (pl. "EDP", "Parfum")
+  - Tab valtas betolti az adott termek variantjait
+  - Animalt tab valtas (framer-motion)
+- Ha egy koncentracio van:
+  - A koncentracio kis badge-kent jelenik meg a termek neve mellett
+  - Nincs tab, meretvalaszto marad a jelenlegi modon
+- A pop-up fejleceben az alap nev jelenik meg (nem a teljes Shopify cim)
+- A vendor kiemelten marad
+
+### Modositott fajl: `src/components/ProductGrid.tsx`
+
+- Az `allProducts` lista atadasra kerul a `ProductQuickBuy`-nak, hogy az csoportositani tudjon
+
+### Vizualis reszletek
+
+- Tab stilus: pill-shaped, arany aktiv hatter, atlatszodo inaktiv, sima atmenetek
+- Tab valtas animacio: tartalom enyhe slide + fade (framer-motion)
+- A koncentracio badge a kartyakon: enyhe arany glow, premium erzes
+- A pop-up cim az alap nev, a koncentracio a tabokban vagy badge-ben jelenik meg
+
+### Osszefoglalo tabla
 
 | Fajl | Valtozas |
 |------|----------|
-| `src/components/ProductCard.tsx` | Uj `onQuickBuy` prop, gomb ujratervezes, pop-up megnyitas direkt kosarazas helyett |
-| `src/components/ProductGrid.tsx` | `quickBuyProduct` state, `ProductQuickBuy` rendereles, `onQuickBuy` callback |
-| `src/components/ProductQuickBuy.tsx` | Teljes vizualis ujratervezes: nagyobb kep, ar animaciok, vegosszeg, elerheto badge, reszletek link, framer-motion |
-
+| `src/lib/perfumeUtils.ts` (uj) | Cim parser: alap nev + koncentracio kinyerese, termekek csoportositasa |
+| `src/components/ProductCard.tsx` | Koncentracio badge a kep jobb felso sarkaban |
+| `src/components/ProductQuickBuy.tsx` | Koncentracio tabok (ha tobb van), alap nev fejlec, allProducts prop |
+| `src/components/ProductGrid.tsx` | allProducts prop atadasa a QuickBuy-nak |
