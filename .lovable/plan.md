@@ -1,63 +1,39 @@
 
+# Header (Toolbar) Ujratervezes
 
-# Segítség Oldal -- Teljes Újratervezés
+## Mi valtozik
+Kizarolag a `Header.tsx` komponens kerul ujraepitesre. Minden mas (oldalak, szekciok, ToolboxPanel, CartDrawer, LoginDialog, SearchCommand) valtozatlan marad.
 
-## Jelenlegi Állapot
-A jelenlegi `/tamogatas` oldal egy egyszerű, 5 elemből álló FAQ lista egy kontakt kártyával. Az új verzió egy komplex, interaktív támogatási központ lesz.
+## Uj Header Design
 
-## Struktúra
+### Asztali nezet (md+)
+- **Bal oldal**: Logo ikon + "ScentBox Hungary" -- valtozatlan pozicio es stilus
+- **Kozep**: Navigacios linkek kozepre igazitva (`flex-1 justify-center`): Termekek, Rolunk, Segitseg -- arany underline hover animacioval es `framer-motion` staggered fade-in-nel
+- **Jobb oldal**: Felhasznalo ikon, Kosar ikon, Menu (hamburger) ikon -- mint eddig, de finomabb hover glow effekttel
 
-Az oldal a meglévő sötét luxus témát fogja használni (fekete + arany), NEM kék-lila gradienst, hogy összhangban maradjon a ScentBox brand arculatával.
+### Mobil nezet (< md)
+- **Bal oldal**: Logo ikon + "ScentBox" (rovid nev, mint eddig)
+- **Kozep**: Ures (linkek elrejtve, a Menu panelbol erheto el)
+- **Jobb oldal**: Felhasznalo, Kosar, Menu ikonok kompaktan
 
-### Szekciók (felülről lefelé):
+### Animaciok
+- Header beuszas: `motion.header` y:-100 -> 0 (meglevo)
+- Nav linkek: staggered `motion.div` fade-in + slide-up kulon-kulon
+- Hover: Arany underline animacio (`scaleX(0) -> scaleX(1)`) es finom `text-primary` szin atmenet
+- Ikonok: `whileHover={{ scale: 1.1 }}` es `whileTap={{ scale: 0.95 }}` spring animacio
+- Scroll allapot: Meglevo backdrop-blur + also arany gradient vonal
 
-1. **Hero** -- "Hogyan segíthetünk?" + keresőmező
-2. **Statisztikák** -- 4 kártya (válaszidő, ügyfélszolgálat, elégedett ügyfelek, elégedettség)
-3. **FAQ szekció** -- 6 kategória fülekkel + akkordeon kérdések + kereső szűrés + "Hasznos volt?" gombok
-4. **Kapcsolat kártyák** -- 4 módszer (Chat, Email, Telefon, Súgó)
-5. **Jegy beküldés űrlap** -- Validált form (Név, Email, Kategória, Tárgy, Üzenet, Fájl feltöltés)
-6. **Tudásbázis gyorslinkek** -- 8 kártya rács
-7. **Népszerű cikkek** -- 6-8 cikk badge-ekkel és megtekintési számmal
-8. **"Még mindig segítség kell?"** -- CTA szekció értékeléssel
+### Scroll viselkedes
+Valtozatlan: scroll > 20px eseten `bg-background/95 backdrop-blur-xl` hatter, arany also hatarvonal AnimatePresence-szel.
 
-### A meglévő Footer megmarad, nem lesz duplikálva.
+## Technikai Reszletek
 
-## Technikai Részletek
+### Modositott fajl
+- **`src/components/Header.tsx`** -- A navigacios linkek elrendezese: `flex-1 justify-center` a kozepre igazitashoz. Az ikonok `whileHover` / `whileTap` animaciokat kapnak. Staggered link animaciok `motion.div` wrapper-ekkel. Az aktiv link jelzese a `useLocation()` hook-kal tortenik (arany also vonal az aktiv oldalon).
 
-### Fájlok:
-
-**Új fájlok:**
-- `src/components/support/SupportHero.tsx` -- Hero + kereső
-- `src/components/support/SupportStats.tsx` -- Statisztikai kártyák
-- `src/components/support/SupportFAQ.tsx` -- Kategorizált FAQ akkordeonokkal, szűréssel, "Hasznos volt?" gombokkal
-- `src/components/support/SupportContact.tsx` -- 4 kapcsolat kártya
-- `src/components/support/SupportTicketForm.tsx` -- Jegy beküldés form (zod validáció, react-hook-form)
-- `src/components/support/SupportKnowledgeBase.tsx` -- Tudásbázis gyorslinkek
-- `src/components/support/SupportArticles.tsx` -- Népszerű cikkek
-- `src/components/support/SupportCTA.tsx` -- "Még mindig segítség kell?" CTA
-
-**Módosított fájl:**
-- `src/pages/Support.tsx` -- Teljes újraírás, az új alkomponensek kompozíciója
-
-### Technológiák:
-- `framer-motion` -- Animációk (whileInView, stagger)
-- `react-hook-form` + `zod` -- Űrlap validáció magyar hibaüzenetekkel
-- `lucide-react` -- Ikonok (Search, Clock, Users, Star, MessageCircle, Mail, Phone, BookOpen, ThumbsUp, ThumbsDown, Upload, stb.)
-- `sonner` -- Toast értesítés a form beküldés után
-- Meglévő UI komponensek: Accordion, Button, Input, Textarea, Select, Tabs, Card, Badge
-
-### Interaktív funkciók:
-- **Valós idejű keresés**: A Hero keresőmezőbe gépelt szöveg szűri az FAQ kérdéseket
-- **Kategória fülek**: Kattintásra csak az adott kategória kérdései jelennek meg
-- **Akkordeon**: Kattintásra nyílik/záródik animációval
-- **"Hasznos volt?"**: Thumbs up/down gombok toast visszajelzéssel
-- **Form validáció**: Magyar nyelvű hibaüzenetek (pl. "A név megadása kötelező")
-- **Vissza a tetejére gomb**: Fix pozíciójú gomb, ami görgés után jelenik meg
-- **Fájl feltöltés**: Frontend-only fájl kiválasztó (képernyőképekhez)
-
-### Design:
-- A meglévő `card-luxury`, `badge-gold`, `noise-texture` stílusokat használja
-- Arany/champagne hover effektek, sötét háttér
-- Reszponzív: mobilon 1 oszlop, tableten 2, asztali gépen 3-4 oszlop
-- `font-display` (Playfair Display) a címekhez, Manrope a szövegtörzshöz
-
+### Nem valtozo fajlok
+- `ToolboxPanel.tsx` -- valtozatlan
+- `CartDrawer.tsx` -- valtozatlan
+- `LoginDialog.tsx` -- valtozatlan
+- `SearchCommand.tsx` -- valtozatlan
+- Osszes oldal es szekció -- valtozatlan
