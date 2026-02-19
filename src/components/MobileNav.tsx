@@ -126,26 +126,26 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
             aria-label="Navigációs menü"
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
-            className="fixed top-0 right-0 z-[1001] h-full w-[85vw] max-w-[400px] max-[375px]:w-[90vw] bg-white rounded-l-xl flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 z-[1001] h-full w-[85vw] max-w-[400px] max-[375px]:w-[90vw] bg-background rounded-l-xl flex flex-col overflow-hidden"
             style={{
               boxShadow: "0 0 40px rgba(0,0,0,0.3)",
               willChange: "transform",
             }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-black/[0.08] shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
               <div className="flex items-center gap-2">
                 <img src={logoIcon} alt="ScentBox" className="h-8 w-8 object-contain" />
-                <span className="text-[#1a1a1a] text-lg font-bold tracking-tight">
+                <span className="text-foreground text-lg font-bold tracking-tight">
                   ScentBox Hungary
                 </span>
               </div>
               <button
                 onClick={close}
                 aria-label="Menü bezárása"
-                className="z-[1002] p-2 -mr-2 rounded-full hover:bg-black/5 transition-colors"
+                className="z-[1002] p-2 -mr-2 rounded-full hover:bg-white/10 transition-colors"
               >
-                <X className="h-6 w-6 text-[#1a1a1a]" />
+                <X className="h-6 w-6 text-foreground" />
               </button>
             </div>
 
@@ -172,7 +172,7 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
                       <>
                         <button
                           onClick={() => setProductsOpen(!productsOpen)}
-                          className="flex items-center justify-between w-full py-4 text-left text-lg font-medium text-[#2c2c2c] border-b border-black/5 transition-colors active:bg-[rgba(212,175,55,0.08)] hover:text-[#d4af37]"
+                          className="flex items-center justify-between w-full py-4 text-left text-lg font-medium text-foreground/90 border-b border-white/10 transition-colors active:bg-primary/10 hover:text-primary"
                           style={{ letterSpacing: "0.02em" }}
                         >
                           {item.label}
@@ -180,7 +180,7 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
                             animate={{ rotate: productsOpen ? 180 : 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <ChevronDown className="h-5 w-5 text-[#d4af37]" />
+                            <ChevronDown className="h-5 w-5 text-primary" />
                           </motion.span>
                         </button>
                         <AnimatePresence>
@@ -199,7 +199,7 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
                                     onClick={() =>
                                       sub.scrollTo ? scrollTo(sub.scrollTo) : goTo(sub.path!)
                                     }
-                                    className="block w-full text-left py-2.5 text-base text-[#666] hover:text-[#d4af37] transition-colors active:bg-[rgba(212,175,55,0.08)] rounded-md px-2"
+                                    className="block w-full text-left py-2.5 text-base text-foreground/60 hover:text-primary transition-colors active:bg-primary/10 rounded-md px-2"
                                   >
                                     {sub.label}
                                   </button>
@@ -212,11 +212,11 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
                     ) : (
                       <button
                         onClick={() => goTo(item.path)}
-                        className="flex items-center justify-between w-full py-4 text-left text-lg font-medium text-[#2c2c2c] border-b border-black/5 transition-colors active:bg-[rgba(212,175,55,0.08)] hover:text-[#d4af37]"
+                        className="flex items-center justify-between w-full py-4 text-left text-lg font-medium text-foreground/90 border-b border-white/10 transition-colors active:bg-primary/10 hover:text-primary"
                         style={{ letterSpacing: "0.02em" }}
                       >
                         {item.label}
-                        <ChevronRight className="h-5 w-5 text-[#d4af37]" />
+                        <ChevronRight className="h-5 w-5 text-primary" />
                       </button>
                     )}
                   </motion.div>
@@ -224,19 +224,19 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
               </div>
 
               {/* Contact Section */}
-              <div className="mt-8 pt-6 border-t border-black/5 space-y-4">
+              <div className="mt-8 pt-6 border-t border-white/10 space-y-4">
                 <a
                   href="tel:+3612345678"
-                  className="flex items-center gap-3 text-[#666] hover:text-[#d4af37] transition-colors py-2"
+                  className="flex items-center gap-3 text-foreground/60 hover:text-primary transition-colors py-2"
                 >
-                  <Phone className="h-[18px] w-[18px] text-[#d4af37]" />
+                  <Phone className="h-[18px] w-[18px] text-primary" />
                   <span className="text-base">+36 1 234 5678</span>
                 </a>
                 <a
                   href="mailto:info@scentbox.hu"
-                  className="flex items-center gap-3 text-[#666] hover:text-[#d4af37] transition-colors py-2"
+                  className="flex items-center gap-3 text-foreground/60 hover:text-primary transition-colors py-2"
                 >
-                  <Mail className="h-[18px] w-[18px] text-[#d4af37]" />
+                  <Mail className="h-[18px] w-[18px] text-primary" />
                   <span className="text-base">info@scentbox.hu</span>
                 </a>
               </div>
@@ -244,7 +244,7 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
 
             {/* Promo Banner */}
             <div
-              className="shrink-0 px-6 py-8"
+              className="shrink-0 px-6 py-8 border-t border-primary/20"
               style={{
                 background: "linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%)",
               }}
@@ -257,7 +257,7 @@ export const MobileNav = ({ open, onOpenChange }: MobileNavProps) => {
               </p>
               <button
                 onClick={() => goTo("/termekek")}
-                className="px-7 py-3 rounded-full text-sm font-medium border-2 border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white transition-all active:scale-95"
+                className="px-7 py-3 rounded-full text-sm font-medium border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all active:scale-95"
               >
                 Mutasd meg
               </button>
