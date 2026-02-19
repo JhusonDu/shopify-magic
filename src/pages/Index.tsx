@@ -33,8 +33,8 @@ const Index = () => {
         searchInitialTab={searchInitialTab}
       />
       <Hero onSearchOpen={handleSearchOpen} onFinderOpen={handleFinderOpen} />
-      <BrandIntroSection />
       <FeaturedProducts />
+      <BrandIntroSection />
       <BundleBuilder />
       <AuthenticitySection />
       <HowItWorksSection />
