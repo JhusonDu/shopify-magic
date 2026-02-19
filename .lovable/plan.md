@@ -1,86 +1,57 @@
 
-
-# Böngészési Élmény Teljes Újratervezése -- Luxus & Professzionális UI
-
-## Probléma
-
-A jelenlegi oldalon a sötét szekciók túl hasonlóak egymáshoz (background: #0a0a0a, card: #141414, secondary: #1a1a1a -- mindegyik szinte fekete), emiatt a szöveg nehezen olvasható, a szekciók összemosódnak, és az összhatás lapos, nem prémium érzetű.
+# Mobil Navigáció -- Pop-up Átalakulás
 
 ## Mi Változik
 
-Összesen **8 fájl** módosítása egy koherens, professzionális luxus megjelenés érdekében.
+A jobbról becsúszó panel teljes cseréje egy középre pozicionált, elegáns pop-up modalra, amely professzionálisabb, luxusabb megjelenést ad mobil nézetben.
 
----
+## Vizuális Koncepció
 
-### 1. Szín- és Kontrasztjavítás (`src/index.css`)
+- **Központi pop-up**: A képernyő közepén jelenik meg (nem oldalról csúszik be)
+- **Megjelenés animáció**: Scale-up + fade-in (0.85-ről 1-re skálázódik, mint egy prémium app modal)
+- **Backdrop**: Erős blur + sötét overlay arany finom fénnyel
+- **Panel**: Lekerekített sarkok (rounded-2xl), sötét háttér arany szegéllyel, belső glow effekt
+- **Bezárás**: Elegáns X gomb arany hover-rel a jobb felső sarokban
 
-- **Muted foreground** fényerő emelése 65%-ról 75%-ra -- a szürke szöveg sokkal olvashatóbb lesz
-- **Card háttér** enyhe emelése 8%-ról 10%-ra, jobban elkülönül a háttértől
-- **Border** szín fényerő emelése 14%-ról 18%-ra, finomabb de láthatóbb vonalak
-- Új CSS utility osztályok:
-  - `.section-dark` -- sötétebb szekció háttér enyhe felső/alsó belső árnyékkal
-  - `.section-elevated` -- kártya-szintű háttér finomabb textúrával
-  - `.text-luxury` -- enyhe text-shadow a fehér szövegeknek a jobb olvashatóságért
+## Struktúra
 
-### 2. Hero Szekció Finomhangolás (`src/components/Hero.tsx`)
+1. **Fejléc**: Logo + "ScentBox Hungary" + bezáró gomb -- arany alsó szegéllyel
+2. **Navigációs linkek**: Középre igazítva, nagyobb betűméret, arany hover animáció, staggered fade-in
+3. **Bővíthető Termékek almenü**: Animált kinyitás arany akcentusokkal
+4. **Elválasztó vonal**: Arany gradient vonal
+5. **Elérhetőségek**: Telefon + email ikonos linkek, arany ikonok
+6. **CTA gomb**: Arany gradient gomb az alján, "Böngészd az Illatokat"
 
-- Szöveg text-shadow erősítése a jobb olvashatóságért a háttérképen
-- "A Te Illatod" arany felirat nagyobb kontrasztú árnyékkal
-- Keresősáv: erősebb border (primary/40-ről primary/50-re), sötétebb háttér a szöveg kiemelésére
-- Trust signals szöveg fényesebbé tétele (primary/80-ról primary-ra)
+## Technikai Részletek
 
-### 3. Legnépszerűbb Termékek Szekció (`src/components/FeaturedProducts.tsx`)
+### Módosított fájl: `src/components/MobileNav.tsx`
 
-- Szekció háttér: finomabb gradient (from-background via-card/50 to-background) -- vizuálisan elkülönül
-- Szekció cím: nagyobb, Playfair Display serif font, alatta arany divider vonal
-- Termékkártya info rész: vendor szöveg fényesebbé (text-primary/80), cím nagyobb sortáv
-- "Összes Megtekintése" gomb: arany outlined pill-stílusú gomb, nem csak szimpla link
+Teljes újraírás:
 
-### 4. Márka Bemutató Szekció (`src/components/BrandIntroSection.tsx`)
+- **Layout**: `fixed inset-0` konténer, flexbox center-rel a pop-up pozicionálásához
+- **Panel méret**: `w-[90vw] max-w-[380px]`, `max-h-[85vh]` -- nem teljes képernyős, hanem lebegő kártya
+- **Animációk**:
+  - Backdrop: `opacity: 0 -> 1`, `backdrop-blur-md`
+  - Panel: `scale: 0.85, opacity: 0 -> scale: 1, opacity: 1` (spring animáció)
+  - Menüpontok: staggered `y: 15, opacity: 0 -> y: 0, opacity: 1`
+  - Bezárásnál: `scale: 0.9, opacity: 0` (gyors exit)
+- **Panel stílus**:
+  - `bg-[#0c0c0c]` háttér
+  - `border border-primary/20` arany szegély
+  - `rounded-2xl` lekerekítés
+  - `box-shadow: 0 0 60px rgba(212,175,55,0.08)` finom arany glow
+- **Menüpontok**:
+  - Középre igazítva (`text-center`)
+  - `text-xl font-medium tracking-wide`
+  - Hover: arany szín + enyhe translateY(-1px) emelkedés
+  - Aktív állapot: `scale(0.98)` feedback
+  - Arany pont dekoráció hover-re a szöveg alatt
+- **Swipe gesztus eltávolítása** (pop-up esetén nem releváns, csak backdrop/X bezárás)
+- **Promo banner eltávolítása** -- a pop-up kompaktabb, a CTA gomb elegendő
+- Escape billentyű és backdrop kattintás bezárás megtartása
+- Body scroll lock megtartása
 
-- Háttér: enyhe arany radiális gradient hozzáadása a mélység érdekében
-- Highlight kártyák: finomabb border (border-primary/15), hover-re arany glow shadow
-- Ikonok: nagyobb méret (w-6 h-6), konténer arany gradient háttérrel
-- Szöveg: leírás szöveg fényesebbé (muted-foreground/90 hatás)
+### Módosított fájl: `src/components/Header.tsx`
 
-### 5. Bundle Builder Szekció (`src/components/BundleBuilder.tsx`)
-
-- Badge szöveg javítás: emoji eltávolítása, elegánsabb badge stílus
-- Szekció háttér: finomabb elkülönítés a többi szekciótól (enyhe gradient overlay)
-- CTA gombok: erősebb vizuális kiemelés, hover glow effekt
-
-### 6. Eredetiség Szekció (`src/components/AuthenticitySection.tsx`)
-
-- Háttér: enyhe radiális arany glow a központban
-- Kártyák: nagyobb padding, erősebb hover effekt arany glow-val
-- Ikon konténerek: gradient border hozzáadása a prémium érzet érdekében
-
-### 7. Hogyan Működik Szekció (`src/components/HowItWorksSection.tsx`)
-
-- Lépés számok: arany gradient háttérben, nem sima szövegként
-- Összekötő vonalak: arany gradient animált vonal asztali nézetben
-- Ikon konténerek: finomabb gold glow és hover animáció
-
-### 8. Hírlevél Szekció (`src/components/NewsletterSection.tsx`)
-
-- Háttér: erősebb arany tint (primary/8 helyett primary/12)
-- Input mező: nagyobb, arany fókusz-ring, sötétebb háttér
-- Szöveg kontrasztja: fehéresebb foreground
-
----
-
-## Technikai Összefoglaló
-
-| Fájl | Változás típusa |
-|------|----------------|
-| `src/index.css` | CSS változók finomhangolása + új utility osztályok |
-| `src/components/Hero.tsx` | Text shadow, keresősáv kontraszt, trust signals fényerő |
-| `src/components/FeaturedProducts.tsx` | Szekció gradient, cím stílus, kártya info kontraszt |
-| `src/components/BrandIntroSection.tsx` | Háttér gradient, kártya hover glow, ikon stílus |
-| `src/components/BundleBuilder.tsx` | Badge javítás, háttér elkülönítés |
-| `src/components/AuthenticitySection.tsx` | Háttér glow, kártya stílus javítás |
-| `src/components/HowItWorksSection.tsx` | Lépés számok design, összekötő vonalak |
-| `src/components/NewsletterSection.tsx` | Háttér, input, szöveg kontraszt |
-
-A változtatások fő célja: **minden szöveg legyen jól olvasható**, a **szekciók vizuálisan elkülönüljenek** egymástól, és az **arany akcentusok koherens luxus érzetet** adjanak az egész oldalon.
-
+- A hamburger ikon X-re váltása megtartása (már implementálva van)
+- Egyéb változás nem szükséges, a `MobileNav` props interface nem változik
