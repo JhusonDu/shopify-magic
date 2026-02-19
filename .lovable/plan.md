@@ -1,45 +1,38 @@
 
 
-# Professzionális Mobil Navigációs Menü
+# Mobil Navigáció -- Sötét Luxus Háttér
 
 ## Mi Változik
 
-Egy teljesen új, luxus megjelenésű mobil navigációs menü jön létre, amely jobbról csúszik be, fehér háttérrel, arany akcentusokkal, bővíthető almenükkel, elérhetőségi információkkal és promóciós bannerrel.
+A jelenlegi fehér háttérű mobil menü átalakítása a weboldal fő témájához illő sötét fekete-arany megjelenésre.
 
-A jelenlegi Header komponensben a Menu (hamburger) ikon mobilon ezt az új menüt fogja megnyitni a meglévő ToolboxPanel helyett.
+## Változások a `src/components/MobileNav.tsx` fájlban
 
-## Fő Elemek
+### Panel háttér
+- `bg-white` cseréje sötét háttérre: `#0a0a0a` (a weboldal fő háttérszíne)
+- Box shadow megtartása a mélység érdekében
 
-1. **Hamburger ikon animáció**: Mobilon a Menu ikon X-re változik nyitott állapotban
-2. **Jobbról becsúszó panel**: 85vw széles (max 400px), fehér háttér, sötét backdrop
-3. **Fejléc**: Logo + "Böngészd az Illatokat" arany CTA gomb + bezáró X
-4. **4 menüpont**: Termékek (bővíthető almenüvel), Rólunk, Kapcsolat, Segítség -- arany chevron, hover/tap effektekkel
-5. **Elérhetőségek**: Telefon + email ikonos linkek
-6. **Promóciós banner**: Sötét luxus háttér, arany szegélyű CTA gomb
+### Fejléc (Header)
+- "ScentBox Hungary" szöveg: fehérre (`text-white`)
+- X bezáró gomb: fehérre
+- Border szín: `border-white/10` (halvány fehér vonal)
 
-## Technikai Részletek
+### CTA gomb
+- Marad az arany gradient -- ez már jól illeszkedik
 
-### Új fájl:
-- **`src/components/MobileNav.tsx`** -- A teljes mobil navigációs menü komponens
-  - `framer-motion` `AnimatePresence` + `motion.div` a panel csúsztatásához és backdrop fade-hez
-  - Bővíthető "Termékek" almenü (Férfi, Női, Unisex, Kedvenceink) saját állapottal
-  - Body scroll lock nyitott állapotban (`overflow: hidden`)
-  - Escape billentyű és backdrop kattintás bezárja
-  - Swipe-right gesztus bezáráshoz (touch event kezelés)
-  - Staggered fade-in animáció a menüpontokra
-  - Elérhetőségek: `tel:` és `mailto:` linkek arany ikonokkal
-  - Promóciós banner sötét gradienssel és outlined arany CTA gombbal
-  - ARIA attribútumok: `role="dialog"`, `aria-modal="true"`, `aria-label`
+### Menüpontok
+- Szöveg szín: `text-white/90` (halvány fehér) a korábbi `#2c2c2c` helyett
+- Hover/aktív szín: marad `#d4af37` (arany)
+- Border separator: `border-white/10` a korábbi `border-black/5` helyett
+- Almenü szöveg: `text-white/60` a korábbi `#666` helyett
+- Aktív háttér: `rgba(212,175,55,0.12)` (arany tint sötét felületen)
 
-### Módosított fájl:
-- **`src/components/Header.tsx`**
-  - Új `isMobileMenuOpen` állapot
-  - Mobilon a Menu gomb az új `MobileNav`-ot nyitja meg a `ToolboxPanel` helyett
-  - A Menu ikon animáltan X-re vált nyitott állapotban
-  - A `MobileNav` komponens importálása és renderelése
-  - A meglévő ToolboxPanel csak desktopon marad elérhető
+### Elérhetőségek szekció
+- Szöveg: `text-white/60` a korábbi `#666` helyett
+- Border: `border-white/10`
+- Ikonok: maradnak arany
 
-### Stílus megközelítés:
-- Inline Tailwind osztályok + néhány egyedi szín fehér háttérhez (a globális téma sötét, ezért a fehér panel explicit `bg-white text-gray-900` stílusokat kap)
-- Reszponzív méretezés: 90vw kis telefonokon, 85vw alapértelmezetten, max 400px
+### Promóciós banner
+- Ez már sötét -- csak finomhangolás, hogy simán illeszkedjen a panel háttérhez
+- Felső border: halvány arany vonal (`border-t border-[#d4af37]/20`)
 
