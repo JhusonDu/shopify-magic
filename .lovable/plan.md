@@ -1,83 +1,86 @@
 
 
-# Keresés UI Újratervezés -- Szebb, Felhasználóbarátabb Kialakítás
+# Böngészési Élmény Teljes Újratervezése -- Luxus & Professzionális UI
 
-## Jelenlegi Probléma
+## Probléma
 
-A keresés a default `CommandDialog`-ot használja, ami egyszerű és nem illeszkedik a ScentBox luxus arculatához. A találatok listája szűk, a képek kicsik, a "Finder" kérdőív pedig átlagosan néz ki.
+A jelenlegi oldalon a sötét szekciók túl hasonlóak egymáshoz (background: #0a0a0a, card: #141414, secondary: #1a1a1a -- mindegyik szinte fekete), emiatt a szöveg nehezen olvasható, a szekciók összemosódnak, és az összhatás lapos, nem prémium érzetű.
 
-## Tervezett Változtatások
+## Mi Változik
 
-### 1. Egyedi Dialog a CommandDialog helyett
+Összesen **8 fájl** módosítása egy koherens, professzionális luxus megjelenés érdekében.
 
-A `CommandDialog` wrapper helyett saját `Dialog`-ra váltás, amely teljes kontrollt ad a megjelenés felett:
-- Nagyobb modal (max-w-2xl), lekerekített sarkok, sötét háttérrel
-- Arany akcentusok a ScentBox márkához illően
-- Háttér blur effekt a backdrop-on
+---
 
-### 2. Szebb Tab Selector
+### 1. Szín- és Kontrasztjavítás (`src/index.css`)
 
-- Pill-stílusú tab-ok arany aktív háttérrel (a jelenlegi underline helyett)
-- Ikonok + szöveg a tabokban, finomabb animáció a váltáskor
+- **Muted foreground** fényerő emelése 65%-ról 75%-ra -- a szürke szöveg sokkal olvashatóbb lesz
+- **Card háttér** enyhe emelése 8%-ról 10%-ra, jobban elkülönül a háttértől
+- **Border** szín fényerő emelése 14%-ról 18%-ra, finomabb de láthatóbb vonalak
+- Új CSS utility osztályok:
+  - `.section-dark` -- sötétebb szekció háttér enyhe felső/alsó belső árnyékkal
+  - `.section-elevated` -- kártya-szintű háttér finomabb textúrával
+  - `.text-luxury` -- enyhe text-shadow a fehér szövegeknek a jobb olvashatóságért
 
-### 3. Keresés Tab -- Továbbfejlesztett Találatok
+### 2. Hero Szekció Finomhangolás (`src/components/Hero.tsx`)
 
-- Nagyobb termékkép (48x48px helyett 56x56px, lekerekített)
-- Termék neve + márka + rövid leírás 1 sorban
-- Ár jobb oldalon arany színnel, kiemelten
-- Hover effekt: enyhe háttérszín-változás arany tintával
-- "Nincs találat" állapot illusztráció vagy ikon + szöveg kombinációval
-- Keresési mező: nagyobb, arany fókusz-ring, ikon animáció
+- Szöveg text-shadow erősítése a jobb olvashatóságért a háttérképen
+- "A Te Illatod" arany felirat nagyobb kontrasztú árnyékkal
+- Keresősáv: erősebb border (primary/40-ről primary/50-re), sötétebb háttér a szöveg kiemelésére
+- Trust signals szöveg fényesebbé tétele (primary/80-ról primary-ra)
 
-### 4. Finder Tab -- Vizuálisabb Kérdőív
+### 3. Legnépszerűbb Termékek Szekció (`src/components/FeaturedProducts.tsx`)
 
-- Kártyás opció-gombok ikonokkal (pl. nap/hold ikon az évszakokhoz, szív a randihoz stb.)
-- Progress bar arany színű kitöltéssel
-- Kérdés szám kör-badge-ben (1/3 stílus)
-- Animáltabb opció-gombok hover-re (arany border + enyhe glow)
-- Eredmények kártya-nézetben (nem listaszerűen): nagyobb kép, név, ár, "Megnézem" gomb
+- Szekció háttér: finomabb gradient (from-background via-card/50 to-background) -- vizuálisan elkülönül
+- Szekció cím: nagyobb, Playfair Display serif font, alatta arany divider vonal
+- Termékkártya info rész: vendor szöveg fényesebbé (text-primary/80), cím nagyobb sortáv
+- "Összes Megtekintése" gomb: arany outlined pill-stílusú gomb, nem csak szimpla link
 
-### 5. Általános Fejlesztések
+### 4. Márka Bemutató Szekció (`src/components/BrandIntroSection.tsx`)
 
-- Bezáró gomb egyértelmű elhelyezéssel (jobb felső sarok, arany hover)
-- Kbd shortcut jelző (Ctrl+K) a keresőmezőben
-- Betöltési állapot: skeleton loading a találatokhoz
-- Üres állapot: illusztrált "Kezdj el gépelni" üzenet parfümös ikonnal
+- Háttér: enyhe arany radiális gradient hozzáadása a mélység érdekében
+- Highlight kártyák: finomabb border (border-primary/15), hover-re arany glow shadow
+- Ikonok: nagyobb méret (w-6 h-6), konténer arany gradient háttérrel
+- Szöveg: leírás szöveg fényesebbé (muted-foreground/90 hatás)
 
-## Technikai Részletek
+### 5. Bundle Builder Szekció (`src/components/BundleBuilder.tsx`)
 
-### Módosított fájl: `src/components/SearchCommand.tsx`
+- Badge szöveg javítás: emoji eltávolítása, elegánsabb badge stílus
+- Szekció háttér: finomabb elkülönítés a többi szekciótól (enyhe gradient overlay)
+- CTA gombok: erősebb vizuális kiemelés, hover glow effekt
 
-Teljes újraírás a következő struktúrával:
+### 6. Eredetiség Szekció (`src/components/AuthenticitySection.tsx`)
 
-- `Dialog` + `DialogContent` használata `CommandDialog` helyett (a `Command` primitív megtartásával a keresési logikához)
-- Pill-stílusú tabváltó a tetején, arany aktív állapottal
-- Keresés tab:
-  - Egyedi input mező arany fókuszgyűrűvel, Search ikon animációval
-  - Találati lista: nagyobb képek, vendor badge, ár kiemelés
-  - Skeleton loader betöltés közben (3 placeholder sor)
-  - Üres állapot: parfümös ikon + "Kezdj el gépelni" szöveg
-- Finder tab:
-  - Arany progress bar (`bg-primary` kitöltés)
-  - Kérdés kör-badge-ben (1/3)
-  - Opció kártyák: `border-primary/30` hover, ikon hozzáadás (emoji/lucide)
-  - Eredmények: kártya-grid (2 oszlop), nagyobb kép, "Megnézem" arany gomb
+- Háttér: enyhe radiális arany glow a központban
+- Kártyák: nagyobb padding, erősebb hover effekt arany glow-val
+- Ikon konténerek: gradient border hozzáadása a prémium érzet érdekében
 
-### Finder opció ikonok hozzárendelése:
-- "Hétköznapi" -> Sun ikon
-- "Esti / Randis" -> Moon ikon  
-- "Irodai" -> Briefcase ikon
-- "Különleges alkalom" -> Star ikon
-- "Fás / Woody" -> TreePine ikon
-- "Friss / Citrusos" -> Citrus/Droplets ikon
-- "Virágos" -> Flower2 ikon
-- "Orientális / Fűszeres" -> Flame ikon
-- "Tavasz / Nyár" -> Sun ikon
-- "Ősz / Tél" -> Snowflake ikon
-- "Egész évben" -> Calendar ikon
+### 7. Hogyan Működik Szekció (`src/components/HowItWorksSection.tsx`)
 
-### Finder eredmények kártya-nézet:
-- 2 oszlopos grid mobilon is
-- Kártya: kép (aspect-square), név, vendor, ár, "Megnézem" pill gomb
-- Staggered fade-in animáció megtartása
+- Lépés számok: arany gradient háttérben, nem sima szövegként
+- Összekötő vonalak: arany gradient animált vonal asztali nézetben
+- Ikon konténerek: finomabb gold glow és hover animáció
+
+### 8. Hírlevél Szekció (`src/components/NewsletterSection.tsx`)
+
+- Háttér: erősebb arany tint (primary/8 helyett primary/12)
+- Input mező: nagyobb, arany fókusz-ring, sötétebb háttér
+- Szöveg kontrasztja: fehéresebb foreground
+
+---
+
+## Technikai Összefoglaló
+
+| Fájl | Változás típusa |
+|------|----------------|
+| `src/index.css` | CSS változók finomhangolása + új utility osztályok |
+| `src/components/Hero.tsx` | Text shadow, keresősáv kontraszt, trust signals fényerő |
+| `src/components/FeaturedProducts.tsx` | Szekció gradient, cím stílus, kártya info kontraszt |
+| `src/components/BrandIntroSection.tsx` | Háttér gradient, kártya hover glow, ikon stílus |
+| `src/components/BundleBuilder.tsx` | Badge javítás, háttér elkülönítés |
+| `src/components/AuthenticitySection.tsx` | Háttér glow, kártya stílus javítás |
+| `src/components/HowItWorksSection.tsx` | Lépés számok design, összekötő vonalak |
+| `src/components/NewsletterSection.tsx` | Háttér, input, szöveg kontraszt |
+
+A változtatások fő célja: **minden szöveg legyen jól olvasható**, a **szekciók vizuálisan elkülönüljenek** egymástól, és az **arany akcentusok koherens luxus érzetet** adjanak az egész oldalon.
 
