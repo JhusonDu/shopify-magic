@@ -110,7 +110,7 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 ml-10">
+          <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
             {/* Termékek with hover dropdown */}
             <div
               className="relative"
