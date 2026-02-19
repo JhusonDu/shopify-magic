@@ -49,14 +49,14 @@ export function getProductGender(product: ShopifyProduct): string {
   return "Uniszex";
 }
 
+const CONCENTRATION_TYPES = ["EDP", "EDT", "Parfum"];
+
 export function extractFilterOptions(products: ShopifyProduct[]) {
   const brands = new Set<string>();
-  const types = new Set<string>();
   let minPrice = Infinity;
   let maxPrice = 0;
   for (const p of products) {
     if (p.node.vendor) brands.add(p.node.vendor);
-    if (p.node.productType) types.add(p.node.productType);
     const price = parseFloat(p.node.priceRange.minVariantPrice.amount);
     if (price < minPrice) minPrice = price;
     if (price > maxPrice) maxPrice = price;
@@ -64,7 +64,7 @@ export function extractFilterOptions(products: ShopifyProduct[]) {
   return {
     genders: ["Férfi", "Női", "Uniszex"],
     brands: Array.from(brands).sort(),
-    types: Array.from(types).sort(),
+    types: CONCENTRATION_TYPES,
     priceBounds: [
       minPrice === Infinity ? 0 : Math.floor(minPrice),
       maxPrice === 0 ? 100000 : Math.ceil(maxPrice),
@@ -101,7 +101,13 @@ export function applyFilters(
       if (!p.node.vendor || !filters.brands.includes(p.node.vendor)) return false;
     }
     if (filters.types.length > 0) {
-      if (!p.node.productType || !filters.types.includes(p.node.productType)) return false;
+      const title = p.node.title.toUpperCase();
+      const type = p.node.productType?.toUpperCase() || "";
+      const matchesConcentration = filters.types.some((t) => {
+        const upper = t.toUpperCase();
+        return title.includes(upper) || type.includes(upper);
+      });
+      if (!matchesConcentration) return false;
     }
     // Price range filter
     if (filters.priceRange) {
@@ -333,9 +339,7 @@ export const ProductFilters = ({
       {options.brands.length > 0 && (
         <FilterGroup title="Márka" options={options.brands} selected={filters.brands} onToggle={(v) => toggle("brands", v)} />
       )}
-      {options.types.length > 0 && (
-        <FilterGroup title="Típus" options={options.types} selected={filters.types} onToggle={(v) => toggle("types", v)} />
-      )}
+      <FilterGroup title="Koncentráció" options={options.types} selected={filters.types} onToggle={(v) => toggle("types", v)} />
     </div>
   );
 
