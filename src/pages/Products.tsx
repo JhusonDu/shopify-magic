@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductGrid } from "@/components/ProductGrid";
-import { ProductFilters, ProductFiltersState, extractFilterOptions } from "@/components/ProductFilters";
+import { ProductFilters, ProductFiltersState, extractFilterOptions, applyFilters } from "@/components/ProductFilters";
 import { useProducts } from "@/hooks/useProducts";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -24,6 +24,10 @@ const Products = () => {
   const isMobile = useIsMobile();
 
   const productCount = products?.length ?? 0;
+  const filteredCount = useMemo(() => {
+    if (!products) return 0;
+    return applyFilters(products, filters).length;
+  }, [products, filters]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -140,6 +144,7 @@ const Products = () => {
                     onFiltersChange={setFilters}
                     products={products}
                     hideSort
+                    totalFilteredCount={filteredCount}
                   />
                 </div>
               </div>
@@ -150,6 +155,7 @@ const Products = () => {
                 filters={filters}
                 onFiltersChange={setFilters}
                 products={products}
+                totalFilteredCount={filteredCount}
               />
             )}
 

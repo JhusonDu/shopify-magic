@@ -124,22 +124,36 @@ export function applyFilters(
 
 /* ── Sub-components ── */
 
-const FilterChip = ({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) => (
+const FilterChip = ({ label, selected, onClick, count }: { label: string; selected: boolean; onClick: () => void; count?: number }) => (
   <motion.button
     whileTap={{ scale: 0.95 }}
     onClick={onClick}
     className={`px-3.5 py-1.5 rounded-full border text-sm font-medium transition-all duration-200 ${
+      count === 0 ? "opacity-40 " : ""
+    }${
       selected
         ? "border-primary bg-primary/15 text-primary shadow-[0_0_12px_hsl(43_65%_52%/0.15)]"
         : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
     }`}
   >
     {label}
+    {count !== undefined && (
+      <motion.span
+        key={count}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className={`ml-1.5 text-[10px] font-semibold ${
+          selected ? "text-primary" : "text-muted-foreground/60"
+        }`}
+      >
+        {count}
+      </motion.span>
+    )}
   </motion.button>
 );
 
-const FilterGroup = ({ title, options, selected, onToggle }: {
-  title: string; options: string[]; selected: string[]; onToggle: (v: string) => void;
+const FilterGroup = ({ title, options, selected, onToggle, counts }: {
+  title: string; options: string[]; selected: string[]; onToggle: (v: string) => void; counts?: Record<string, number>;
 }) => (
   <div className="space-y-3">
     <div className="flex items-center gap-2">
@@ -152,7 +166,7 @@ const FilterGroup = ({ title, options, selected, onToggle }: {
     </div>
     <div className="flex flex-wrap gap-2">
       {options.map((opt) => (
-        <FilterChip key={opt} label={opt} selected={selected.includes(opt)} onClick={() => onToggle(opt)} />
+        <FilterChip key={opt} label={opt} selected={selected.includes(opt)} onClick={() => onToggle(opt)} count={counts?.[opt]} />
       ))}
     </div>
   </div>
@@ -295,6 +309,7 @@ interface ProductFiltersProps {
   onFiltersChange: (filters: ProductFiltersState) => void;
   products: ShopifyProduct[];
   hideSort?: boolean;
+  totalFilteredCount?: number;
 }
 
 export const ProductFilters = ({
@@ -302,6 +317,7 @@ export const ProductFilters = ({
   onFiltersChange,
   products,
   hideSort = false,
+  totalFilteredCount,
 }: ProductFiltersProps) => {
   const isMobile = useIsMobile();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -309,6 +325,30 @@ export const ProductFilters = ({
 
   const isPriceActive = filters.priceRange[0] !== options.priceBounds[0] || filters.priceRange[1] !== options.priceBounds[1];
   const activeCount = filters.genders.length + filters.brands.length + filters.types.length + (isPriceActive ? 1 : 0);
+
+  // Calculate "what-if" counts for each filter option
+  const filterCounts = useMemo(() => {
+    const countFor = (key: keyof Omit<ProductFiltersState, "sort" | "priceRange">, value: string) => {
+      const testFilters: ProductFiltersState = {
+        ...filters,
+        [key]: filters[key].includes(value)
+          ? filters[key] // already active, show current count
+          : [...(filters[key] as string[]), value],
+      };
+      return applyFilters(products, testFilters).length;
+    };
+
+    const genders: Record<string, number> = {};
+    for (const g of options.genders) genders[g] = countFor("genders", g);
+
+    const brands: Record<string, number> = {};
+    for (const b of options.brands) brands[b] = countFor("brands", b);
+
+    const types: Record<string, number> = {};
+    for (const t of options.types) types[t] = countFor("types", t);
+
+    return { genders, brands, types };
+  }, [products, filters, options]);
 
   const toggle = (key: keyof Omit<ProductFiltersState, "sort" | "priceRange">, value: string) => {
     const current = filters[key] as string[];
@@ -335,11 +375,11 @@ export const ProductFilters = ({
         onChange={(range) => onFiltersChange({ ...filters, priceRange: range })}
       />
       <div className="border-t border-border" />
-      <FilterGroup title="Nem" options={options.genders} selected={filters.genders} onToggle={(v) => toggle("genders", v)} />
+      <FilterGroup title="Nem" options={options.genders} selected={filters.genders} onToggle={(v) => toggle("genders", v)} counts={filterCounts.genders} />
       {options.brands.length > 0 && (
-        <FilterGroup title="Márka" options={options.brands} selected={filters.brands} onToggle={(v) => toggle("brands", v)} />
+        <FilterGroup title="Márka" options={options.brands} selected={filters.brands} onToggle={(v) => toggle("brands", v)} counts={filterCounts.brands} />
       )}
-      <FilterGroup title="Koncentráció" options={options.types} selected={filters.types} onToggle={(v) => toggle("types", v)} />
+      <FilterGroup title="Koncentráció" options={options.types} selected={filters.types} onToggle={(v) => toggle("types", v)} counts={filterCounts.types} />
     </div>
   );
 
@@ -362,12 +402,34 @@ export const ProductFilters = ({
                   {activeCount}
                 </Badge>
               )}
+              {totalFilteredCount !== undefined && activeCount > 0 && (
+                <motion.span
+                  key={totalFilteredCount}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-xs text-primary-foreground/80"
+                >
+                  · {totalFilteredCount}
+                </motion.span>
+              )}
             </Button>
           </motion.div>
         </SheetTrigger>
         <SheetContent side="bottom" className="rounded-t-2xl max-h-[80vh] overflow-y-auto">
           <SheetHeader className="pb-4">
-            <SheetTitle className="text-lg">Szűrők</SheetTitle>
+            <SheetTitle className="text-lg flex items-center gap-2">
+              Szűrők
+              {totalFilteredCount !== undefined && (
+                <motion.span
+                  key={totalFilteredCount}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-sm font-normal text-muted-foreground"
+                >
+                  ({totalFilteredCount} termék)
+                </motion.span>
+              )}
+            </SheetTitle>
           </SheetHeader>
           {filterContent}
           <div className="flex gap-3 mt-8 pb-4">
@@ -377,7 +439,15 @@ export const ProductFilters = ({
               </Button>
             )}
             <SheetClose asChild>
-              <Button className="flex-1">Alkalmaz</Button>
+              <Button className="flex-1">
+                <motion.span
+                  key={totalFilteredCount}
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                >
+                  Alkalmaz{totalFilteredCount !== undefined ? ` (${totalFilteredCount})` : ""}
+                </motion.span>
+              </Button>
             </SheetClose>
           </div>
         </SheetContent>
