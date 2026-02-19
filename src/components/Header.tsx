@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { CartDrawer } from "./CartDrawer";
-import { Menu, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,6 +8,8 @@ import logoIcon from "@/assets/logo-icon.png";
 import { SearchCommand } from "./SearchCommand";
 import { ToolboxPanel } from "./ToolboxPanel";
 import { LoginDialog } from "./LoginDialog";
+import { MobileNav } from "./MobileNav";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface HeaderProps {
   isSearchOpen?: boolean;
@@ -19,7 +21,9 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
   const [isScrolled, setIsScrolled] = useState(false);
   const [isToolboxOpen, setIsToolboxOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const isSearchOpen = externalOpen ?? internalOpen;
   const setIsSearchOpen = onSearchOpenChange ?? setInternalOpen;
@@ -128,10 +132,20 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setIsToolboxOpen(true)}
+                onClick={() => isMobile ? setIsMobileMenuOpen(true) : setIsToolboxOpen(true)}
                 className="text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300"
               >
-                <Menu className="h-5 w-5" />
+                <AnimatePresence mode="wait" initial={false}>
+                  {isMobileMenuOpen && isMobile ? (
+                    <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                      <X className="h-5 w-5" />
+                    </motion.span>
+                  ) : (
+                    <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                      <Menu className="h-5 w-5" />
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </Button>
             </motion.div>
           </div>
@@ -153,6 +167,7 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
       <SearchCommand open={isSearchOpen} onOpenChange={setIsSearchOpen} initialTab={searchInitialTab} />
       <ToolboxPanel open={isToolboxOpen} onOpenChange={setIsToolboxOpen} />
       <LoginDialog open={isLoginOpen} onOpenChange={setIsLoginOpen} />
+      <MobileNav open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} />
     </>
   );
 };
