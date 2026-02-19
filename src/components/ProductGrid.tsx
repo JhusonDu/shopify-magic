@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { useProducts } from "@/hooks/useProducts";
 import { ProductCard } from "./ProductCard";
+import { ProductQuickBuy } from "./ProductQuickBuy";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PackageOpen, Sparkles, FilterX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductFiltersState, applyFilters } from "./ProductFilters";
 import { motion, AnimatePresence } from "framer-motion";
+import { ShopifyProduct } from "@/lib/shopify";
 
 interface ProductGridProps {
   filters?: ProductFiltersState;
@@ -13,6 +16,7 @@ interface ProductGridProps {
 
 export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
   const { data: products, isLoading, error } = useProducts(50);
+  const [quickBuyProduct, setQuickBuyProduct] = useState<ShopifyProduct | null>(null);
 
   if (isLoading) {
     return (
@@ -59,7 +63,6 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
     );
   }
 
-  // Apply client-side filters + sort
   const filtered = filters ? applyFilters(products, filters) : products;
 
   if (filtered.length === 0) {
@@ -83,22 +86,25 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
   }
 
   return (
-    <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
-      <AnimatePresence mode="popLayout">
-        {filtered.map((product, index) => (
-          <motion.div
-            key={product.node.id}
-            layout
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.25, delay: index * 0.03 }}
-            className="w-full"
-          >
-            <ProductCard product={product} index={index} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </motion.div>
+    <>
+      <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+        <AnimatePresence mode="popLayout">
+          {filtered.map((product, index) => (
+            <motion.div
+              key={product.node.id}
+              layout
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.25, delay: index * 0.03 }}
+              className="w-full"
+            >
+              <ProductCard product={product} index={index} onQuickBuy={setQuickBuyProduct} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+      <ProductQuickBuy product={quickBuyProduct} onClose={() => setQuickBuyProduct(null)} />
+    </>
   );
 };

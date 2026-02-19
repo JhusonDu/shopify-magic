@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ShoppingBag, Loader2, Plus } from "lucide-react";
+import { ShoppingBag, Plus } from "lucide-react";
 import { ShopifyProduct } from "@/lib/shopify";
-import { useCartStore } from "@/stores/cartStore";
-import { toast } from "sonner";
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductCardProps {
   product: ShopifyProduct;
   index?: number;
+  onQuickBuy?: (product: ShopifyProduct) => void;
 }
 
 function formatHUF(amount: string): string {
@@ -17,9 +15,7 @@ function formatHUF(amount: string): string {
   return num.toLocaleString("hu-HU").replace(/,/g, " ") + " Ft";
 }
 
-export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
-  const addItem = useCartStore(state => state.addItem);
-  const isLoading = useCartStore(state => state.isLoading);
+export const ProductCard = ({ product, index = 0, onQuickBuy }: ProductCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const isMobile = useIsMobile();
@@ -31,24 +27,10 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const price = node.priceRange.minVariantPrice;
   const firstVariant = node.variants?.edges?.[0]?.node;
 
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const handleQuickBuy = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    if (!firstVariant) return;
-    
-    await addItem({
-      product,
-      variantId: firstVariant.id,
-      variantTitle: firstVariant.title,
-      price: firstVariant.price,
-      quantity: 1,
-      selectedOptions: firstVariant.selectedOptions || []
-    });
-    
-    toast.success("Kosárba rakva", {
-      description: node.title,
-    });
+    onQuickBuy?.(product);
   };
 
   return (
@@ -108,38 +90,31 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           </div>
         )}
 
-        {/* Quick add overlay */}
+        {/* Quick buy overlay */}
         <div
-          className="absolute inset-x-0 bottom-0 p-2 md:p-4 bg-gradient-to-t from-background/80 to-transparent transition-all duration-300"
+          className="absolute inset-x-0 bottom-0 p-2 md:p-4 transition-all duration-400"
           style={{
             opacity: isMobile || isHovered ? 1 : 0,
-            transform: isMobile || isHovered ? "translateY(0)" : "translateY(100%)",
+            transform: isMobile || isHovered ? "translateY(0)" : "translateY(8px)",
           }}
         >
           {isMobile ? (
-            <Button 
-              onClick={handleAddToCart}
-              disabled={isLoading || !firstVariant?.availableForSale}
-              size="icon"
-              className="ml-auto block bg-primary hover:bg-accent text-primary-foreground h-9 w-9 rounded-full"
+            <button 
+              onClick={handleQuickBuy}
+              disabled={!firstVariant?.availableForSale}
+              className="ml-auto block h-10 w-10 rounded-full bg-primary/90 backdrop-blur-md text-primary-foreground flex items-center justify-center shadow-[0_4px_16px_hsl(43_65%_52%/0.35)] active:scale-95 transition-all duration-200 disabled:opacity-40"
             >
-              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            </Button>
+              <Plus className="w-4.5 h-4.5" />
+            </button>
           ) : (
-            <Button 
-              onClick={handleAddToCart}
-              disabled={isLoading || !firstVariant?.availableForSale}
-              className="w-full bg-primary hover:bg-accent text-primary-foreground h-11 rounded-md font-semibold tracking-wide text-sm"
+            <button 
+              onClick={handleQuickBuy}
+              disabled={!firstVariant?.availableForSale}
+              className="w-full backdrop-blur-xl bg-background/70 border border-primary/20 text-foreground h-11 rounded-lg font-semibold tracking-wide text-sm flex items-center justify-center gap-2 shadow-[0_4px_20px_hsl(43_65%_52%/0.15)] hover:bg-background/85 hover:border-primary/40 hover:shadow-[0_4px_24px_hsl(43_65%_52%/0.3)] active:scale-[0.98] transition-all duration-300 disabled:opacity-40 disabled:pointer-events-none"
             >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Gyors Választás
-                </>
-              )}
-            </Button>
+              <Plus className="w-4 h-4 text-primary" />
+              <span>Gyors Választás</span>
+            </button>
           )}
         </div>
 
@@ -153,17 +128,14 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
 
       {/* Product Info */}
       <div className="space-y-1.5 md:space-y-2 px-0.5">
-        {/* Brand */}
         {node.vendor && (
           <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             {node.vendor}
           </p>
         )}
-        {/* Title */}
         <h3 className="font-display text-sm md:text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
           {node.title}
         </h3>
-        {/* Price */}
         <p className="text-base md:text-lg font-bold text-primary">
           {(node.variants?.edges?.length ?? 0) > 1 && <span className="text-xs font-normal text-muted-foreground mr-1">tól</span>}
           {formatHUF(price.amount)}
