@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { CartDrawer } from "./CartDrawer";
-import { Menu, X, User, ChevronDown, Star, BoxIcon, ShoppingBag, Users as UsersIcon } from "lucide-react";
+import { Menu, X, User, ChevronDown, Star, BoxIcon, ShoppingBag, Users as UsersIcon, Droplets } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
