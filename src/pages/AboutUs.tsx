@@ -42,9 +42,9 @@ const milestones = [
   },
   {
     year: "2026",
-    title: "Első Értékesítések",
+    title: "Itt Vagyunk!",
     description:
-      "Elindítottuk az értékesítést — online és személyes csatornákon egyaránt. A ScentBox Hungary hivatalosan is elkezdte a működését, és megérkeztek az első valós vásárlások.",
+      "Eljött a pillanat — a ScentBox Hungary hivatalosan is megnyitotta kapuit! A webshop él, a csapat készen áll, és végre itt vagyunk nektek. Prémium parfümök, őszinte árak, kompromisszumok nélkül. Üdv a fedélzeten!",
   },
   {
     year: "Hamarosan",
