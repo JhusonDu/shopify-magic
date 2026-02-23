@@ -310,6 +310,8 @@ interface ProductFiltersProps {
   products: ShopifyProduct[];
   hideSort?: boolean;
   totalFilteredCount?: number;
+  /** Render only the filter content without any wrapper (useful inside Dialog) */
+  bare?: boolean;
 }
 
 export const ProductFilters = ({
@@ -318,6 +320,7 @@ export const ProductFilters = ({
   products,
   hideSort = false,
   totalFilteredCount,
+  bare = false,
 }: ProductFiltersProps) => {
   const isMobile = useIsMobile();
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -382,6 +385,11 @@ export const ProductFilters = ({
       <FilterGroup title="Koncentráció" options={options.types} selected={filters.types} onToggle={(v) => toggle("types", v)} counts={filterCounts.types} />
     </div>
   );
+
+  // Bare mode: just the filter content, no wrapper
+  if (bare) {
+    return filterContent;
+  }
 
   // Mobile: sticky bottom button + sheet
   if (isMobile) {
