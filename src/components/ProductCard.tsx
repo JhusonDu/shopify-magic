@@ -44,7 +44,7 @@ export const ProductCard = ({ product, index = 0, onQuickBuy }: ProductCardProps
     >
       {/* Image Container */}
       <div
-        className="relative overflow-hidden rounded-lg bg-secondary aspect-[3/4] md:aspect-[4/5] mb-2 md:mb-4 transition-all duration-500"
+        className="relative overflow-hidden rounded-lg bg-secondary aspect-[3/4] mb-2 md:mb-3 transition-all duration-500"
         style={{
           transform: isHovered ? "translateY(-8px)" : "translateY(0)",
           boxShadow: isHovered
@@ -144,10 +144,10 @@ export const ProductCard = ({ product, index = 0, onQuickBuy }: ProductCardProps
             {node.vendor}
           </p>
         )}
-        <h3 className="font-display text-sm md:text-base font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
+        <h3 className="font-display text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
           {node.title}
         </h3>
-        <p className="text-base md:text-lg font-bold text-primary">
+        <p className="text-base font-bold text-primary">
           {(node.variants?.edges?.length ?? 0) > 1 && <span className="text-xs font-normal text-muted-foreground mr-1">tól</span>}
           {formatHUF(price.amount)}
         </p>

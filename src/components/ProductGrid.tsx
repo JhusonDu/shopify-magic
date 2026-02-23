@@ -20,7 +20,7 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="space-y-4 animate-fade-in" style={{ animationDelay: `${i * 0.08}s` }}>
             <Skeleton className="aspect-[4/5] rounded-lg" />
@@ -87,7 +87,7 @@ export const ProductGrid = ({ filters, onClearFilters }: ProductGridProps) => {
 
   return (
     <>
-      <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+      <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         <AnimatePresence mode="popLayout">
           {filtered.map((product, index) => (
             <motion.div
