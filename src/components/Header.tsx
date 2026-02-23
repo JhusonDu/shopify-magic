@@ -97,16 +97,16 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className="flex flex-col items-start leading-none"
             >
-              <span className="flex items-baseline text-xl md:text-2xl">
-                <span className="relative">
+              <span className="flex items-end text-xl md:text-2xl">
+                <span className="relative -mr-1">
                   <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <img
                     src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png"
                     alt="S"
-                    className="h-[1.15em] w-auto object-contain relative z-10 drop-shadow-lg -mr-[0.05em]"
+                    className="h-[1.6em] w-auto object-contain relative z-10 drop-shadow-lg"
                   />
                 </span>
-                <span className="font-semibold tracking-tight text-foreground font-display">
+                <span className="font-semibold tracking-tight text-foreground font-display -ml-0.5">
                   centBox
                 </span>
               </span>
