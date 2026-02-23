@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ContactModal } from "@/components/ContactModal";
 import { motion } from "framer-motion";
 import { Mail, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
@@ -33,6 +36,8 @@ const faqSections = [
 ];
 
 const Support = () => {
+  const [contactOpen, setContactOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -100,9 +105,15 @@ const Support = () => {
           <div className="card-luxury p-8 text-center">
             <h3 className="font-display text-xl text-foreground mb-4">Nem találtad a választ?</h3>
             <p className="text-muted-foreground text-sm mb-6">
-              Írj nekünk e-mailt és 24 órán belül válaszolunk.
+              Írj nekünk és 24 órán belül válaszolunk.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground">
+            <Button
+              onClick={() => setContactOpen(true)}
+              className="rounded-full px-8 bg-primary text-primary-foreground hover:bg-accent"
+            >
+              Kapcsolatfelvétel
+            </Button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground mt-6">
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
                 <span>info@scentbox.hu</span>
@@ -117,6 +128,7 @@ const Support = () => {
       </section>
 
       <Footer />
+      <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
     </div>
   );
 };
