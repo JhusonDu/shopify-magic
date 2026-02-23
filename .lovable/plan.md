@@ -1,55 +1,32 @@
 
+# Desktop Product Grid -- Tighter, Denser Layout
 
-# GYIK Oldal Bovitese — 27 Kerdes, 5 Kategoria
+## Problem
 
-## Attekintes
+Currently the desktop grid shows **3 columns on large screens** (`lg:grid-cols-3`) and **4 columns on extra-large** (`xl:grid-cols-4`) with `md:gap-6` spacing. This wastes space and shows fewer products above the fold.
 
-A jelenlegi 5 egyszeru FAQ bejegyzes helyett 27 reszletes kerdes-valasz par kerul az oldalra, 5 kategoriaval csoportositva. Minden kategoria egy kulon szekciokent jelenik meg sajat cimmel, es azon belul az egyes kerdesek Accordion elemkent nyilnak meg.
+## Solution
 
-## Struktura
+Increase column count and reduce spacing/card sizing for a denser, more professional catalog feel on desktop:
 
-A `faqSections` tomb atalakul: minden elem egy **kategoria** lesz, amely tartalmaz egy `title` (kategoria nev) es egy `questions` tombot (kerdes-valasz parok).
+### Modified file: `src/components/ProductGrid.tsx`
 
-### Kategoriak es kerdesek:
+- Change grid classes from `grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` to `grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`
+- Reduce gap from `md:gap-6` to `md:gap-4`
 
-**1. Hogyan Rendeljek? (5 kerdes)**
-- Q1–Q5: Parfum kivalasztas, dekant magyarazat, meretek, rendeles leadasa, modositas/torles
+### Modified file: `src/components/ProductCard.tsx`
 
-**2. Szallitas (6 kerdes)**
-- Q6–Q11: Szallitasi ido, modok, koltseg, kulfoldi szallitas, nyomkovetes, tavolleti kezbesites
+- Reduce image aspect ratio on desktop from `md:aspect-[4/5]` to `md:aspect-[3/4]` for more compact cards
+- Slightly reduce text sizes on desktop: product name from `md:text-base` to `md:text-sm`, price from `md:text-lg` to `md:text-base`
+- Reduce bottom spacing between image and info from `md:mb-4` to `md:mb-3`
 
-**3. Fizetesi Modok (5 kerdes)**
-- Q12–Q16: Elfogadott modok, biztonsag, utanvet, szamla, kuponkodok
+### Modified file: `src/pages/Products.tsx`
 
-**4. Visszakuldes & Garancia (6 kerdes)**
-- Q17–Q22: Visszakuldes szabalyzat, illatpreferencia, serult termek, eredetiseg, garancia, ellenorzes
+- Update the product count bar text styling to stay consistent with the new denser layout (no structural change needed)
 
-**5. Kapcsolat & Ugyfelszolgalat (5 kerdes)**
-- Q23–Q27: Kapcsolatfelvetel, valaszido, elo chat, uzletek, hirlevel
+## Result
 
-## Technikai Valtozasok
-
-### Modositott fajl: `src/pages/Support.tsx`
-
-1. **Adatstruktura:** A `faqSections` tomb atalakul kategoriak + kerdesek formatura:
-```
-const faqSections = [
-  {
-    category: "Hogyan Rendeljek?",
-    icon: ShoppingBag,
-    questions: [
-      { question: "Hogyan valasszam ki...", answer: "..." },
-      ...
-    ]
-  },
-  ...
-]
-```
-
-2. **Megjelenites:** Minden kategoria kulon blokkban jelenik meg egy cimmel es ikonnal, alatta az Accordion elemek a kerdesekkel. A jelenlegi egyretegu Accordion struktura ketreteguve valik (kategoria cim + kerdesek).
-
-3. **Uj importok:** Lucide ikonok a kategoriakhoz (ShoppingBag, Truck, CreditCard, RotateCcw, Headphones).
-
-4. **Valaszok tartalma:** Reszletes, informativ valaszok minden kerdesre, a ScentBox branddel osszhangban (dekant magyarazat, GLS szallitas, 14 napos elallas, stb).
-
-A Hero szekció, a Contact Card szekció es a Footer valtozatlan marad.
+- **Before:** 3-4 products per row on desktop
+- **After:** 4-5 products per row on desktop, with tighter spacing and proportionally smaller cards
+- Mobile stays unchanged at 2 columns
+- More products visible above the fold without scrolling
