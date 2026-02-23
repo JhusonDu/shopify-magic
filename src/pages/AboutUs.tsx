@@ -41,6 +41,12 @@ const milestones = [
       "A ScentBox Hungary végre a világ elé állt. Elindítottuk webáruházunkat, megérkeztek az első vásárlóink, és bebizonyítottuk, hogy a prémium nem jelent lehúzást.",
   },
   {
+    year: "2026",
+    title: "Első Értékesítések",
+    description:
+      "Elindítottuk az értékesítést — online és személyes csatornákon egyaránt. A ScentBox Hungary hivatalosan is elkezdte a működését, és megérkeztek az első valós vásárlások.",
+  },
+  {
     year: "Hamarosan",
     title: "Dekant Szolgáltatás",
     description:
