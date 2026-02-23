@@ -1,39 +1,44 @@
 
 
-# Featured Products Section -- Denser Grid + Stronger CTA
+# Logo + Brand Name Redesign -- Stacked Layout
 
-## Changes
+## What Changes
 
-### 1. Denser Desktop Grid (src/components/FeaturedProducts.tsx)
+### Modified file: `src/components/Header.tsx` (lines 93-110)
 
-- **More products:** Show **8 products** instead of 6 (`.slice(0, 8)`)
-- **More columns:** Grid changes from `md:grid-cols-3` to `md:grid-cols-4` on desktop
-- **Tighter gaps:** Reduce gap from `md:gap-5` to `md:gap-4`
-- **Skeleton loader** updated to match (8 skeletons, 4 columns)
+**Logo image -- slightly larger:**
+- Current: `h-10 w-10 md:h-11 md:w-11`
+- New: `h-11 w-11 md:h-12 md:w-12` (bump up one step)
 
-### 2. Compact Featured Cards (src/components/FeaturedProducts.tsx)
+**Brand text -- stacked "ScentBox" over "Hungary":**
 
-- **Smaller image:** Desktop aspect ratio from `md:aspect-[3/4]` to `md:aspect-[4/5]` (slightly taller/narrower for compact feel)
-- **Tighter text:** Reduce card padding from `md:p-4` to `md:p-3`, title from `md:text-base` to `text-sm`, price from `text-lg` to `text-base`
-- **Quick buy button:** Smaller text and padding to fit the compact cards
+Replace the single `<span>` with a stacked flex-column layout:
 
-### 3. Redesigned CTA -- Centered "View All" Button (src/components/FeaturedProducts.tsx)
+```
+<div className="flex flex-col leading-none">
+  <span className="text-lg md:text-xl font-semibold tracking-tight text-foreground font-display">
+    ScentBox
+  </span>
+  <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] uppercase text-primary/70">
+    Hungary
+  </span>
+</div>
+```
 
-Replace the small inline "Osszes Megtekintese" link in the header with a prominent, centered CTA button below the grid:
+- "ScentBox" keeps the exact same `text-lg md:text-xl` size as the current text
+- "Hungary" sits below in a smaller, gold-tinted, wide-tracked uppercase style -- elegant subtitle treatment
+- Always visible on both mobile and desktop (currently "Hungary" is hidden on mobile)
+- `leading-none` on the container keeps the two lines tight together
 
-- Remove the desktop "Osszes Megtekintese" link from the header row
-- Add a centered block after the grid with a styled button:
-  - Full-width on mobile, auto-width on desktop
-  - Primary outline style with arrow icon
-  - Gold glow hover effect matching brand aesthetic
-  - Text: "Osszes Termek Megtekintese" with ArrowRight icon
-
-### 4. Mobile stays 2 columns, mobile CTA merges with the new centered one
-
-The existing mobile "Osszes Megtekintese" div gets replaced by the new universal centered CTA that works on both mobile and desktop.
+**Layout alignment:**
+- The outer `<Link>` keeps `flex items-center gap-2 md:gap-3` so the logo and stacked text sit side-by-side, vertically centered
+- No other header elements change
 
 ## Result
 
-- **Before:** 6 products in 3 columns, small text link for "view all" tucked in the header
-- **After:** 8 products in 4 columns (desktop), compact cards, prominent centered CTA button below the grid pushing users to the full catalog
+- Logo icon slightly larger for better visual weight
+- "ScentBox" on top line, same font size as before
+- "Hungary" on second line, smaller uppercase with gold accent color and wide letter-spacing
+- Clean, professional look on both mobile and desktop
+- No structural changes to nav, cart, or other header elements
 
