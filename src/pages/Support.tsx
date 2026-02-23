@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ContactModal } from "@/components/ContactModal";
 import { motion } from "framer-motion";
-import { Mail, Clock } from "lucide-react";
+import { Mail, Clock, ShoppingBag, Truck, CreditCard, RotateCcw, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -11,27 +11,179 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import type { LucideIcon } from "lucide-react";
 
-const faqSections = [
+interface FaqCategory {
+  category: string;
+  icon: LucideIcon;
+  questions: { question: string; answer: string }[];
+}
+
+const faqSections: FaqCategory[] = [
   {
-    title: "Hogyan Rendeljek?",
-    content: `1. Böngéssz a termékeink között és válaszd ki a kívánt illatot.\n2. Válaszd ki a méretet (5ml, 10ml vagy egyedi doboz).\n3. Add hozzá a kosaradhoz és lépj tovább a fizetéshez.\n4. Add meg a szállítási adataidat és válaszd ki a fizetési módot.\n5. A megrendelés után e-mailben küldünk visszaigazolást és nyomkövetési számot.`,
+    category: "Hogyan Rendeljek?",
+    icon: ShoppingBag,
+    questions: [
+      {
+        question: "Hogyan válasszam ki a megfelelő parfümöt?",
+        answer:
+          "Böngészd a kínálatunkat kategóriák (férfi, női, uniszex) vagy márkák szerint. Minden termékoldalon részletes illatleírást találsz az illatcsalád, a fő jegyek és a karakterisztika megjelölésével. Ha bizonytalan vagy, próbáld ki az 5ml-es dekant méretet – így kedvező áron tesztelheted az illatot, mielőtt nagyobb kiszerelést vásárolnál.",
+      },
+      {
+        question: "Mi a dekant és hogyan működik?",
+        answer:
+          "A dekant az eredeti parfümből kis üvegbe (általában 5ml vagy 10ml) átöntött illat. Az átöntés steril környezetben, profi eszközökkel történik, így a parfüm minősége és összetétele változatlan marad. A dekant üvegek kompakt, zsebbarát méretűek, tökéletesek utazáshoz vagy egy új illat kipróbálásához.",
+      },
+      {
+        question: "Milyen méretekben kaphatók a termékek?",
+        answer:
+          "Termékeink 5ml és 10ml dekant méretben kaphatók. Az 5ml-es kiszerelés kb. 50-70 fújásra elegendő (1-2 hét napi használat mellett), míg a 10ml-es kb. 100-140 fújásra (3-4 hét). Egyedi doboz (bundle) összeállítása esetén több illatot is választhatsz egyszerre.",
+      },
+      {
+        question: "Hogyan tudom leadni a rendelésemet?",
+        answer:
+          "1. Válaszd ki a kívánt terméke(ke)t és add hozzá a kosaradhoz.\n2. Kattints a kosár ikonra és ellenőrizd a tételeket.\n3. Lépj tovább a fizetéshez, add meg a szállítási adataidat.\n4. Válaszd ki a fizetési módot és véglegesítsd a rendelést.\n5. E-mailben visszaigazolást és nyomkövetési számot küldünk.",
+      },
+      {
+        question: "Módosíthatom vagy törölhetem a rendelésemet leadás után?",
+        answer:
+          "Igen, a rendelés leadása után legfeljebb 2 órán belül módosíthatod vagy törölheted azt, amennyiben a csomag még nem került feladásra. Írj nekünk az info@scentbox.hu címre a rendelési számoddal, és igyekszünk minél hamarabb intézni a kérésedet.",
+      },
+    ],
   },
   {
-    title: "Szállítás",
-    content: `GLS futárszolgálattal szállítunk egész Magyarország területén.\n\n• Szállítási idő: 1-3 munkanap\n• Szállítási költség: 1 490 Ft (10 000 Ft feletti rendelés esetén ingyenes)\n• Minden csomag biztonsági csomagolásban, buborékfóliával védve érkezik.\n• A feladás után e-mailben küldünk nyomkövetési linket.`,
+    category: "Szállítás",
+    icon: Truck,
+    questions: [
+      {
+        question: "Mennyi a szállítási idő Magyarországon belül?",
+        answer:
+          "A szállítási idő általában 1-3 munkanap a feladástól számítva. A rendelések feldolgozása 1 munkanapon belül megtörténik, így a legtöbb csomag 2-4 munkanapon belül megérkezik.",
+      },
+      {
+        question: "Milyen szállítási módokat kínálnak?",
+        answer:
+          "Jelenleg GLS futárszolgálattal szállítunk egész Magyarország területén. A GLS megbízható, gyors kézbesítést biztosít, és minden csomag nyomon követhető.",
+      },
+      {
+        question: "Mennyi a szállítási költség?",
+        answer:
+          "A szállítási költség 1 490 Ft. 10 000 Ft feletti rendelés esetén a szállítás teljesen ingyenes! Utánvétes fizetés esetén +500 Ft kezelési költséggel kell számolnod.",
+      },
+      {
+        question: "Külföldre is szállítanak?",
+        answer:
+          "Jelenleg kizárólag Magyarországon belül szállítunk. Külföldi szállítási lehetőségek bevezetését tervezzük a jövőben – kövess minket az Instagramon, hogy elsőként értesülj a hírekről!",
+      },
+      {
+        question: "Hogyan követhetem nyomon a csomagomat?",
+        answer:
+          "A csomag feladása után e-mailben küldünk egy GLS nyomkövetési linket, amellyel valós időben követheted a csomagod útját. Ha nem kaptad meg az e-mailt, ellenőrizd a spam mappádat, vagy írj nekünk az info@scentbox.hu címre.",
+      },
+      {
+        question: "Mi történik, ha nem vagyok otthon a kézbesítéskor?",
+        answer:
+          "A GLS futár egy alkalommal megpróbálja kézbesíteni a csomagot. Ha nem vagy otthon, értesítést hagy, és a csomagot a legközelebbi GLS csomagponton veheted át, vagy egyeztethetsz újabb kézbesítési időpontot a GLS ügyfélszolgálatán keresztül.",
+      },
+    ],
   },
   {
-    title: "Fizetési Módok",
-    content: `Az alábbi fizetési módokat fogadjuk el:\n\n• Bankkártyás fizetés (Visa, Mastercard)\n• Banki átutalás\n• Utánvét (+ 500 Ft kezelési költség)\n\nMinden tranzakció biztonságos, titkosított kapcsolaton keresztül történik.`,
+    category: "Fizetési Módok",
+    icon: CreditCard,
+    questions: [
+      {
+        question: "Milyen fizetési módokat fogadnak el?",
+        answer:
+          "Az alábbi fizetési módokat fogadjuk el:\n• Bankkártyás fizetés (Visa, Mastercard)\n• Banki átutalás\n• Utánvét (+500 Ft kezelési költség)",
+      },
+      {
+        question: "Biztonságos a bankkártyás fizetés?",
+        answer:
+          "Igen, teljes mértékben. A fizetés titkosított SSL kapcsolaton keresztül történik, és a kártyaadataidat mi semmilyen formában nem tároljuk. A tranzakciókat megbízható, PCI DSS szabványnak megfelelő fizetési szolgáltató kezeli.",
+      },
+      {
+        question: "Fizetés utánvéttel lehetséges?",
+        answer:
+          "Igen, utánvétes fizetésnél a csomag átvételekor fizetsz a futárnak készpénzzel vagy kártyával. Ehhez +500 Ft kezelési költség kapcsolódik.",
+      },
+      {
+        question: "Kaphatok számlát a vásárlásomról?",
+        answer:
+          "Igen, minden vásárlásról automatikusan elektronikus számlát állítunk ki, amelyet e-mailben küldünk el a megrendeléskor megadott címre. Ha céges számlára van szükséged, a megrendelés megjegyzés rovatában add meg a cégedatok.",
+      },
+      {
+        question: "Elfogadnak kuponkódokat vagy kedvezményeket?",
+        answer:
+          "Igen! Időszakos akcióink és kuponkódjaink segítségével kedvezményesen vásárolhatsz. A kuponkódot a kosár oldalon tudod megadni a fizetés előtt. Kövess minket az Instagramon és iratkozz fel a hírlevélre, hogy ne maradj le egyetlen ajánlatról sem!",
+      },
+    ],
   },
   {
-    title: "Visszaküldés",
-    content: `14 napos elállási joggal rendelkezel a csomag átvételétől számítva.\n\n• A terméknek bontatlannak és sértetlennek kell lennie.\n• A visszaküldés költségét a vásárló viseli.\n• A visszaküldés jóváhagyása után 5 munkanapon belül visszautaljuk a vételárat.\n• Reklamáció esetén írj nekünk: info@scentbox.hu`,
+    category: "Visszaküldés & Garancia",
+    icon: RotateCcw,
+    questions: [
+      {
+        question: "Milyen a visszaküldési szabályzatuk?",
+        answer:
+          "A csomag átvételétől számított 14 napon belül elállási joggal rendelkezel. A terméknek bontatlannak és sértetlennek kell lennie. A visszaküldés költségét a vásárló viseli. A visszaküldés jóváhagyása után 5 munkanapon belül visszautaljuk a vételárat.",
+      },
+      {
+        question: "Visszaküldhetem a terméket, ha nem tetszik az illat?",
+        answer:
+          "A dekant termékek jellegéből adódóan a bontott terméket nem áll módunkban visszavenni, hiszen higiéniai okokból újraértékesítésre nem alkalmas. Ezért javasoljuk az 5ml-es próbaméretet, hogy minimális kockázattal próbálhasd ki az illatot.",
+      },
+      {
+        question: "Mi történik, ha sérült terméket kapok?",
+        answer:
+          "Ha sérült terméket kaptál, kérjük, készíts fényképeket a sérülésről (csomag + termék), és küld el nekünk az info@scentbox.hu címre 48 órán belül. Díjmentesen pótoljuk a sérült terméket, vagy visszautaljuk az árát – a te döntésed!",
+      },
+      {
+        question: "Hogyan garantálják a termékek eredetiségét?",
+        answer:
+          "Kizárólag hivatalos parfüm disztribútoroktól és megbízható nagykereskedőktől szerezzük be az eredeti, teljes méretű parfümöket, amelyekből a dekantokat készítjük. Minden tétel ellenőrzött és igazolható eredetiségű.",
+      },
+      {
+        question: "Van garancia a termékekre?",
+        answer:
+          "Igen, garantáljuk, hogy minden termékünk eredeti és a leírt minőségben érkezik meg hozzád. Ha bármilyen minőségi problémát tapasztalsz, vedd fel velünk a kapcsolatot, és megoldjuk a helyzetet.",
+      },
+      {
+        question: "Hogyan ellenőrizhetem az eredetiséget?",
+        answer:
+          "Minden dekant üvegen feltüntetjük az eredeti parfüm nevét és márkáját. Kérésre az eredeti üveg batch-kódját is megosztjuk, amellyel független oldalakon (pl. checkfresh.com) ellenőrizheted az eredetiséget és a gyártási dátumot.",
+      },
+    ],
   },
   {
-    title: "Kapcsolat",
-    content: `Kérdésed van? Írj nekünk bátran!\n\n📧 E-mail: info@scentbox.hu\n⏱ Válaszidő: általában 24 órán belül válaszolunk munkanapokon.\n\nKövetess minket az Instagramon a legfrissebb hírekért és akciókért!`,
+    category: "Kapcsolat & Ügyfélszolgálat",
+    icon: Headphones,
+    questions: [
+      {
+        question: "Hogyan tudok kapcsolatba lépni az ügyfélszolgálattal?",
+        answer:
+          "Írj nekünk e-mailben az info@scentbox.hu címre, vagy használd az oldalon található Kapcsolatfelvétel gombot. Instagram DM-ben is szívesen válaszolunk!",
+      },
+      {
+        question: "Milyen a válaszidő?",
+        answer:
+          "Munkanapokon általában 24 órán belül válaszolunk az e-mailekre. Hétvégén és ünnepnapokon a válaszidő hosszabb lehet, de igyekszünk minél hamarabb reagálni.",
+      },
+      {
+        question: "Van élő chat támogatás?",
+        answer:
+          "Jelenleg nincs élő chat funkciónk, de az e-mailes és Instagram DM-es ügyfélszolgálatunk gyorsan és hatékonyan kezeli a megkereséseket. Az élő chat bevezetését tervezzük a közeljövőben.",
+      },
+      {
+        question: "Vannak üzleteik, ahol személyesen vásárolhatok?",
+        answer:
+          "Jelenleg kizárólag online értékesítünk a scentbox.hu webshopunkon keresztül. Fizikai üzlet nyitását fontolgatjuk a jövőben – kövess minket, hogy elsőként értesülj!",
+      },
+      {
+        question: "Feliratkozhatok hírlevélre exkluzív ajánlatokért?",
+        answer:
+          "Igen! Az oldal alján található hírlevél szekcióban megadhatod az e-mail címedet, és elsőként értesülhetsz az új illatokról, akciókról és exkluzív kedvezményekről. A feliratkozás bármikor lemondható.",
+      },
+    ],
   },
 ];
 
@@ -71,31 +223,44 @@ const Support = () => {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ Categories */}
       <section className="pb-20">
-        <div className="container max-w-2xl mx-auto">
-          <Accordion type="single" collapsible className="space-y-3">
-            {faqSections.map((faq, i) => (
+        <div className="container max-w-2xl mx-auto space-y-10">
+          {faqSections.map((section, sIdx) => {
+            const Icon = section.icon;
+            return (
               <motion.div
-                key={faq.title}
-                initial={{ opacity: 0, y: 15 }}
+                key={section.category}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 + i * 0.07 }}
+                transition={{ delay: 0.15 + sIdx * 0.08 }}
               >
-                <AccordionItem
-                  value={`item-${i}`}
-                  className="border border-border rounded-lg px-5 bg-card"
-                >
-                  <AccordionTrigger className="text-foreground font-display text-base hover:no-underline hover:text-primary transition-colors">
-                    {faq.title}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
-                    {faq.content}
-                  </AccordionContent>
-                </AccordionItem>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10">
+                    <Icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h2 className="font-display text-xl text-foreground">{section.category}</h2>
+                </div>
+
+                <Accordion type="single" collapsible className="space-y-2">
+                  {section.questions.map((q, qIdx) => (
+                    <AccordionItem
+                      key={qIdx}
+                      value={`s${sIdx}-q${qIdx}`}
+                      className="border border-border rounded-lg px-5 bg-card"
+                    >
+                      <AccordionTrigger className="text-foreground font-display text-sm hover:no-underline hover:text-primary transition-colors">
+                        {q.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
+                        {q.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </motion.div>
-            ))}
-          </Accordion>
+            );
+          })}
         </div>
       </section>
 
