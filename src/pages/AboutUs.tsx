@@ -29,16 +29,10 @@ const values = [
 
 const milestones = [
   {
-    year: "2024",
-    title: "Az Ötlet",
-    description:
-      "Megszületett az ötlet: prémium parfümöket tisztességes áron, magas árrések nélkül. Piackutatás, tervezés — csendben építkeztünk a háttérben.",
-  },
-  {
     year: "2025",
-    title: "Az Indulás",
+    title: "Az Alapok",
     description:
-      "A ScentBox Hungary végre a világ elé állt. Elindítottuk webáruházunkat, megérkeztek az első vásárlóink, és bebizonyítottuk, hogy a prémium nem jelent lehúzást.",
+      "Megszületett az ötlet, és nem vártunk tovább — nekiálltunk építeni. Összegyűjtöttük az erőforrásokat, megterveztük a márkát, megtaláltuk a megfelelő partnert, és elkezdődött a munka. Minden, amit 2026-ban láttok, itt kezdődött.",
   },
   {
     year: "2026",
