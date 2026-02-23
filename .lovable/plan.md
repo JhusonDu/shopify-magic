@@ -1,36 +1,26 @@
 
 
-# 2026-os Merfoldk Szoveg Frissitese
+# 2024-es Torles es 2025-os Szoveg Frissites
 
 ## Mi Valtozik
 
-A `src/pages/AboutUs.tsx` fajlban a 2026-os merfoldk `title` es `description` mezoi frissulnek egy sokkal energikusabb, unnepelyes szoveggel.
+A `src/pages/AboutUs.tsx` fajlban:
 
-## Technikai Reszletek
+1. **Torolni:** A 2024-es merfoldk bejegyzes teljesen torolve lesz a `milestones` tombbol.
+2. **Frissiteni:** A 2025-os merfoldk uj szoveget kap, ami azt kommunikalja, hogy ebben az evben indult el minden — tervezes, felkeszules, eroforrasok osszegyujtese, az alapok lerakasa.
 
-### Modositott fajl: `src/pages/AboutUs.tsx`
-
-A jelenlegi 2026-os merfoldk:
-
-```
-{
-  year: "2026",
-  title: "Első Értékesítések",
-  description:
-    "Elindítottuk az értékesítést — online és személyes csatornákon egyaránt. A ScentBox Hungary hivatalosan is elkezdte a működését, és megérkeztek az első valós vásárlások.",
-}
-```
-
-Lecserelve erre:
+### Uj 2025-os merfoldk:
 
 ```
 {
-  year: "2026",
-  title: "Itt Vagyunk!",
+  year: "2025",
+  title: "Az Alapok",
   description:
-    "Eljött a pillanat — a ScentBox Hungary hivatalosan is megnyitotta kapuit! A webshop él, a csapat készen áll, és végre itt vagyunk nektek. Prémium parfümök, őszinte árak, kompromisszumok nélkül. Üdv a fedélzeten!",
+    "Megszuletett az otlet, es nem varunk tovabb — nekiallunk epiteni. Osszegyujtottuk az eroforrasokat, megterveztuk a markát, megtalaltuk a megfelelo partnert, es elkezodott a munka. Minden, amit 2026-ban lattok, itt kezdodott.",
 }
 ```
 
-Mas fajl nem modosul.
+### Eredmeny
+
+A `milestones` tomb 3 elembol fog allni: 2025, 2026, Hamarosan.
 
