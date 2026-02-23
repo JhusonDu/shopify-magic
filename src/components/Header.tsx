@@ -97,20 +97,19 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
               className="flex flex-col items-start leading-none"
             >
-              <span className="flex items-end text-xl md:text-2xl">
-                <span className="relative -mr-1">
-                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="flex items-baseline gap-0 text-xl md:text-2xl">
+                <span className="relative top-[2px]">
                   <img
                     src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png"
                     alt="S"
-                    className="h-[1.6em] w-auto object-contain relative z-10 drop-shadow-lg"
+                    className="h-8 w-8 md:h-9 md:w-9 object-contain drop-shadow-lg"
                   />
                 </span>
-                <span className="font-semibold tracking-tight text-foreground font-display -ml-0.5">
+                <span className="font-semibold tracking-tight text-foreground font-display ml-[-4px]">
                   centBox
                 </span>
               </span>
-              <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] uppercase text-primary/70">
+              <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] uppercase text-primary/70 mt-[-2px]">
                 Hungary
               </span>
             </motion.div>
