@@ -95,23 +95,21 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="flex flex-col items-start leading-none"
+              className="flex items-center gap-2"
             >
-              <span className="flex items-baseline gap-0 text-xl md:text-2xl">
-                <span className="relative top-[2px]">
-                  <img
-                    src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png"
-                    alt="S"
-                    className="h-8 w-8 md:h-9 md:w-9 object-contain drop-shadow-lg"
-                  />
+              <img
+                src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png"
+                alt="ScentBox logo"
+                className="h-9 w-9 md:h-10 md:w-10 object-contain drop-shadow-lg"
+              />
+              <div className="flex flex-col leading-none whitespace-nowrap">
+                <span className="text-lg md:text-xl font-semibold tracking-tight text-foreground font-display">
+                  ScentBox
                 </span>
-                <span className="font-semibold tracking-tight text-foreground font-display ml-[-4px]">
-                  centBox
+                <span className="text-[9px] md:text-[10px] font-medium tracking-[0.25em] uppercase text-primary/70 mt-[1px]">
+                  Hungary
                 </span>
-              </span>
-              <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] uppercase text-primary/70 mt-[-2px]">
-                Hungary
-              </span>
+              </div>
             </motion.div>
           </Link>
 
