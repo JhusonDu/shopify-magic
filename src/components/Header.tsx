@@ -90,26 +90,30 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
 
         <div className="container flex h-14 md:h-20 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 md:gap-3 group">
+          <Link to="/" className="group">
             <motion.div
-              whileHover={{ scale: 1.05, rotate: 5 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              className="relative">
-
-              <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <img
-                alt="ScentBox"
-                className="h-11 w-11 md:h-12 md:w-12 object-contain relative z-10 drop-shadow-lg" src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png" />
-            </motion.div>
-            <div className="flex flex-col leading-none">
-              <span className="text-lg md:text-xl font-semibold tracking-tight text-foreground font-display">
-                ScentBox
+              className="flex flex-col items-start leading-none"
+            >
+              <span className="flex items-baseline text-xl md:text-2xl">
+                <span className="relative">
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <img
+                    src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png"
+                    alt="S"
+                    className="h-[1.15em] w-auto object-contain relative z-10 drop-shadow-lg -mr-[0.05em]"
+                  />
+                </span>
+                <span className="font-semibold tracking-tight text-foreground font-display">
+                  centBox
+                </span>
               </span>
               <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] uppercase text-primary/70">
                 Hungary
               </span>
-            </div>
+            </motion.div>
           </Link>
 
           {/* Desktop Navigation Links */}
