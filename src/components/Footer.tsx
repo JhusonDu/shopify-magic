@@ -166,6 +166,7 @@ export const Footer = () => {
                   <li key={link.label}>
                     <Link
                       to={link.href}
+                      onClick={() => window.scrollTo(0, 0)}
                       className="text-muted-foreground hover:text-primary transition-colors text-sm"
                     >
                       {link.label}
