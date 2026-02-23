@@ -99,14 +99,17 @@ export const Header = ({ isSearchOpen: externalOpen, onSearchOpenChange, searchI
 
               <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <img
-
                 alt="ScentBox"
-                className="h-10 w-10 md:h-11 md:w-11 object-contain relative z-10 drop-shadow-lg" src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png" />
-
+                className="h-11 w-11 md:h-12 md:w-12 object-contain relative z-10 drop-shadow-lg" src="/lovable-uploads/cffba5ca-0963-46f8-895d-57cc9d9a8eed.png" />
             </motion.div>
-            <span className="text-lg md:text-xl font-semibold tracking-tight text-foreground font-display leading-tight">
-              ScentBox<span className="hidden md:inline"> Hungary</span>
-            </span>
+            <div className="flex flex-col leading-none">
+              <span className="text-lg md:text-xl font-semibold tracking-tight text-foreground font-display">
+                ScentBox
+              </span>
+              <span className="text-[10px] md:text-xs font-medium tracking-[0.25em] uppercase text-primary/70">
+                Hungary
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation Links */}
