@@ -1,19 +1,20 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, Search, X, SlidersHorizontal, Sparkles } from "lucide-react";
+import { ShoppingBag, SlidersHorizontal, Sparkles, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import { ShopifyProduct } from "@/lib/shopify";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductQuickBuy } from "@/components/ProductQuickBuy";
+import { ProductFilters, ProductFiltersState, applyFilters, extractFilterOptions } from "@/components/ProductFilters";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 
 /* ── animation variants ── */
 const containerVariants = {
@@ -64,14 +65,12 @@ const FeaturedCard = ({ product, onQuickBuy }: { product: ShopifyProduct; onQuic
             </div>
           )}
 
-          {/* Sold-out badge */}
           {firstVariant && !firstVariant.availableForSale && (
             <span className="absolute top-2 left-2 bg-foreground/80 text-background text-[10px] font-semibold px-2 py-0.5 rounded-full">
               Elfogyott
             </span>
           )}
 
-          {/* Quick choose – hover on desktop */}
           <div className="absolute inset-x-0 bottom-0 p-2.5 hidden md:flex md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 bg-gradient-to-t from-black/50 to-transparent pt-8">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickBuy(product); }}
@@ -84,7 +83,6 @@ const FeaturedCard = ({ product, onQuickBuy }: { product: ShopifyProduct; onQuic
           </div>
         </div>
 
-        {/* Info */}
         <div className="p-3 md:p-4 space-y-1">
           {node.vendor && (
             <span className="text-[11px] uppercase tracking-widest text-primary font-medium">
@@ -115,140 +113,42 @@ const CardSkeleton = () => (
   </div>
 );
 
-/* ── filter catalog dialog ── */
-const FilterCatalog = ({
-  open,
-  onOpenChange,
-  searchQuery,
-  setSearchQuery,
-  vendors,
-  activeVendor,
-  setActiveVendor,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  searchQuery: string;
-  setSearchQuery: (q: string) => void;
-  vendors: string[];
-  activeVendor: string | null;
-  setActiveVendor: (v: string | null) => void;
-}) => (
-  <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="bg-card border-border max-w-md mx-4 sm:mx-auto">
-      <DialogHeader>
-        <DialogTitle className="text-foreground font-display text-xl flex items-center gap-2">
-          <SlidersHorizontal className="w-5 h-5 text-primary" />
-          Termék szűrő
-        </DialogTitle>
-        <DialogDescription className="text-muted-foreground text-sm">
-          Keress név alapján vagy válassz márkát
-        </DialogDescription>
-      </DialogHeader>
-
-      <div className="space-y-4 pt-2">
-        {/* Search input */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setActiveVendor(null);
-            }}
-            placeholder="Keresés termékek között..."
-            className="pl-9 pr-9 h-11 text-sm bg-secondary border-border"
-            autoFocus
-          />
-          {searchQuery && (
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setActiveVendor(null);
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
-
-        {/* Vendor chips */}
-        {vendors.length > 0 && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">Márkák</p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => {
-                  setActiveVendor(null);
-                  setSearchQuery("");
-                }}
-                className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 ${
-                  !activeVendor
-                    ? "border-primary bg-primary/15 text-primary shadow-[0_0_8px_hsl(var(--primary)/0.2)]"
-                    : "border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
-                }`}
-              >
-                Összes
-              </button>
-              {vendors.map((v) => (
-                <button
-                  key={v}
-                  onClick={() => {
-                    setActiveVendor(v);
-                    setSearchQuery(v);
-                  }}
-                  className={`text-xs px-3 py-1.5 rounded-full border transition-all duration-200 ${
-                    activeVendor === v
-                      ? "border-primary bg-primary/15 text-primary shadow-[0_0_8px_hsl(var(--primary)/0.2)]"
-                      : "border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
-                  }`}
-                >
-                  {v}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <button
-          onClick={() => onOpenChange(false)}
-          className="w-full bg-primary text-primary-foreground py-2.5 rounded-lg font-semibold text-sm hover:bg-primary/90 transition-colors shadow-[0_0_12px_hsl(var(--primary)/0.3)]"
-        >
-          Alkalmaz
-        </button>
-      </div>
-    </DialogContent>
-  </Dialog>
-);
-
 /* ── main section ── */
 export const FeaturedProducts = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [activeVendor, setActiveVendor] = useState<string | null>(null);
+  const isMobile = useIsMobile();
   const [quickBuyProduct, setQuickBuyProduct] = useState<ShopifyProduct | null>(null);
+  const [desktopFilterOpen, setDesktopFilterOpen] = useState(false);
 
-  // debounce search
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedQuery(searchQuery), 300);
-    return () => clearTimeout(t);
-  }, [searchQuery]);
+  const { data: products, isLoading } = useProducts(50);
 
-  const { data: products, isLoading } = useProducts(
-    6,
-    debouncedQuery || undefined
-  );
+  const defaultFilters = useMemo((): ProductFiltersState => {
+    if (!products || products.length === 0) {
+      return { genders: [], brands: [], types: [], sort: "recommended", priceRange: [0, 100000] };
+    }
+    const opts = extractFilterOptions(products);
+    return { genders: [], brands: [], types: [], sort: "recommended", priceRange: opts.priceBounds };
+  }, [products]);
 
-  // extract unique vendors for filter chips
-  const vendors = useCallback(() => {
+  const [filters, setFilters] = useState<ProductFiltersState | null>(null);
+  const activeFilters = filters ?? defaultFilters;
+
+  const filteredProducts = useMemo(() => {
     if (!products) return [];
-    const set = new Set<string>();
-    products.forEach((p) => {
-      if (p.node.vendor) set.add(p.node.vendor);
-    });
-    return Array.from(set);
-  }, [products])();
+    return applyFilters(products, activeFilters).slice(0, 6);
+  }, [products, activeFilters]);
+
+  const totalFilteredCount = useMemo(() => {
+    if (!products) return 0;
+    return applyFilters(products, activeFilters).length;
+  }, [products, activeFilters]);
+
+  const isPriceActive = products && products.length > 0
+    ? (() => {
+        const opts = extractFilterOptions(products);
+        return activeFilters.priceRange[0] !== opts.priceBounds[0] || activeFilters.priceRange[1] !== opts.priceBounds[1];
+      })()
+    : false;
+  const activeCount = activeFilters.genders.length + activeFilters.brands.length + activeFilters.types.length + (isPriceActive ? 1 : 0);
 
   return (
     <section className="py-10 md:py-16 bg-gradient-to-b from-background to-secondary/30 relative">
@@ -263,14 +163,29 @@ export const FeaturedProducts = () => {
           </Link>
 
           <div className="flex items-center gap-2">
-            {/* Filter button */}
+            {/* Desktop filter button */}
             <button
-              onClick={() => setFilterOpen(true)}
-              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary bg-card border border-border hover:border-primary/50 px-4 py-2 rounded-full transition-all duration-200 hover:shadow-[0_0_10px_hsl(var(--primary)/0.15)]"
+              onClick={() => setDesktopFilterOpen(true)}
+              className="hidden md:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary bg-card border border-border hover:border-primary/50 px-4 py-2 rounded-full transition-all duration-200 hover:shadow-[0_0_10px_hsl(var(--primary)/0.15)]"
             >
               <SlidersHorizontal className="w-4 h-4" />
               Szűrő
+              {activeCount > 0 && (
+                <Badge variant="default" className="h-5 min-w-5 px-1.5 text-[10px] ml-1">
+                  {activeCount}
+                </Badge>
+              )}
             </button>
+
+            {activeCount > 0 && (
+              <button
+                onClick={() => setFilters(null)}
+                className="hidden md:flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="w-3 h-3" />
+                Törlés
+              </button>
+            )}
 
             <Link
               to="/termekek"
@@ -281,19 +196,6 @@ export const FeaturedProducts = () => {
           </div>
         </div>
 
-        {/* Active filter indicator */}
-        {debouncedQuery && (
-          <div className="mb-5 flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Aktív szűrő:</span>
-            <span className="text-xs bg-primary/15 text-primary px-3 py-1 rounded-full flex items-center gap-1.5 border border-primary/20 shadow-[0_0_8px_hsl(var(--primary)/0.15)]">
-              {debouncedQuery}
-              <button onClick={() => { setSearchQuery(""); setActiveVendor(null); }}>
-                <X className="w-3 h-3" />
-              </button>
-            </span>
-          </div>
-        )}
-
         {/* Grid */}
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
@@ -301,11 +203,11 @@ export const FeaturedProducts = () => {
               <CardSkeleton key={i} />
             ))}
           </div>
-        ) : !products || products.length === 0 ? (
+        ) : !products || filteredProducts.length === 0 ? (
           <div className="text-center py-16">
             <ShoppingBag className="w-12 h-12 text-muted-foreground/40 mx-auto mb-3" />
             <p className="text-muted-foreground">
-              Nincs termék{debouncedQuery ? ` "${debouncedQuery}" keresésre` : ""}.
+              Nincs a szűrőknek megfelelő termék.
             </p>
           </div>
         ) : (
@@ -315,7 +217,7 @@ export const FeaturedProducts = () => {
             initial="hidden"
             animate="visible"
           >
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <FeaturedCard key={product.node.id} product={product} onQuickBuy={setQuickBuyProduct} />
             ))}
           </motion.div>
@@ -332,17 +234,46 @@ export const FeaturedProducts = () => {
         </div>
       </div>
 
-      {/* Filter catalog dialog */}
-      <FilterCatalog
-        open={filterOpen}
-        onOpenChange={setFilterOpen}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        vendors={vendors}
-        activeVendor={activeVendor}
-        setActiveVendor={setActiveVendor}
-      />
-      {/* Quick buy dialog (mobile) */}
+      {/* Mobile: ProductFilters handles sticky button + sheet */}
+      {isMobile && products && products.length > 0 && (
+        <ProductFilters
+          filters={activeFilters}
+          onFiltersChange={setFilters}
+          products={products}
+          hideSort
+          totalFilteredCount={totalFilteredCount}
+        />
+      )}
+
+      {/* Desktop: Dialog with ProductFilters content */}
+      {!isMobile && (
+        <Dialog open={desktopFilterOpen} onOpenChange={setDesktopFilterOpen}>
+          <DialogContent className="bg-card border-border max-w-md max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-foreground font-display text-lg flex items-center gap-2">
+                <SlidersHorizontal className="w-5 h-5 text-primary" />
+                Szűrők
+                {totalFilteredCount !== undefined && (
+                  <span className="text-sm font-normal text-muted-foreground">
+                    ({totalFilteredCount} termék)
+                  </span>
+                )}
+              </DialogTitle>
+            </DialogHeader>
+            {products && products.length > 0 && (
+              <ProductFilters
+                filters={activeFilters}
+                onFiltersChange={setFilters}
+                products={products}
+                hideSort
+                totalFilteredCount={totalFilteredCount}
+                bare
+              />
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
+
       <ProductQuickBuy product={quickBuyProduct} onClose={() => setQuickBuyProduct(null)} />
     </section>
   );
